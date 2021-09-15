@@ -22,7 +22,5 @@ class CustomUserAdmin(UserAdmin):
                     "superhost",
                 )
             },
-            "test",
-            {"fields": ("A", "B")},
         ),
     )

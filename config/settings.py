@@ -39,6 +39,9 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
+
+THIRD_PARTY_APPS = []
+
 # 내가 만든 유저 앱을 서치
 PROJECT_APPS = ["users.apps.UsersConfig"]
 
