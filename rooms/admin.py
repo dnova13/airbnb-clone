@@ -7,6 +7,12 @@ class ItemAdmin(admin.ModelAdmin):
 
     """Item Admin Definition"""
 
+    list_display = ("name", "used_by")
+
+    # 이 타입에서 사용되는 방의 개수를 알려줌.
+    def used_by(self, obj):
+        return obj.rooms.count()
+
     pass
 
 
@@ -45,6 +51,7 @@ class RoomAdmin(admin.ModelAdmin):
         "check_out",
         "instant_book",
         "count_amenities",  # 소모품 카운트 함수 추가
+        "count_photos",  # 사진 수 함수 추가
     )
 
     # 포린키 호스트에서 다른거 보여주고 싶다면
@@ -73,6 +80,9 @@ class RoomAdmin(admin.ModelAdmin):
     # model의 row 값임. 자세한거 문서 참조
     def count_amenities(self, obj):
         return obj.amenities.count()
+
+    def count_photos(self, obj):
+        return obj.photos.count()
 
     # count_amenities.short_description = "ffff"
 
