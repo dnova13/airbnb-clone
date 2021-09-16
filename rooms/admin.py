@@ -44,7 +44,7 @@ class RoomAdmin(admin.ModelAdmin):
         "check_in",
         "check_out",
         "instant_book",
-        "count_amenities",
+        "count_amenities",  # 소모품 카운트 함수 추가
     )
 
     # 포린키 호스트에서 다른거 보여주고 싶다면
@@ -60,10 +60,21 @@ class RoomAdmin(admin.ModelAdmin):
         "country",
     )
 
+    # 정렬
+    ordering = ("name", "price", "bedrooms")
+
     search_fields = ("=city", "^host__username")
 
     # horizon 패널은 다대다 관계만 가능.
     filter_horizontal = ("amenities", "facilities", "house_rules")
+
+    # 함수 추가
+    # self 는 여기 room class 고
+    # model의 row 값임. 자세한거 문서 참조
+    def count_amenities(self, obj):
+        return obj.amenities.count()
+
+    # count_amenities.short_description = "ffff"
 
 
 @admin.register(models.Photo)
