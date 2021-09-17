@@ -13,8 +13,25 @@ class Conversation(core_models.TimeStampedModel):
     )
 
     def __str__(self):
-        # self.created 그냥 쓰면 에러가 나므로 string화 해줘야됨.
-        return str(self.created)
+        usernames = []
+        for user in self.participants.all():
+            usernames.append(user.username)
+
+        # join을 이용해 배열에 , 붙이며 스트링화
+        # "a, b" 로 출력됨
+        return ", ".join(usernames)
+
+    # 메세지 수
+    def count_messages(self):
+        return self.messages.count()
+
+    count_messages.short_description = "Number of Messages"
+
+    # 참가자 수
+    def count_participants(self):
+        return self.participants.count()
+
+    count_participants.short_description = "Number of Participants"
 
 
 # 메세지(채팅) 모델, 코어 상속.
