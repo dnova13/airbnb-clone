@@ -98,9 +98,10 @@ class Room(core_models.TimeStampedModel):
     def __str__(self):
         return self.name
 
+    # 방 총점 구함.
     def total_rating(self):
         all_reviews = self.reviews.all()  # 쿼리셋 이용하여 룸에 잇는 리뷰 다 불러옴.
-        all_ratings = []
+        all_ratings = 0
         for review in all_reviews:
-            all_ratings.append(review.rating_average())
-        return 0
+            all_ratings += review.rating_average()
+        return all_ratings / len(all_reviews)
