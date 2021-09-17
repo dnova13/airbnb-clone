@@ -59,7 +59,7 @@ class Photo(core_models.TimeStampedModel):
     caption = models.CharField(max_length=80)
 
     #  이미지 파일
-    file = models.ImageField()
+    file = models.ImageField(upload_to="room_photos")
 
     # 방이 삭제 되면 거기에 종속된 포토도 삭제
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)
@@ -104,4 +104,6 @@ class Room(core_models.TimeStampedModel):
         all_ratings = 0
         for review in all_reviews:
             all_ratings += review.rating_average()
-        return all_ratings / len(all_reviews)
+
+        # 삼항 연산자로 review가 하나도 없을때는 계산 안하고 0으로
+        return all_ratings / len(all_reviews) if len(all_reviews) > 0 else 0
