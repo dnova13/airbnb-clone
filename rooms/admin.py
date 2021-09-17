@@ -52,6 +52,7 @@ class RoomAdmin(admin.ModelAdmin):
         "instant_book",
         "count_amenities",  # 소모품 카운트 함수 추가
         "count_photos",  # 사진 수 함수 추가
+        "total_rating",
     )
 
     # 포린키 호스트에서 다른거 보여주고 싶다면
