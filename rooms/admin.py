@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
 from . import models
 
 
@@ -91,6 +92,12 @@ class RoomAdmin(admin.ModelAdmin):
 @admin.register(models.Photo)
 class PhotoAdmin(admin.ModelAdmin):
 
-    """ """
+    """Phot Admin Definition"""
 
-    pass
+    list_display = ("__str__", "get_thumbnail")
+
+    def get_thumbnail(self, obj):
+        # mark_safe : 이 안에 쓴 input 내용들은 안전하니 쓰라고 알려줌.
+        return mark_safe(f'<img width="250px" src="{obj.file.url}" />')
+
+    get_thumbnail.short_description = "Thumbnail"
