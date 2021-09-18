@@ -83,6 +83,10 @@ class RoomAdmin(admin.ModelAdmin):
     # horizon 패널은 다대다 관계만 가능.
     filter_horizontal = ("amenities", "facilities", "house_rules")
 
+    """ def save_model(self, request, obj, form, change):
+        print(obj, change, form)
+        super().save_model(request, obj, form, change) """
+
     # 함수 추가
     # self 는 여기 room class 고
     # model의 row 값임. 자세한거 문서 참조

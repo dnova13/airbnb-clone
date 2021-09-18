@@ -98,6 +98,12 @@ class Room(core_models.TimeStampedModel):
     def __str__(self):
         return self.name
 
+    # __str__ 처럼 sava() 오버라이딩, 자세한거는 문서 참조
+    # https://docs.djangoproject.com/en/3.2/topics/db/models/#overriding-model-methods
+    def save(self, *args, **kwargs):
+        self.city = str.capitalize(self.city)
+        super().save(*args, **kwargs)
+
     # 방 총점 구함.
     def total_rating(self):
         all_reviews = self.reviews.all()  # 쿼리셋 이용하여 룸에 잇는 리뷰 다 불러옴.
