@@ -40,7 +40,7 @@ DJANGO_APPS = [
 ]
 
 
-THIRD_PARTY_APPS = ["django_countries"]
+THIRD_PARTY_APPS = ["django_countries", "django_seed"]
 
 # 내가 만든 앱을 서치
 PROJECT_APPS = [
