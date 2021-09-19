@@ -4,7 +4,7 @@ from rooms.models import RoomType
 
 class Command(BaseCommand):
 
-    help = "This command creates facilities"
+    help = "This command creates room type"
 
     def handle(self, *args, **options):
         roomType = [
@@ -16,4 +16,4 @@ class Command(BaseCommand):
         for rt in roomType:
             RoomType.objects.create(name=rt)
 
-        self.stdout.write(self.style.SUCCESS(f"{len(roomType)} facilities created!"))
+        self.stdout.write(self.style.SUCCESS(f"{len(roomType)} facilities room type!"))
