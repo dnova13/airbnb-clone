@@ -112,4 +112,4 @@ class Room(core_models.TimeStampedModel):
             all_ratings += review.rating_average()
 
         # 삼항 연산자로 review가 하나도 없을때는 계산 안하고 0으로
-        return all_ratings / len(all_reviews) if len(all_reviews) > 0 else 0
+        return round(all_ratings / len(all_reviews), 2) if len(all_reviews) > 0 else 0
