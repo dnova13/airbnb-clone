@@ -1,7 +1,4 @@
-from django.views.generic import ListView
-from django.urls import reverse
-from django.http import Http404
-from django.shortcuts import render
+from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from . import models
 
@@ -28,13 +25,9 @@ class HomeView(ListView):
         return context
 
 
-def room_detail(request, pk):
-    try:
-        # db에서 해당 pk 즉 아이디에서의 방정보를 가져옴.
-        room = models.Room.objects.get(pk=pk)
+# 장고에 내장된 DetailView 상속
+class RoomDetail(DetailView):
 
-        # db 에서 방하나의 정보를 랜더함.
-        return render(request, "rooms/detail.html", {"room": room})
-    except models.Room.DoesNotExist:
-        # error 는 return 이 아닌 raise 로 그러므로 404 응답 에러는 raise로 반환
-        raise Http404()
+    """RoomDetail Definition"""
+
+    model = models.Room
