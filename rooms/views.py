@@ -1,4 +1,5 @@
 from django.views.generic import ListView
+from django.shortcuts import render
 from django.utils import timezone
 from . import models
 
@@ -23,3 +24,8 @@ class HomeView(ListView):
         now = timezone.now()
         context["now"] = now
         return context
+
+
+def room_detail(request, pk):
+    print(pk)
+    return render(request, "rooms/detail.html")
