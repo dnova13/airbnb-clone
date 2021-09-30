@@ -41,6 +41,8 @@ def search(request):
     # get에 아무데이터가 없는 None 일때
     # 디폴트 값 'Anywhere'  로 지정
     city = request.GET.get("city", "Anywhere")
+    country = request.GET.get("country", "KR")
+    room_type = int(request.GET.get("room_type", 0))
 
     # capitalize 앞문자만 대문자로 만들고 나머지 소문자로.
     city = str.capitalize(city)
@@ -48,8 +50,17 @@ def search(request):
     # db 에서 룸타입 다 가져옴.
     room_types = models.RoomType.objects.all()
 
-    return render(
-        request,
-        "rooms/search.html",
-        {"city": city, "countries": countries, "room_types": room_types},
-    )
+    # 서치 폼에서 검색한 조건들.
+    form = {
+        "city": city,
+        "s_room_type": room_type,  # 선택한 룸 타입
+        "s_country": country,  # 선택한 나라
+    }
+
+    # 각 검색 태그에 들어갈 선택 조건들
+    choices = {
+        "countries": countries,
+        "room_types": room_types,
+    }
+
+    return render(request, "rooms/search.html", {**form, **choices})
