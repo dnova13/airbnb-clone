@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.shortcuts import render
+from django_countries import countries  # 나라 항목 임포트
 from . import models
 
 
@@ -37,8 +38,18 @@ class RoomDetail(DetailView):
 def search(request):
 
     # 검색 폼에서 검색한 city 변수의 데이터를 가져옴.
-    city = request.GET.get("city")
+    # get에 아무데이터가 없는 None 일때
+    # 디폴트 값 'Anywhere'  로 지정
+    city = request.GET.get("city", "Anywhere")
 
     # capitalize 앞문자만 대문자로 만들고 나머지 소문자로.
     city = str.capitalize(city)
-    return render(request, "rooms/search.html", {"city": city})
+
+    # db 에서 룸타입 다 가져옴.
+    room_types = models.RoomType.objects.all()
+
+    return render(
+        request,
+        "rooms/search.html",
+        {"city": city, "countries": countries, "room_types": room_types},
+    )
