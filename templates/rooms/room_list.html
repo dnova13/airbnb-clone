@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 
-{% block page_name %}
+{% block page_title %}
     Home
-{% endblock page_name %}
+{% endblock page_title %}
 
 {% block content %}
+
+    {% comment %} {{now}} {% endcomment %}
 
     {% for room in rooms  %}
         <h3>
@@ -32,5 +34,6 @@
 
 
     </h5>
+
 
 {% endblock content %}

@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
+from django.shortcuts import render
 from . import models
 
 
@@ -31,3 +32,13 @@ class RoomDetail(DetailView):
     """RoomDetail Definition"""
 
     model = models.Room
+
+
+def search(request):
+
+    # 검색 폼에서 검색한 city 변수의 데이터를 가져옴.
+    city = request.GET.get("city")
+
+    # capitalize 앞문자만 대문자로 만들고 나머지 소문자로.
+    city = str.capitalize(city)
+    return render(request, "rooms/search.html", {"city": city})
