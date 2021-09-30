@@ -48,9 +48,10 @@ def search(request):
     bedrooms = int(request.GET.get("bedrooms", 0))
     beds = int(request.GET.get("beds", 0))
     baths = int(request.GET.get("baths", 0))
-    s_amenities = request.GET.get("amenities")
-    s_facilities = request.GET.get("facilities")
-    print(s_amenities, s_facilities)
+    instant = request.GET.get("instant", False)  # 즉시 예약 체크
+    super_host = request.GET.get("super_host", False)  # 슈퍼 호스트인지 체크
+    s_amenities = request.GET.getlist("amenities")
+    s_facilities = request.GET.getlist("facilities")
 
     # capitalize 앞문자만 대문자로 만들고 나머지 소문자로.
     city = str.capitalize(city)
@@ -67,9 +68,11 @@ def search(request):
         "baths": baths,
         "s_amenities": s_amenities,
         "s_facilities": s_facilities,
+        "instant": instant,
+        "super_host": super_host,
     }
 
-    # db 에서 룸타입 다 가져옴.
+    # db 에서 작성한 각 타입들의 가져옴.
     room_types = models.RoomType.objects.all()
     amenities = models.Amenity.objects.all()
     facilities = models.Facility.objects.all()
