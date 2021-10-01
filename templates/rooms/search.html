@@ -35,7 +35,7 @@
                 {% endfor %}
             </select>
         </div>
-        
+
         <div>
             <label for="price">Price</label>
             <input value="{{price}}" type="number" name="price" id="price" placeholder="Price" />
@@ -105,6 +105,10 @@
         <button>Search</button>
     </form>
 
+    <h3>Results</h3>
 
+    {% for room in rooms %}
+        <h3>{{room.name}}</h3>
+    {% endfor %}
 
 {% endblock content %}
