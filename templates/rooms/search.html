@@ -19,9 +19,26 @@
     <h3>Results</h3>
 
     {% for room in rooms %}
-        <h3>{{room.name}}</h3>
+        <h3>
+            <a href="{% url "rooms:detail" room.pk %}">
+                {{room.name}} / ${{room.price}}
+            </a>
+        </h3>
     {% endfor %}
 
+    <h5>
+    {% if page_obj.has_previous %}
+        <a href="{{current_url}}&page={{page_obj.previous_page_number}}">Previous</a>
+    {% endif %}
 
+    {% for page in page_obj.paginator.page_range %}
+        <a href="{{current_url}}&page={{page}}">{{page}}</a>
+    {% endfor %}
+
+    Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+    
+    {% if page_obj.has_next  %}
+        <a href="{{current_url}}&page={{page_obj.previous_page_number}}">Next</a>
+    {% endif %}
 
 {% endblock content %}
