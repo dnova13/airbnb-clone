@@ -48,8 +48,8 @@ def search(request):
     bedrooms = int(request.GET.get("bedrooms", 0))
     beds = int(request.GET.get("beds", 0))
     baths = int(request.GET.get("baths", 0))
-    instant = request.GET.get("instant", False)  # 즉시 예약 체크
-    super_host = request.GET.get("super_host", False)  # 슈퍼 호스트인지 체크
+    instant = bool(request.GET.get("instant", False))  # 즉시 예약 체크
+    superhost = bool(request.GET.get("superhost", False))  # 슈퍼 호스트인지 체크
     s_amenities = request.GET.getlist("amenities")
     s_facilities = request.GET.getlist("facilities")
 
@@ -69,7 +69,7 @@ def search(request):
         "s_amenities": s_amenities,
         "s_facilities": s_facilities,
         "instant": instant,
-        "super_host": super_host,
+        "superhost": superhost,
     }
 
     # db 에서 작성한 각 타입들의 가져옴.
@@ -94,6 +94,37 @@ def search(request):
 
     if room_type != 0:
         filter_args["room_type__pk"] = room_type
+
+    if price != 0:  # lte <=
+        filter_args["price__lte"] = price
+
+    if guests != 0:  # gte =>
+        filter_args["guests__gte"] = guests
+
+    if bedrooms != 0:
+        filter_args["bedrooms__gte"] = bedrooms
+
+    if beds != 0:
+        filter_args["beds__gte"] = beds
+
+    if baths != 0:
+        filter_args["baths__gte"] = baths
+
+    if instant is True:
+        filter_args["instant_book"] = True
+
+    # superhost 같은 경우 user 모델에 등록되어 있으므로
+    # foreign key 를 이용해 아래와 같이 필터링 가능.
+    if superhost is True:
+        filter_args["host__superhost"] = True
+
+    if len(s_amenities) > 0:
+        for s_amenity in s_amenities:
+            filter_args["amenities__pk"] = int(s_amenity)
+
+    if len(s_facilities) > 0:
+        for s_facility in s_facilities:
+            filter_args["facilities__pk"] = int(s_facility)
 
     rooms = models.Room.objects.filter(**filter_args)
 
