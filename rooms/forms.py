@@ -29,8 +29,12 @@ class SearchForm(forms.Form):
     # 다선택 체크 박스를 적용하기 위해 아래같이 widget 변겅.
     # widget=forms.CheckboxSelectMultiple
     amenities = forms.ModelMultipleChoiceField(
-        queryset=models.Amenity.objects.all(), widget=forms.CheckboxSelectMultiple
+        required=False,
+        queryset=models.Amenity.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
     )
     facilities = forms.ModelMultipleChoiceField(
-        queryset=models.Facility.objects.all(), widget=forms.CheckboxSelectMultiple
+        required=False,
+        queryset=models.Facility.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
     )
