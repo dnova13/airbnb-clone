@@ -5,3 +5,7 @@ Cloning Airbnb with Python, Django, Tailwind and more... 🇰🇷💖🐍
 # admin account
 dnova
 123
+
+# test account
+dn@gmail.com
+1q2w3e4r~

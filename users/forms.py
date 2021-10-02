@@ -7,19 +7,17 @@ class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
-    def clean_email(self):
+    def clean(self):
         email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+
         try:
-            # 장고에서 username은 id 이고
-            # 여기서 id는 email로 입력받게함.
-            # user 테이블에서 같은 이메일이 있는지 검색
-            models.User.objects.get(username=email)
-            return email
+            user = models.User.objects.get(username=email)
 
-        # 만약 입력한 이메일 값이 없다면.
-        # DoesNotExist 에러 발생
+            if user.check_password(password):
+                return self.cleaned_data
+            else:
+                self.add_error("password", forms.ValidationError("Password is wrong"))
+
         except models.User.DoesNotExist:
-            raise forms.ValidationError("User does not exist")
-
-    def clean_password(self):
-        return "lalalalalalal"
+            self.add_error("email", forms.ValidationError("User does not exist"))

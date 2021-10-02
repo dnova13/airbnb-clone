@@ -6,7 +6,6 @@ from . import forms
 class LoginView(View):
     def get(self, request):
 
-        # 테스트를 위해 initial 로그인 아디 넣음
         form = forms.LoginForm()
 
         return render(request, "users/login.html", {"form": form})
