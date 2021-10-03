@@ -83,24 +83,91 @@ def complete_verification(request, key):
 def github_login(request):
     client_id = os.environ.get("GH_ID")
     redirect_uri = "http://127.0.0.1:8000/users/login/github/callback"
+    scope = "read:user"
     return redirect(
-        f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user"
+        f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
     )
 
 
-def github_callback(request):
-    client_id = os.environ.get("GH_ID")
-    client_secret = os.environ.get("GH_SECRET")
-    code = request.GET.get("code", None)
+# 깃 에러에 대한 예외처리 클래스
+class GithubException(Exception):
+    pass
 
-    if code is not None:
-        request = requests.post(
-            f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
-            headers={"Accept": "application/json"},
-        )
-        print(request.json())
-    else:
-        return redirect(reverse("core:home"))
+
+def github_callback(request):
+    try:
+        client_id = os.environ.get("GH_ID")
+        client_secret = os.environ.get("GH_SECRET")
+        code = request.GET.get("code", None)
+
+        if code is not None:
+            token_request = requests.post(
+                f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
+                headers={"Accept": "application/json"},
+            )
+
+            token_json = token_request.json()
+
+            # 액새스 토큰 가져오는 json 에서 error 키를 가져옴
+            # 아무것도 없을시 None으로 기본값 지정.
+            error = token_json.get("error", None)
+
+            # 에러가 잇을 경우 에러 발생.
+            if error is not None:
+                raise GithubException()
+            else:
+                # 액세스 토큰 추출하여 유저 정보 가져옴.
+                access_token = token_json.get("access_token")
+                profile_request = requests.get(
+                    "https://api.github.com/user",
+                    headers={
+                        "Authorization": f"token {access_token}",
+                        "Accept": "application/json",
+                    },
+                )
+
+                profile_json = profile_request.json()
+
+                # 추출한 user 정보에서 login=ID 정보가 잇는지 확인
+                username = profile_json.get("login", None)
+
+                # ID 가 잇다면 db 저장 작업 시작
+                if username is not None:
+                    name = profile_json.get("name")
+                    email = profile_json.get("email")
+                    bio = profile_json.get("bio")
+
+                    try:
+                        # 해당 메일로 유저 정보가 잇는지 검색.
+                        user = models.User.objects.get(email=email)
+
+                        # 로깅 방법 검사.
+                        if user.login_method != models.User.LOGIN_GITHUB:
+                            raise GithubException()
+
+                    # 유저 정보가 없다면 회원가입 진행.
+                    except models.User.DoesNotExist:
+
+                        user = models.User.objects.create(
+                            email=email,
+                            first_name=name,
+                            username=email,
+                            bio=bio,
+                            login_method=models.User.LOGIN_GITHUB,
+                        )
+                        user.set_unusable_password()
+                        user.save()
+
+                    # 회원 가입 후 로깅 상태로 만듬.
+                    login(request, user)
+                    return redirect(reverse("core:home"))
+                else:
+                    raise GithubException()
+        else:
+            raise GithubException()
+    except GithubException:
+        # send error message
+        return redirect(reverse("users:login"))
 
 
 def log_out(request):
