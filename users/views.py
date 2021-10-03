@@ -59,6 +59,21 @@ class SignUpView(FormView):
     # 초기값 지정 일단 예로 보여준거고 실제 회원가입 폼에서 쓸필요가 없음.
     # initial = {"first_name": "Nicoas", "last_name": "Serr", "email": "itn@las.com}
 
+    def form_valid(self, form):
+
+        # form 이 유효하면 form save 함.
+        form.save()
+
+        # 회원 가입 후 바로 로그인하기 위한 과정을 위해 아래 작성.
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=email, password=password)
+
+        if user is not None:
+            login(self.request, user)
+
+        return super().form_valid(form)
+
 
 def log_out(request):
     logout(request)
