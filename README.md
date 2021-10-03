@@ -9,3 +9,7 @@ dnova
 # test account
 dn@gmail.com
 1q2w3e4r~
+
+
+# mail accout
+testnova0713@gmail.com
