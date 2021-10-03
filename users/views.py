@@ -50,6 +50,16 @@ class LoginView(FormView):
         return render(request, "users/login.html", {"form": form}) """
 
 
+class SignUpView(FormView):
+
+    template_name = "users/signup.html"
+    form_class = forms.SignUpForm
+    success_url = reverse_lazy("core:home")
+
+    # 초기값 지정 일단 예로 보여준거고 실제 회원가입 폼에서 쓸필요가 없음.
+    # initial = {"first_name": "Nicoas", "last_name": "Serr", "email": "itn@las.com}
+
+
 def log_out(request):
     logout(request)
     return redirect(reverse("core:home"))
