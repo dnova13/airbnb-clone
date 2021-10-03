@@ -31,14 +31,14 @@ class SignUpForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     password1 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
-    """ def clean_email(self):
+    def clean_email(self):
         email = self.cleaned_data.get("email")
 
         try:
             models.User.objects.get(username=email)
             raise forms.ValidationError("User already exists with that email")
         except models.User.DoesNotExist:
-            return email """
+            return email
 
     def clean_password1(self):
         password = self.cleaned_data.get("password")

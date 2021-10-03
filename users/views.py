@@ -3,7 +3,7 @@ from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
-from . import forms
+from . import forms, models
 
 
 class LoginView(FormView):
@@ -28,26 +28,6 @@ class LoginView(FormView):
             login(self.request, user)
 
         return super().form_valid(form)
-
-    """ def get(self, request):
-
-        form = forms.LoginForm()
-
-        return render(request, "users/login.html", {"form": form}) """
-
-    """ def post(self, request):
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            user = authenticate(request, username=email, password=password)
-
-            if user is not None:
-                login(request, user)
-                #
-                return redirect(reverse("core:home"))
-
-        return render(request, "users/login.html", {"form": form}) """
 
 
 class SignUpView(FormView):
@@ -75,6 +55,27 @@ class SignUpView(FormView):
         user.verify_email()
 
         return super().form_valid(form)
+
+
+# 여기서 인자 key 해도 되고, secrect 해도 상관없은 내키는대로
+def complete_verification(request, key):
+
+    try:
+        # 메일 인증하면서 보낸 시크릿 키 검사
+        user = models.User.objects.get(email_secret=key)
+
+        # 유효성 통과시 db 저장하고 , 시크릿 키 초기화
+        user.email_verified = True
+        user.email_secret = ""
+        user.save()
+
+        # 메세지 동작은 추후 나중에
+        # to do: add succes message
+    except models.User.DoesNotExist:
+        # to do: add error message
+        pass
+
+    return redirect(reverse("core:home"))
 
 
 def log_out(request):

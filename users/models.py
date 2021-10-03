@@ -74,4 +74,6 @@ class User(AbstractUser):
                 fail_silently=False,  # 에러 발생시 처리 유무
                 html_message=html_message,  # html 메시지
             )
+
+            self.save()
         return
