@@ -37,3 +37,13 @@ class User(AbstractUser):
         choices=CURRENCY_CHOICES, max_length=3, blank=True, default=CURRENCY_KRW
     )
     superhost = models.BooleanField(default=False)
+
+    # 메일 인증 검증
+    email_confirmed = models.BooleanField(default=False)
+
+    # 메일 인증키
+    email_secret = models.CharField(max_length=120, default="", blank=True)
+
+    # 메일 인증 메소드
+    def verify_email(self):
+        pass
