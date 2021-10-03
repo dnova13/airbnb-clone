@@ -83,7 +83,7 @@ def complete_verification(request, key):
 def github_login(request):
     client_id = os.environ.get("GH_ID")
     redirect_uri = "http://127.0.0.1:8000/users/login/github/callback"
-    scope = "read:user"
+    scope = "read:user user:email"  # 메일 정보를 추출하기위해 스코프 범위 변경.
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
     )
@@ -126,20 +126,45 @@ def github_callback(request):
                     },
                 )
 
+                # 이메일 데이터 추출
+                email_request = requests.get(
+                    "https://api.github.com/user/emails",
+                    headers={
+                        "Authorization": f"token {access_token}",
+                        "Accept": "application/json",
+                    },
+                )
+
+                email_json = email_request.json()
                 profile_json = profile_request.json()
+
+                for obj in email_json:
+                    if obj.get("primary") is True and obj.get("verified") is True:
+                        email = obj.get("email")
+
+                if email is None:
+                    raise GithubException()
 
                 # 추출한 user 정보에서 login=ID 정보가 잇는지 확인
                 username = profile_json.get("login", None)
 
                 # ID 가 잇다면 db 저장 작업 시작
                 if username is not None:
-                    name = profile_json.get("name")
-                    email = profile_json.get("email")
-                    bio = profile_json.get("bio")
+                    name = (
+                        profile_json.get("name")
+                        if profile_json.get("name") is not None
+                        else "noname"
+                    )
+                    email = email
+                    bio = (
+                        profile_json.get("bio")
+                        if profile_json.get("bio") is not None
+                        else ""
+                    )
 
                     try:
                         # 해당 메일로 유저 정보가 잇는지 검색.
-                        user = models.User.objects.get(email=email)
+                        user = models.User.objects.get(username=email)
 
                         # 로깅 방법 검사.
                         if user.login_method != models.User.LOGIN_GITHUB:
