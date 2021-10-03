@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 
 class User(AbstractUser):
@@ -59,11 +61,17 @@ class User(AbstractUser):
             # 해당 db 데이터에 eamil_secret 값 삽입
             self.email_secret = secret
 
+            # render_to_string : templte를 로드하여 render 하는거.
+            html_message = render_to_string(
+                "emails/verify_email.html", {"secret": secret}
+            )
+
             send_mail(
                 "Verify Airbnb Account",  # 메일 제목
-                f"Verify account, this is your secret: {secret}",  # 메일 메세지
+                strip_tags(html_message),  # 메일 메세지, strip_tags : 태그를 제회하고 문자로 반환
                 settings.EMAIL_FROM,  # 발신 메일
                 [self.email],  # 보낼 메일 주소 리스트
                 fail_silently=False,  # 에러 발생시 처리 유무
+                html_message=html_message,  # html 메시지
             )
         return
