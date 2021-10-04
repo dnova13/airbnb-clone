@@ -5,6 +5,7 @@ from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.base import ContentFile
 from . import forms, models
 
 
@@ -161,6 +162,7 @@ def github_callback(request):
                         if profile_json.get("bio") is not None
                         else ""
                     )
+                    profile_image = profile_json.get("avatar_url")
 
                     try:
                         # 해당 메일로 유저 정보가 잇는지 검색.
@@ -184,6 +186,12 @@ def github_callback(request):
                         # 암호 등록 필요업음을 알림
                         user.set_unusable_password()
                         user.save()
+
+                        if profile_image is not None:
+                            photo_request = requests.get(profile_image)
+                            user.avatar.save(
+                                f"{email}-avatar", ContentFile(photo_request.content)
+                            )
 
                     # 회원 가입 후 로깅 상태로 만듬.
                     login(request, user)
@@ -261,6 +269,14 @@ def kakao_callback(request):
             # 암호 등록 필요업음을 알림
             user.set_unusable_password()
             user.save()
+
+            if profile_image is not None:
+                # 파일 url 을 통해 파일 정보 가져옴.
+                photo_request = requests.get(profile_image)
+
+                # photo_request.content : 파일의 이진 정보를 가져옴.
+                # ContentFile 을 통해 파일을 담고 저장.
+                user.avatar.save(f"{email}-avatar", ContentFile(photo_request.content))
 
         login(request, user)
 
