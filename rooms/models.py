@@ -117,3 +117,11 @@ class Room(core_models.TimeStampedModel):
 
         # 삼항 연산자로 review가 하나도 없을때는 계산 안하고 0으로
         return round(all_ratings / len(all_reviews), 2) if len(all_reviews) > 0 else 0
+
+    # 첫번째 사진 url 를 보냄.
+    def first_photo(self):
+        # unpacking value,  배열에서 첫번째 것를 담음
+        # 다른 예로 배열이 2개일 때, 이렇게 담는거 가능 one, two = self.photos.all()[:2]
+        (photo,) = self.photos.all()[:1]
+
+        return photo.file.url
