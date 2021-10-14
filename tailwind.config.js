@@ -8,6 +8,9 @@ module.exports = {
       },
       borderRadius: {
         xl: "1.5rem"
+      },
+      backgroundSize: {
+        'full': '100% 100%',
       }
     }
   },
