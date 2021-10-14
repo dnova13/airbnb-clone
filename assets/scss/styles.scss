@@ -15,4 +15,11 @@
   }
 }
 
+.page_hover {
+  @apply mx-3 pb-1 px-10px ;
+  &:hover {
+    @apply rounded-circle  bg-gray-100;
+  }
+}
+
 @tailwind utilities;

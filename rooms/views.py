@@ -13,17 +13,64 @@ class HomeView(ListView):
     model = models.Room
 
     # 페이지에서 보일 목록의 개수
-    paginate_by = 12
+    paginate_by = 8
     paginate_orphans = 5
     ordering = "created"
+
+    # page_range = self.paginator.get_elided_page_range(number=10)
 
     # object 이름을 rooms 로 변경
     context_object_name = "rooms"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # 장고 ListView 에서 paginator 속성 얻어오는 과정.
+        queryset = object_list if object_list is not None else self.object_list
+        paginator, page, queryset, is_paginated = self.paginate_queryset(
+            queryset, self.paginate_by
+        )
+
+        per_page_cnt = 4
+
+        start_page = (
+            0
+            if page.number - 2 <= 0
+            else page.number - 2
+            if paginator.num_pages - (page.number - 2) > per_page_cnt
+            else paginator.num_pages - per_page_cnt
+            if paginator.num_pages != per_page_cnt
+            else paginator.num_pages - per_page_cnt + 1
+        )
+
+        end_page = per_page_cnt + abs(start_page)
+
+        last_range = (
+            page.number + per_page_cnt - 2
+            if paginator.num_pages != per_page_cnt
+            else page.number + per_page_cnt - 2 + 1
+        )
+
+        first_ellipsis = (
+            True
+            if page.number > per_page_cnt - 1 and paginator.num_pages > per_page_cnt + 1
+            else False
+        )
+
+        last_ellipsis = (
+            True
+            if last_range + 1 < paginator.num_pages
+            and paginator.num_pages > per_page_cnt + 1
+            else False
+        )
+
         now = timezone.now()
         context["now"] = now
+        context["page_range"] = paginator.page_range[abs(start_page) : end_page]
+        context["last_range"] = last_range
+        context["first_ellipsis"] = first_ellipsis
+        context["last_ellipsis"] = last_ellipsis
+
         return context
 
 
