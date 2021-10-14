@@ -1,5 +1,7 @@
 module.exports = {
   theme: {
+
+    // extend : 테마 안에 객체를 추가합니다. 
     extend: {
       spacing: {
         "25vh": "25vh",
@@ -14,6 +16,9 @@ module.exports = {
       },
       backgroundSize: {
         'full': '100% 100%',
+      },
+      textColor: {
+        'teal-500': '#38b2ac',
       }
     }
   },
