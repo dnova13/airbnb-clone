@@ -47,7 +47,9 @@ class SignUpForm(forms.ModelForm):
 
         try:
             models.User.objects.get(username=email)
-            raise forms.ValidationError("User already exists with that email")
+            raise forms.ValidationError(
+                "User already exists with that email", code="existing_user"
+            )
         except models.User.DoesNotExist:
             return email
 
