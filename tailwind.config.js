@@ -19,6 +19,10 @@ module.exports = {
       },
       textColor: {
         'teal-500': '#38b2ac',
+      },
+      minHeight: {
+        "50vh": "50vh",
+        "75vh": "75vh"
       }
     }
   },
