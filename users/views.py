@@ -1,7 +1,7 @@
 import os
 import requests
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
@@ -61,7 +61,9 @@ class SignUpView(FormView):
         return super().form_valid(form)
 
 
-# 여기서 인자 key 해도 되고, secrect 해도 상관없은 내키는대로
+# 여기서 인자는 url.py 에서 셋팅한 verify/<str:key>
+# key 값을로.
+# <str:secret> 인 경우 secret 로 변경
 def complete_verification(request, key):
 
     try:
@@ -291,6 +293,12 @@ def kakao_callback(request):
     except KakaoException as e:
         messages.error(request, e)
         return redirect(reverse("users:login"))
+
+
+class UserProfileView(DetailView):
+
+    model = models.User
+    context_object_name = "user_obj"
 
 
 def log_out(request):
