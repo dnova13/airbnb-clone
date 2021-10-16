@@ -1,7 +1,7 @@
 import os
 import requests
 from django.views import View
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
@@ -299,6 +299,30 @@ class UserProfileView(DetailView):
 
     model = models.User
     context_object_name = "user_obj"
+
+
+class UpdateProfileView(UpdateView):
+
+    model = models.User
+
+    # 연결시킬 html 지정.
+    template_name = "users/update-profile.html"
+
+    # 보여줄 폼 필드 설정.
+    fields = (
+        "first_name",
+        "last_name",
+        "avatar",
+        "gender",
+        "bio",
+        "birthdate",
+        "language",
+        "currency",
+    )
+
+    # 수정하기 위한 객체를 반환함.
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 def log_out(request):

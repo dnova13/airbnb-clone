@@ -22,7 +22,7 @@
 
                 {% comment %} 로그인한 사용자인지 확인 {% endcomment %}
                 {% if user == user_obj %}
-                    <a href="#" class="btn-link">Edit Profile</a>
+                    <a href="{% url 'users:update' %}" class="btn-link">Edit Profile</a>
                 {% endif %}
                     
             </div>
