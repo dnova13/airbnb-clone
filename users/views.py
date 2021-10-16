@@ -283,6 +283,7 @@ def kakao_callback(request):
                 # ContentFile 을 통해 파일을 담고 저장.
                 user.avatar.save(f"{email}-avatar", ContentFile(photo_request.content))
 
+        # 로그인 성공 메세지 보냄
         messages.success(request, f"Welcome back {user.first_name}")
         login(request, user)
 
@@ -293,5 +294,6 @@ def kakao_callback(request):
 
 
 def log_out(request):
+    messages.info(request, f"See you later")
     logout(request)
     return redirect(reverse("core:home"))
