@@ -1,5 +1,5 @@
 {% comment %} 로그인 또는 회원 가입을 위한 폼 태그 {% endcomment %}
-<form method="POST" class="w-full">
+<form method="POST" class="w-full" enctype="multipart/form-data">
     {% csrf_token %}
     
     {% if form.non_field_errors %}

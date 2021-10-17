@@ -31,12 +31,24 @@
 }
 
 
-input {
+input,
+textarea,
+select {
   @apply rounded-sm py-5 font-light text-lg w-full text-left border border-gray-600 px-5;
   &:focus {
     border-color: #38b2ac;
     @apply outline-none ;
   }
+}
+
+
+textarea {
+  resize: none;
+  height: 100px;
+}
+
+select {
+  // height: 7px;
 }
 
 form {
