@@ -1,6 +1,8 @@
 {% comment %} 폼태그에서 에러 처리 등의 메세지 {% endcomment %}
 <div class="input w-full {% if field.errors %}has_error{% endif %}">
-    {% comment %} {{field.label}} {% endcomment %}
+    {% comment %} {% if field.widget_type == "date" %} {% endcomment %}
+    <span class="text-sm font-medium">{{field.label}}<span>
+    {% comment %} {% endif %} {% endcomment %}
     {{field}}
     {% if field.errors %}
         {% for error in field.errors %}
