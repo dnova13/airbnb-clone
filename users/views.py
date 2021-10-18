@@ -22,11 +22,6 @@ class LoginView(mixins.LoggedOutOnlyView, FormView):
     # 어떤 용도로 쓸지 클래스 지정.
     form_class = forms.LoginForm
 
-    # 해당 요청 예로 로그인 성공시 리다렉 지정.
-    # reverse를 통해 ("core:home") 이 적용 안됨
-    # reverse_lazy 이용
-    success_url = reverse_lazy("core:home")
-
     def form_valid(self, form):
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
@@ -36,6 +31,15 @@ class LoginView(mixins.LoggedOutOnlyView, FormView):
             login(self.request, user)
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        next_arg = self.request.GET.get("next")
+
+        # next_arg 가 있다면 next에 잇는 url로 반환
+        if next_arg is not None:
+            return next_arg
+        else:
+            return reverse("core:home")
 
 
 class SignUpView(mixins.LoggedOutOnlyView, FormView):
@@ -305,7 +309,7 @@ class UserProfileView(DetailView):
     context_object_name = "user_obj"
 
 
-class UpdateProfileView(SuccessMessageMixin, UpdateView):
+class UpdateProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
 
     model = models.User
 
@@ -357,7 +361,12 @@ class UpdateProfileView(SuccessMessageMixin, UpdateView):
         return form
 
 
-class UpdatePasswordView(SuccessMessageMixin, PasswordChangeView):
+class UpdatePasswordView(
+    mixins.EmailLoginOnlyView,
+    mixins.LoggedInOnlyView,
+    SuccessMessageMixin,
+    PasswordChangeView,
+):
 
     template_name = "users/update-password.html"
     success_message = "Password Updated"
