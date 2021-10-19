@@ -9,6 +9,9 @@
                 {% endif %}
             </a>
         </li>
+        {% if request.session.is_hosting %}
+            <li class="nav_link"><a href="{% url 'rooms:create' %}">Create Room</a></li>
+        {% endif %}
         <a class="ml-5" href="{{user.get_absolute_url}}">
             {% include "mixins/user_avatar.html" with user=user h_and_w='w-11 h-11' %}
         </a>

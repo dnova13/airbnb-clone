@@ -5,6 +5,7 @@ app_name = "rooms"
 
 # as_view() 로 RoomDetail view 로 전환
 urlpatterns = [
+    path("create/", views.CreateRoomView.as_view(), name="create"),
     path("<int:pk>", views.RoomDetail.as_view(), name="detail"),
     path("<int:pk>/edit/", views.EditRoomView.as_view(), name="edit"),
     path("<int:pk>/photos/", views.RoomPhotosView.as_view(), name="photos"),

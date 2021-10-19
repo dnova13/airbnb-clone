@@ -20,7 +20,9 @@ class HomeView(ListView):
     # 페이지에서 보일 목록의 개수
     paginate_by = 8
     paginate_orphans = 5
-    ordering = "created"
+
+    # 정렬 : 내림차순, 오름차순 "created"
+    ordering = "-created"
 
     # page_range = self.paginator.get_elided_page_range(number=10)
 
@@ -297,3 +299,17 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
         messages.success(self.request, "Photo Uploaded")
 
         return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
+
+
+class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
+
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/room_create.html"
+
+    def form_valid(self, form):
+        room = form.save()
+        room.host = self.request.user
+        room.save()
+        messages.success(self.request, "Photo Uploaded")
+
+        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))

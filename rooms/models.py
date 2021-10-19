@@ -120,11 +120,14 @@ class Room(core_models.TimeStampedModel):
 
     # 첫번째 사진 url 를 보냄.
     def first_photo(self):
-        # unpacking value,  배열에서 첫번째 것를 담음
-        # 다른 예로 배열이 2개일 때, 이렇게 담는거 가능 one, two = self.photos.all()[:2]
-        (photo,) = self.photos.all()[:1]
 
-        return photo.file.url
+        try:
+            # unpacking value,  배열에서 첫번째 것를 담음
+            # 다른 예로 배열이 2개일 때, 이렇게 담는거 가능 one, two = self.photos.all()[:2]
+            (photo,) = self.photos.all()[:1]
+            return photo.file.url
+        except ValueError:
+            return None
 
     def get_next_four_photos(self):
         photos = self.photos.all()[1:5]
