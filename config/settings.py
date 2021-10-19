@@ -161,3 +161,8 @@ EMAIL_HOST_PASSWORD = os.environ.get("GMAIL_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_FROM = "myemail@gmail.com"  # 설정하고 싶은 이메일로
+
+
+# Auth
+
+LOGIN_URL = "/users/login/"
