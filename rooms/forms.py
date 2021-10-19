@@ -47,4 +47,10 @@ class CreatePhotoForm(forms.ModelForm):
 
     def save(self, pk, *args, **kwargs):
         photo = super().save(commit=False)
-        print(pk)
+
+        # pk roomd_id 검색
+        room = models.Room.objects.get(pk=pk)
+
+        # photo db 에 룸 삽입
+        photo.room = room
+        photo.save()
