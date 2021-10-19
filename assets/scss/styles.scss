@@ -53,7 +53,7 @@ select {
 
 form {
   .input {
-    @apply mb-3 w-full;
+    @apply mb-4 w-full;
     &.has_error {
       input {
         @apply bg-red-200 border-gray-600;
@@ -65,6 +65,10 @@ form {
   }
 }
 
+
+input[name=instant_book]  {
+  @apply w-8
+}
 
 
 @keyframes messageFadeIn {

@@ -1,7 +1,9 @@
+from django.http import Http404
 from django.views.generic import ListView, DetailView, View, UpdateView
 from django.utils import timezone
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from users import mixins as user_mixins
 from . import models, forms
 
 
@@ -185,7 +187,7 @@ class SearchView(View):
         return render(request, "rooms/search.html", {"form": form})
 
 
-class EditRoomView(UpdateView):
+class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
 
     model = models.Room
     template_name = "rooms/room_edit.html"
@@ -208,3 +210,24 @@ class EditRoomView(UpdateView):
         "facilities",
         "house_rules",
     )
+
+    # 사용자에 대한 필터 처리
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset=queryset)
+
+        # 이 룸의 주인이 아니라면 못들어게 함.
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        return room
+
+
+class RoomPhotosView(user_mixins.LoggedInOnlyView, DetailView):
+
+    model = models.Room
+    template_name = "room_photos.html"
+
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset=queryset)
+        if room.host.pk != self.request.user.pk:
+            raise Http404("Page Not Found11")
+        return room
