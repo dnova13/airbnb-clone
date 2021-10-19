@@ -1,6 +1,15 @@
 <ul class="flex items-center text-sm font-medium h-full">
     {% if user.is_authenticated %}
-        <a href="{{user.get_absolute_url}}">
+        <li class="nav_link">
+            <a href="{% url 'users:switch-hosting' %}">
+                {% if request.session.is_hosting %}
+                    Stop hosting
+                {% else %}
+                    Start hosting
+                {% endif %}
+            </a>
+        </li>
+        <a class="ml-5" href="{{user.get_absolute_url}}">
             {% include "mixins/user_avatar.html" with user=user h_and_w='w-11 h-11' %}
         </a>
         <li class="nav_link"><a href="{{user.get_absolute_url}}">Profile</a></li>

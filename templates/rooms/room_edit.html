@@ -16,6 +16,9 @@
         <div class="mt-5">
             <a href="{% url 'rooms:photos' room.pk %}" class="text-teal-500 font-medium">Edit Photos</a>
         </div>
-            
+        <hr class="border-solid w-full border-gray-200 mt-5">
+        <div class="mt-5">
+            <a href="{% url 'rooms:detail' room.pk %}" class="text-red-500 font-bold">Back to room</a>
+        </div>
     </div>
 {% endblock content %}

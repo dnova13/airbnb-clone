@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 from . import forms, models, mixins
 
 
@@ -387,4 +388,13 @@ class UpdatePasswordView(
 def log_out(request):
     messages.info(request, f"See you later")
     logout(request)
+    return redirect(reverse("core:home"))
+
+
+@login_required
+def switch_hosting(request):
+    try:
+        del request.session["is_hosting"]
+    except KeyError:
+        request.session["is_hosting"] = True
     return redirect(reverse("core:home"))
