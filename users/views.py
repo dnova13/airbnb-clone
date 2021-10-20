@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
+from core.forms import CustomClearableFileInput
 from . import forms, models, mixins
 
 
@@ -340,12 +341,7 @@ class UpdateProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
 
-        # form.fields["avatar"].widget = forms.forms.FileInput()
-
-        # print(form["avatar"])
-        # print(vars(form["avatar"]))
-        # print(vars(form.fields["avatar"].widget))
-
+        form.fields["avatar"].widget = CustomClearableFileInput()
         form.fields["birthdate"].label = "Birth date"
         form.fields["birthdate"].widget = forms.forms.DateInput(
             attrs={"type": "date", "label": "Birth date"},

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from users import mixins as user_mixins
 from django.contrib.messages.views import SuccessMessageMixin
+from core.forms import CustomClearableFileInput
 from . import models, forms
 
 
@@ -265,19 +266,15 @@ class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateVie
     pk_url_kwarg = "photo_pk"  # photo_pk를 pk 대신 사용.
     success_message = "Photo Updated"
     fields = (
-        "file",
         "caption",
+        "file",
     )
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
 
-        # print(vars(form["file"]))
-        # # print(vars(form["file"].form))
-        # # print(vars(form["file"].field))
-        # print(dir(form.fields["file"]))
-        # print(dir(form.fields["file"].widget.attrs))
-        # print(vars(form.fields["file"]))
+        form.fields["file"].label = "Image"
+        form.fields["file"].widget = CustomClearableFileInput()
 
         return form
 
@@ -292,6 +289,14 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
     template_name = "rooms/photo_create.html"
     fields = ("caption", "file")
     form_class = forms.CreatePhotoForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+
+        form.fields["file"].label = "Image"
+        form.fields["file"].widget = CustomClearableFileInput()
+        
+        return form
 
     def form_valid(self, form):
         pk = self.kwargs.get("pk")

@@ -1,0 +1,60 @@
+<!-- 기존이미지 -->
+<div>
+    <div class="flex flex-col items-center">
+        <div id='imagePreview' class="img-{{name}} mt-1 mb-4 " style="{% if value %} background-image: url({{value.url}}); {% else %} display:none {% endif %}" >   
+        {% if id != 'id_file' %}
+        <button id='imageClearBtn' class="text-xl mt-1 mb-2 mr-1 text-red-600 float-right {%if not value %} hidden {% endif %}"  type='button'>
+                <i class="fas fa-times fa-lg"></i>
+        </button>
+        {% endif %}
+        </div>        
+    </div>
+    
+    <!-- 기존 ClearableFileInput의 삭제 기능을 활용하기 위해 위에 삭제 버튼을 누르면 체크되도록 하되 안보이게 설정 -->
+    <div class="custom-control custom-checkbox d-none">
+        <input class="hidden" type="checkbox" id="{{ name }}-clear_id" class="custom-control-input" name="{{ name }}-clear">
+        {% comment %} <label class="custom-control-label" for="chk-{{ name }}">이미지를 삭제하려면 체크하세요.</label> {% endcomment %}
+    </div>
+
+
+    <!-- 파일 업로드 폼 좀 더 예쁘게(선택사항) -->
+    <div class="custom-file">
+        {% comment %} <label for="{{ id }}" class="custom-file-label">Change</label> {% endcomment %}
+        <input type="file" id="{{ id }}" class="custom-file-input" name="{{ name }}" accept="image/*" style="cursor: pointer;">
+    </div>
+
+    <!-- 여기서부터 스크립트 -->
+    <script>
+        
+        const clearBtn = document.getElementById('imageClearBtn')
+
+        if (clearBtn) {
+            // 삭제 버튼이 클릭되면 이미지 안보이게 한 후 숨겨진 삭제 체크박스 값 변경 
+            clearBtn.addEventListener('click', function(e) {
+                document.querySelector("#id_{{ name }}").value = '';
+                document.getElementById('{{ name }}-clear_id').checked = true;
+                document.getElementById('imagePreview').style.display = "none"
+                clearBtn.style.display = "none"
+            });
+        }
+
+        // 파일 선택 이벤트 등록
+        let imgFieldCtrl = document.getElementById('{{ id }}')
+
+        imgFieldCtrl.addEventListener('change', function(e) {
+        
+            if (imgFieldCtrl.files && imgFieldCtrl.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {   
+                    document.getElementById('imagePreview').style.backgroundImage = `url(${e.target.result})`;
+                    clearBtn ? clearBtn.style.display = "block" : '';
+                    document.getElementById('imagePreview').style.display = "block"
+                    document.getElementById('{{ name }}-clear_id').checked = false;
+                }
+
+                // convert to base64 string
+                reader.readAsDataURL(document.getElementById('{{ id }}').files[0]); 
+            }
+        });
+    </script>
+</div>
