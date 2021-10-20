@@ -226,6 +226,19 @@ class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
             raise Http404()
         return room
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+
+        form.fields["check_in"].widget = forms.forms.TimeInput(
+            format="%H:%M", attrs={"type": "time"}
+        )
+
+        form.fields["check_out"].widget = forms.forms.TimeInput(
+            format="%H:%M", attrs={"type": "time"}
+        )
+
+        return form
+
 
 class RoomPhotosView(user_mixins.LoggedInOnlyView, DetailView):
 
@@ -295,7 +308,7 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
 
         form.fields["file"].label = "Image"
         form.fields["file"].widget = CustomClearableFileInput()
-        
+
         return form
 
     def form_valid(self, form):
