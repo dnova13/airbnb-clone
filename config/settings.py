@@ -41,8 +41,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-
-THIRD_PARTY_APPS = ["django_countries", "django_seed", "send_gmail"]
+THIRD_PARTY_APPS = ["django_countries", "django_seed"]
 
 # 내가 만든 앱을 서치
 PROJECT_APPS = [
@@ -55,7 +54,7 @@ PROJECT_APPS = [
     "conversations.apps.ConversationsConfig",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
