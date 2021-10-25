@@ -229,6 +229,15 @@ class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
 
+        """ 
+        print(vars(form["facilities"].field))
+
+        form.fields["facilities"] = forms.forms.ModelMultipleChoiceField(
+            queryset=form["facilities"].field._queryset,
+            widget=forms.forms.CheckboxSelectMultiple,
+            required=True,
+        ) """
+
         form.fields["check_in"].widget = forms.forms.TimeInput(
             format="%H:%M", attrs={"type": "time"}
         )
