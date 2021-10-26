@@ -48,11 +48,15 @@ class ReservationDetailView(View):
         pk = kwargs.get("pk")
         reservation = models.Reservation.objects.get_or_none(pk=pk)
 
+        # 데이터가 없거나
+        # 접속한 유저가 예약 신청한 게스트도 동시에 방 주인이 아닐경우 팅궈냄.
         if not reservation or (
             reservation.guest != self.request.user
             and reservation.room.host != self.request.user
         ):
             raise Http404()
+
+        # 접속한 유저가 예약 신청한 게스트이거나, 방 주인일때 접속 가능.
         return render(
             self.request, "reservations/detail.html", {"reservation": reservation}
         )
