@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.utils import timezone
 from core import models as core_models
@@ -71,13 +72,25 @@ class Reservation(core_models.TimeStampedModel):
             start = self.check_in
             end = self.check_out
 
-            diff = end - start
+            difference = end - start
 
             # 체크인 체크 아웃 날짜범위에 예약된게 있는지 찾아서 true 반환.
             existing_booked_day = BookedDay.objects.filter(
                 day__range=(start, end)
             ).exists()
 
-        # 예약된게 있다면 그냥 save
+            # 예약이 없다면 예약정보와 예약 날짜들 저장
+            if not existing_booked_day:
+
+                # resevation 저장하여 포린키 형성
+                super().save(*args, **kwargs)
+
+                # 예약된 날짜 담음.
+                for i in range(difference.days + 1):
+                    day = start + datetime.timedelta(days=i)
+                    BookedDay.objects.create(day=day, reservation=self)
+                return
+
+        # 예약된게 있다면 그냥 save(수정)
         else:
             return super().save(*args, **kwargs)
