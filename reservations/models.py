@@ -13,6 +13,9 @@ class BookedDay(core_models.TimeStampedModel):
         verbose_name = "Booked Day"
         verbose_name_plural = "Booked Days"
 
+    def __str__(self):
+        return str(self.day)
+
 
 class Reservation(core_models.TimeStampedModel):
 
@@ -57,7 +60,7 @@ class Reservation(core_models.TimeStampedModel):
     # 방 사용 완료 끝난거 표시
     def is_finished(self):
         now = timezone.now().date()
-        print(now)
+
         # return False
         return now > self.check_out
 
@@ -68,7 +71,7 @@ class Reservation(core_models.TimeStampedModel):
 
         # 예약된게 없으면 예약된 날짜 추가
         if self.pk is None:
-            print("new")
+
             start = self.check_in
             end = self.check_out
 
@@ -76,7 +79,7 @@ class Reservation(core_models.TimeStampedModel):
 
             # 체크인 체크 아웃 날짜범위에 예약된게 있는지 찾아서 true 반환.
             existing_booked_day = BookedDay.objects.filter(
-                day__range=(start, end)
+                reservation__room=self.room, day__range=(start, end)
             ).exists()
 
             # 예약이 없다면 예약정보와 예약 날짜들 저장
