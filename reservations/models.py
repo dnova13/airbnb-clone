@@ -3,6 +3,16 @@ from django.utils import timezone
 from core import models as core_models
 
 
+class BookedDay(core_models.TimeStampedModel):
+
+    day = models.DateField()
+    reservation = models.ForeignKey("Reservation", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Booked Day"
+        verbose_name_plural = "Booked Days"
+
+
 class Reservation(core_models.TimeStampedModel):
 
     """Reservation Model Definition"""
@@ -52,3 +62,22 @@ class Reservation(core_models.TimeStampedModel):
 
     # 화면 표시를 아이콘으로 변경
     is_finished.boolean = True
+
+    def save(self, *args, **kwargs):
+
+        # 예약된게 없으면 예약된 날짜 추가
+        if self.pk is None:
+            print("new")
+            start = self.check_in
+            end = self.check_out
+
+            diff = end - start
+
+            # 체크인 체크 아웃 날짜범위에 예약된게 있는지 찾아서 true 반환.
+            existing_booked_day = BookedDay.objects.filter(
+                day__range=(start, end)
+            ).exists()
+
+        # 예약된게 있다면 그냥 save
+        else:
+            return super().save(*args, **kwargs)
