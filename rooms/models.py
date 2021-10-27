@@ -140,12 +140,14 @@ class Room(core_models.TimeStampedModel):
 
         this_year = now.year
         this_month = now.month
-        next_month = this_month + 1
 
-        if this_month == 12:
-            next_month = 1
+        next_month = (this_month + 1) % 12 if (this_month + 1) % 12 != 0 else 12
+        next_year = this_year if this_month < next_month else this_year + 1
+        next2_month = (this_month + 2) % 12 if (this_month + 2) % 12 != 0 else 12
+        next2_year = this_year if this_month < next2_month else this_year + 1
 
         this_month_cal = Calendar(this_year, this_month)
-        next_month_cal = Calendar(this_year, next_month)
+        next_month_cal = Calendar(next_year, next_month)
+        next2_month_cal = Calendar(next2_year, next2_month)
 
-        return [this_month_cal, next_month_cal]
+        return [this_month_cal, next_month_cal, next2_month_cal]

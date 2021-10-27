@@ -11,7 +11,7 @@ class CreateError(Exception):
     pass
 
 
-def create(request, room, year, month, day):
+def create_reservation(request, room, year, month, day, timedelta):
     try:
         date_obj = datetime.datetime(year, month, day)
         room = room_models.Room.objects.get(pk=room)
@@ -38,7 +38,7 @@ def create(request, room, year, month, day):
             guest=request.user,
             room=room,
             check_in=date_obj,
-            check_out=date_obj + datetime.timedelta(days=1),
+            check_out=date_obj + datetime.timedelta(days=timedelta),
         )
         return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
 
@@ -60,3 +60,27 @@ class ReservationDetailView(View):
         return render(
             self.request, "reservations/detail.html", {"reservation": reservation}
         )
+
+
+def edit_reservation(request, pk, verb):
+    reservation = models.Reservation.objects.get_or_none(pk=pk)
+
+    # 데이터가 없거나
+    # 접속한 유저가 예약 신청한 게스트도 동시에 방 주인이 아닐경우 팅궈냄.
+    if not reservation or (
+        reservation.guest != request.user and reservation.room.host != request.user
+    ):
+        raise Http404()
+
+    if verb == "confirm":
+        reservation.status = models.Reservation.STATUS_CONFIRMED
+
+    elif verb == "cancel":
+        reservation.status = models.Reservation.STATUS_CANCELED
+        models.BookedDay.objects.filter(reservation=reservation).delete()
+
+    reservation.save()
+
+    messages.success(request, "Reservation Updated")
+
+    return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))

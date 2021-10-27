@@ -30,6 +30,9 @@
   @apply text-center py-3 rounded-lg font-light text-lg w-full text-white bg-red-500;
 }
 
+.btn-back {
+  @apply text-center py-3 rounded-lg font-light text-lg w-full text-white bg-teal-500;
+}
 
 input,
 textarea,
