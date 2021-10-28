@@ -15,7 +15,7 @@
 
         <div class="flex flex-col items-start border-l border-r border-t border-b">
             <div class="font-medium border-b py-8 px-5 w-full">
-                {{reservation.check_in}} - {{reservation.check_out}} <span class="ml-5 {% if reservation.status == 'pending' %} text-yellow-500 {% elif reservation.status == 'canceled' %} text-red-600 {% else %} text-teal-600 {% endif %}">{{reservation.get_status_display}}</span>
+                {{reservation.check_in}} - {{reservation.check_out}} <span class="ml-5 {% if reservation.status == 'pending' %} text-yellow-500 {% elif reservation.status == 'canceled' %} text-red-600 {% else %} text-teal-500 {% endif %}">{{reservation.get_status_display}}</span>
             </div>
     
             <span class="text-2xl border-b p-5 mt-2 w-full">
@@ -35,7 +35,7 @@
     
             <div class="py-10 px-5">
             {% if reservation.status != 'canceled' %}
-                {% if reservation.status == 'confirmed' and reservation.is_finished %}
+                {% if reservation.status == 'confirmed' and reservation.is_finished and not reservation.is_reviewed %}
                     <span class="font-medium text-2xl text-center w-full block mb-5">Write your review</span>
                     <form action="{% url 'reviews:create' reservation.room.pk reservation.pk  %}" method="POST" class="w-1/2 mx-auto">
                         {% csrf_token %}
@@ -50,8 +50,14 @@
                         {% endif %}
                     {% endif %}
                 {% endif %}
+                
             {% endif %}
-            <a href="{% url 'rooms:detail' reservation.room.pk  %}" class="btn-back  block px-3 mt-4 ">Back to Room</a>
+            {% if reservation.status == 'confirmed' and reservation.is_finished and not reservation.is_reviewed %}
+                <a href="{% url 'rooms:detail' reservation.room.pk  %}" class="btn-back w-1/2 mx-auto block px-3 mt-4 ">Back to Room</a>
+            {% else %}
+                <a href="{% url 'rooms:detail' reservation.room.pk  %}" class="btn-back block px-3 mt-4 ">Back to Room</a>
+            {% endif %}
+            
             </div>
         </div>
 

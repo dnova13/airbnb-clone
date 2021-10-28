@@ -37,6 +37,7 @@ class Reservation(core_models.TimeStampedModel):
     )
     check_in = models.DateField()
     check_out = models.DateField()
+    is_reviewed = models.BooleanField(default=False)
     guest = models.ForeignKey(
         "users.User", related_name="reservations", on_delete=models.CASCADE
     )
