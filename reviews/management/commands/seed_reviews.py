@@ -15,11 +15,20 @@ class Command(BaseCommand):
             "--number", default=2, type=int, help="How many reviews you want to create"
         )
 
+        parser.add_argument("--room_pk", default=0, type=int, help="write room_pk")
+
     def handle(self, *args, **options):
         number = options.get("number")
+        room_pk = options.get("room_pk")
+
         seeder = Seed.seeder()
         users = user_models.User.objects.all()
-        rooms = room_models.Room.objects.all()
+        rooms = (
+            room_models.Room.objects.all()
+            if room_pk == 0
+            else room_models.Room.objects.filter(pk=room_pk)
+        )
+
         seeder.add_entity(
             review_models.Review,
             number,

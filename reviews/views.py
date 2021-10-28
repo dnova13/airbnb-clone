@@ -56,11 +56,12 @@ def create_review(request, room_pk, reservation_pk):
 def list_reviews(request, room_pk):
 
     page = int(request.GET.get("page", 1))
-    page_size = 1
+    page_size = 10
     limit = page_size * page
     offset = limit - page_size
 
     reviews = Review.objects.filter(room=room_pk)[offset:limit]
+    total_reviews = Review.objects.count()
 
     if not reviews:
         return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
@@ -69,6 +70,10 @@ def list_reviews(request, room_pk):
     # iterable 객체를 list 같은 객체를 넣을 때는 many를 True로 바꿔줘야함.
     serialized_reviews = ReviewListSerializer(reviews, many=True)
 
-    __data = {"success": True, "data": serialized_reviews.data}
+    __data = {
+        "success": True,
+        "data": serialized_reviews.data,
+        "total_reviews": total_reviews,
+    }
 
     return Response(data=__data, status=status.HTTP_200_OK)
