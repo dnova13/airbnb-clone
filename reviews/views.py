@@ -5,6 +5,7 @@ from reservations import models as reservation_models
 from .serializers import ReviewListSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .models import Review
 from . import forms
 
@@ -52,7 +53,22 @@ def create_review(request, room_pk, reservation_pk):
 
 
 @api_view(["GET"])
-def list_reviews(request):
-    reviews = Review.objects.all()
+def list_reviews(request, room_pk):
+
+    page = int(request.GET.get("page", 1))
+    page_size = 1
+    limit = page_size * page
+    offset = limit - page_size
+
+    reviews = Review.objects.filter(room=room_pk)[offset:limit]
+
+    if not reviews:
+        return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
+
+    # 직렬화는 기본값이 하나만 하게 되어있기 때문에
+    # iterable 객체를 list 같은 객체를 넣을 때는 many를 True로 바꿔줘야함.
     serialized_reviews = ReviewListSerializer(reviews, many=True)
-    return Response(data=serialized_reviews.data)
+
+    __data = {"success": True, "data": serialized_reviews.data}
+
+    return Response(data=__data, status=status.HTTP_200_OK)
