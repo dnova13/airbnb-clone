@@ -1,3 +1,4 @@
+let reviewTotal;
 
 document.addEventListener("DOMContentLoaded", async function (event) {
 
@@ -7,16 +8,27 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 
 async function addReviews(page) {
 
-
     let room_pk = window.location.pathname.replace('/rooms/', "")
     let url = `/api/v1/reviews/list/${room_pk}?page=${page ? page : 1}`;
 
-    const response = await ajaxCall(url, "GET")
-    const data = await response.json();
+    let img = document.createElement('img')
 
-    if (data["success"]) {
-        appendReviews(data["data"])
-    }
+    img.setAttribute("class", "mx-auto mt-3");
+    img.setAttribute("src", '/static/img/loading.gif');
+
+    document.querySelector("#review-section").appendChild(img)
+
+    await ajaxCall(url, "GET").then(async res => {
+        let data = await res.json()
+
+        img.remove()
+
+        if (data["success"]) {
+            reviewTotal = data["total_reviews"]
+            console.log(reviewTotal)
+            appendReviews(data["data"])
+        }
+    })
 }
 
 function appendReviews(reviews) {
@@ -24,6 +36,7 @@ function appendReviews(reviews) {
     for (review of reviews) {
 
         let div = document.createElement("div");
+
         let avatarTag = '';
         let created = moment(review.created).format("DD MMM YYYY")
 
@@ -49,7 +62,8 @@ function appendReviews(reviews) {
                 <span class="text-sm text-gray-500">${created}</span>
             </div>
         </div>
-        <p>${review.review}</p>`
+        <p>${review.review}</p>
+        `
 
         div.innerHTML = tags
 
@@ -66,14 +80,14 @@ window.addEventListener("scroll", async e => {
 
     e.preventDefault();
 
-    if (Math.abs(document.querySelector("body > div.container.mx-auto.flex.justify-around.pb-56").scrollHeight - window.innerHeight - window.scrollY) <= 300) {
+    if (Math.abs(document.querySelector("body > div.container.mx-auto.flex.justify-around.pb-56").scrollHeight - window.innerHeight - window.scrollY) <= 250) {
 
+        let reviewCnt = document.querySelectorAll('#review').length
         scrCnt++;
 
-        if (scrCnt === 1) {
+        if (scrCnt === 1 && reviewTotal > reviewCnt) {
 
-            let revieCnt = document.querySelectorAll('#review').length
-            page = Math.ceil(revieCnt / pageSize) + 1
+            page = Math.ceil(reviewCnt / pageSize) + 1
 
             await addReviews(page)
 
