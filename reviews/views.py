@@ -2,8 +2,10 @@ from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from rooms import models as room_models
 from reservations import models as reservation_models
+from .serializers import ReviewListSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .models import Review
 from . import forms
 
 
@@ -51,4 +53,6 @@ def create_review(request, room_pk, reservation_pk):
 
 @api_view(["GET"])
 def list_reviews(request):
-    return Response()
+    reviews = Review.objects.all()
+    serialized_reviews = ReviewListSerializer(reviews, many=True)
+    return Response(data=serialized_reviews.data)
