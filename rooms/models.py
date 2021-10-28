@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.db import models
 from django.urls import reverse
 from django_countries.fields import CountryField
+from django.core.validators import MinValueValidator
 from core import models as core_models
 from cal import Calendar
 
@@ -79,12 +80,12 @@ class Room(core_models.TimeStampedModel):
     description = models.TextField()
     country = CountryField()
     city = models.CharField(max_length=80)
-    price = models.IntegerField()
+    price = models.IntegerField(validators=[MinValueValidator(1)])
     address = models.CharField(max_length=140)
     guests = models.IntegerField(help_text="How many people will be staying?")
-    beds = models.IntegerField()
-    bedrooms = models.IntegerField()
-    baths = models.IntegerField()
+    beds = models.IntegerField(validators=[MinValueValidator(1)])
+    bedrooms = models.IntegerField(validators=[MinValueValidator(1)])
+    baths = models.IntegerField(validators=[MinValueValidator(1)])
     check_in = models.TimeField()
     check_out = models.TimeField()
     instant_book = models.BooleanField(default=False)

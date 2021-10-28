@@ -193,6 +193,39 @@ class SearchView(View):
         return render(request, "rooms/search.html", {"form": form})
 
 
+class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
+
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/room_create.html"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+
+        form.fields["check_in"].widget = forms.forms.TimeInput(
+            format="%H:%M", attrs={"type": "time"}
+        )
+
+        form.fields["check_out"].widget = forms.forms.TimeInput(
+            format="%H:%M", attrs={"type": "time"}
+        )
+
+        form.fields["country"].widget.choices[0] = ("", "Select Country")
+
+        # ModelChoiceField 일경우 빈 라벨 제목 지정  empty field 로
+        form.fields["room_type"].empty_label = "Select Room Type"
+
+        return form
+
+    def form_valid(self, form):
+        room = form.save()
+        room.host = self.request.user
+        room.save()
+        form.save_m2m()
+        messages.success(self.request, "Room Uploaded")
+
+        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
+
+
 class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
 
     model = models.Room
@@ -245,6 +278,9 @@ class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
         form.fields["check_out"].widget = forms.forms.TimeInput(
             format="%H:%M", attrs={"type": "time"}
         )
+
+        form.fields["country"].widget.choices[0] = ("", "Select Country")
+        form.fields["room_type"].empty_label = "Select Room Type"
 
         return form
 
@@ -326,31 +362,3 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
         messages.success(self.request, "Photo Uploaded")
 
         return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
-
-
-class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
-
-    form_class = forms.CreateRoomForm
-    template_name = "rooms/room_create.html"
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class=form_class)
-
-        form.fields["check_in"].widget = forms.forms.TimeInput(
-            format="%H:%M", attrs={"type": "time"}
-        )
-
-        form.fields["check_out"].widget = forms.forms.TimeInput(
-            format="%H:%M", attrs={"type": "time"}
-        )
-
-        return form
-
-    def form_valid(self, form):
-        room = form.save()
-        room.host = self.request.user
-        room.save()
-        form.save_m2m()
-        messages.success(self.request, "Room Uploaded")
-
-        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))

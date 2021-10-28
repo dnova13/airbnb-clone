@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
 from rooms import models as room_models
 from reviews import forms as review_forms
+from django.contrib.auth.decorators import login_required
 from . import models
 
 
@@ -12,6 +13,7 @@ class CreateError(Exception):
     pass
 
 
+@login_required
 def create_reservation(request, room, year, month, day, timedelta):
     try:
         date_obj = datetime.datetime(year, month, day)
@@ -67,6 +69,7 @@ class ReservationDetailView(View):
         )
 
 
+@login_required
 def edit_reservation(request, pk, verb):
     reservation = models.Reservation.objects.get_or_none(pk=pk)
 
@@ -75,7 +78,8 @@ def edit_reservation(request, pk, verb):
     if not reservation or (
         reservation.guest != request.user and reservation.room.host != request.user
     ):
-        raise Http404()
+        messages.error(request, "Invalid Account")
+        return redirect(reverse("core:home"))
 
     if verb == "confirm":
         reservation.status = models.Reservation.STATUS_CONFIRMED
