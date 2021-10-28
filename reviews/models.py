@@ -46,3 +46,6 @@ class Review(core_models.TimeStampedModel):
 
     # 닉네임 지정.
     rating_average.short_description = "Avg."
+
+    class Meta:
+        ordering = ("-created",)
