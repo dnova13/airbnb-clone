@@ -41,7 +41,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["django_countries", "django_seed"]
+THIRD_PARTY_APPS = ["django_countries", "django_seed", "rest_framework"]
 
 # 내가 만든 앱을 서치
 PROJECT_APPS = [
@@ -165,3 +165,11 @@ EMAIL_FROM = "myemail@gmail.com"  # 설정하고 싶은 이메일로
 # Auth
 
 LOGIN_URL = "/users/login/"
+
+
+# Django Rest Framework
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}

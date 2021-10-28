@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from rooms import models as room_models
 from reservations import models as reservation_models
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from . import forms
 
 
@@ -45,3 +47,8 @@ def create_review(request, room_pk, reservation_pk):
         # 실패 햇을 경우.
         messages.error(request, "Room review failed")
         return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
+
+
+@api_view(["GET"])
+def list_reviews(request):
+    return Response()

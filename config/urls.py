@@ -25,6 +25,7 @@ urlpatterns = [
     path("reservations/", include("reservations.urls", namespace="reservations")),
     path("reviews/", include("reviews.urls", namespace="reviews")),
     path("admin/", admin.site.urls),
+    path("api/v1/reviews/", include("reviews.urls", namespace="reviews_api")),
 ]
 
 
