@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load is_booked %}
+{% load static %}
 
 {% block page_title %}
     {{room.name}}
@@ -69,21 +70,7 @@
                         <span>review{{room.reviews.count|pluralize}}</span>
                     </div>
                 </div>
-                <div class="mt-10">
-                    {% for review in room.reviews.all  %}
-                        <div class="border-section">
-                            <div class="mb-3 flex">
-                                <div>
-                                    {% include "mixins/user_avatar.html" with user=review.user h_and_w='w-10 h-10' text='text-xl' %}
-                                </div>
-                                <div class="flex flex-col ml-5">
-                                    <span class="font-medium">{{review.user.first_name}}</span>
-                                    <span class="text-sm text-gray-500">{{review.created|date:'F Y'}}</span>
-                                </div>
-                            </div>
-                            <p>{{review.review}}</p>
-                        </div>
-                    {% endfor %}    
+                <div id="review-section" class="mt-10">
                 </div>
             </div>
         </div>
@@ -91,7 +78,6 @@
             {% if room.host == user %}
                 <a href="{% url 'rooms:edit' room.pk %}" class="btn-link block">Edit Room</a>
             {% else %}
-                {% comment %} {{'something'|sexy_capitals}} {% endcomment %}
                 {% if not request.session.is_hosting %}
                     {% for calendar in room.get_calendars %}
                     <div class="mb-14">
@@ -123,104 +109,8 @@
             {% endif %}
         </div>
     </div>
-    <script>    
-            let a;
-            let b;
-            let diff;
-            let cnt = 0;
-            let lastIdx = 0;
-            let isBook = false;
-
-            const cal_days = document.querySelectorAll(".sel-number")
-
-            cal_days.forEach((day, idx) => {
-                day.addEventListener("click", e => {
-
-                    if (cnt == 0) 
-                        a = { tag:e.target, idx:idx }
-                    
-                    else 
-                        b = { tag:e.target, idx:idx }
-                        
-
-                    selDay(a.tag)
-                    
-                    aDate = a.tag.getAttribute('value')
-                    bDate = b ? b.tag.getAttribute('value') : 0
-
-                    diff = b ? diffDate(bDate, aDate) : undefined
-
-                    cnt++;
-
-                    if (diff === 0) {
-                        clearAll();
-                    }
-
-                    else if (diff > 0) {
-                        
-                        if (diff > 9) {
-                            alert("Available for less than 10 days"); 
-                            return;
-                        }
-
-                        clearDays();
-
-                        for (let i = a.idx; i <= b.idx; i++) {
-                            selDay(cal_days[i])
-                        }
-
-                        setTimeout(function() {
-                            isBook= confirm("Do you want the reservation?")
-                        
-                            if (isBook) 
-                                location.href = `/reservations/create/{{room.pk}}/${aDate}/${diff}`
-                        }, 100);
-                    }
-
-                    else if (cnt > 1 && diff < 0)
-                        alert("Don't select"); 
-                })
-            })
-
-            function selDay(day) {
-                day.classList.replace("bg-white", "bg-red-600")
-                day.classList.replace("text-gray-700", "text-white")
-            }
-
-            function clearDay(day) {
-                day.classList.replace("bg-red-600", "bg-white")
-                day.classList.replace( "text-white", "text-gray-700")
-            }
-
-            function clearDays() {
-                cal_days.forEach(day => {
-                    clearDay(day)
-                })
-            }
-
-            function clearAll() {
-
-                clearDays();
-                
-                a = null
-                b = null
-                diff = ""
-
-                cnt = 0;
-            }
-
-            function diffDate(end_value, start_value) {
-                
-                let start_Array = start_value.split("-");          
-                let end_Array = end_value.split("-");
-
-                let start_date = new Date(start_Array[0], Number(start_Array[1])-1, start_Array[2]);   
-                let end_date = new Date(end_Array[0], Number(end_Array[1])-1, end_Array[2]);
-
-            
-                return (end_date.getTime() - start_date.getTime())/1000/60/60/24;   
-            }
-
-        </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment-with-locales.min.js"></script>
+    <script src="{% static 'js/calendar_select.js' %}"></script>
+    <script src="{% static 'js/review_section.js' %}"></script>
+    <script src="{% static 'js/ajax_call.js' %}"></script>
 {% endblock %}

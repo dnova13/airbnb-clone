@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from users.serializers import UserSerializer
+
 from .models import Review
 
 # serializers : model -> json , json -> model 로 간편하게 전환하게해줌.
@@ -12,6 +14,9 @@ class ReviewTestSerializer(serializers.ModelSerializer):
 
 
 class ReviewListSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Review
         fields = ("review", "room", "user", "created", "updated")

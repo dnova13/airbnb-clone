@@ -60,8 +60,8 @@ def list_reviews(request, room_pk):
     limit = page_size * page
     offset = limit - page_size
 
-    reviews = Review.objects.filter(room=room_pk)[offset:limit]
-    total_reviews = Review.objects.count()
+    reviews = Review.objects.filter(room=room_pk).order_by("-created")[offset:limit]
+    total_reviews = Review.objects.filter(room=room_pk).count()
 
     if not reviews:
         return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
