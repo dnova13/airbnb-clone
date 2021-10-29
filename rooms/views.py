@@ -161,22 +161,55 @@ class SearchView(View):
             for facility in facilities:
                 filter_args["facilities"] = facility
 
-            print(country)
-
             qs = models.Room.objects.filter(**filter_args).order_by("-created")
 
-            paginator = Paginator(qs, 10, orphans=5)
+            page_size = 8
+            per_page_cnt = 4
 
+            paginator = Paginator(qs, page_size, orphans=5)
             page = request.GET.get("page", 1)
-
             rooms = paginator.get_page(page)
 
+            start_page = (
+                0
+                if rooms.number - 2 <= 0
+                else rooms.number - 2
+                if paginator.num_pages - (rooms.number - 2) > per_page_cnt
+                else paginator.num_pages - per_page_cnt
+                if paginator.num_pages != per_page_cnt
+                else paginator.num_pages - per_page_cnt + 1
+            )
+
+            end_page = per_page_cnt + abs(start_page)
+
+            last_range = (
+                rooms.number + per_page_cnt - 2
+                if paginator.num_pages != per_page_cnt
+                else rooms.number + per_page_cnt - 2 + 1
+            )
+
+            first_ellipsis = (
+                True
+                if rooms.number > per_page_cnt - 1
+                and paginator.num_pages > per_page_cnt + 1
+                else False
+            )
+
+            last_ellipsis = (
+                True
+                if last_range + 1 < paginator.num_pages
+                and paginator.num_pages > per_page_cnt + 1
+                else False
+            )
+
             current_url = "".join(request.get_full_path().split("page")[0])
+
+            print(current_url)
 
             if current_url[-1] != "&":
                 current_url = "".join(request.get_full_path().split("page")[0]) + "&"
 
-            # form.fields["country"].widget.initial = "South Korea"
+            print(current_url)
 
             return render(
                 request,
@@ -186,6 +219,10 @@ class SearchView(View):
                     "rooms": rooms,
                     "page_obj": rooms,
                     "current_url": current_url,
+                    "page_range": paginator.page_range[abs(start_page) : end_page],
+                    "last_range": last_range,
+                    "first_ellipsis": first_ellipsis,
+                    "last_ellipsis": last_ellipsis,
                 },
             )
 

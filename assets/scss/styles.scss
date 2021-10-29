@@ -34,6 +34,15 @@
   @apply text-center py-3 rounded-lg font-light text-lg w-full text-white bg-teal-500;
 }
 
+.search-btn {
+  @apply border-t border-r border-b px-4 border-black;
+  background-color:#FF385C;
+  img {
+    filter: invert(100%) sepia(26%) saturate(0%) hue-rotate(41deg) brightness(103%) contrast(104%);
+  }
+}
+
+
 input,
 textarea,
 select {
@@ -68,9 +77,25 @@ form {
   }
 }
 
+form.search {
+  input[type=checkbox] {
+    @apply w-8
+  }
+  input {
+    @apply py-3
+  }
+  input[name=baths] {
+    @apply mb-4
+  }
+}
 
-input[name=instant_book]  {
+input[name=instant_book] {
   @apply w-8
+}
+
+.amenities {
+  @apply truncate
+
 }
 
 
@@ -134,5 +159,32 @@ input[name=instant_book]  {
 .cal-number {
   @apply w-full text-center rounded p-1 cursor-pointer;
 }
+
+.amenities-scroll  {
+  -ms-overflow-style: none;
+  /*overflow-y: scroll;*/
+  max-height: 25rem;
+  padding-right: 3px;
+  overflow: auto;
+}
+
+.amenities-scroll::-webkit-scrollbar {
+  // display: compact;
+  width: 10px;
+  height: 10px;
+}
+
+.amenities-scroll::-webkit-scrollbar-thumb {
+background-color: #d3d3d3;
+border-radius: 10px;
+background-clip: padding-box;
+border: 2px solid transparent;
+}
+.amenities-scroll::-webkit-scrollbar-track {
+background-color: transparent;
+border-radius: 10px;
+box-shadow: inset 0px 0px 5px white;
+}
+
 
 @tailwind utilities;

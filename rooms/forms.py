@@ -7,7 +7,7 @@ from . import models
 class SearchForm(forms.Form):
 
     # initial : 초기값 로 지정
-    city = forms.CharField(required=False)
+    city = forms.CharField(required=False, widget=forms.HiddenInput(), label="")
 
     # default : 초기 체크박스 선태값 지정.
     country = CountryField(default="KR").formfield(required=False, empty_value="KR")
@@ -19,11 +19,11 @@ class SearchForm(forms.Form):
     )
 
     # required=False : input 박스에서의 required 해제
-    price = forms.IntegerField(required=False)
-    guests = forms.IntegerField(required=False)
-    bedrooms = forms.IntegerField(required=False)
-    beds = forms.IntegerField(required=False)
-    baths = forms.IntegerField(required=False)
+    price = forms.IntegerField(required=False, min_value=1)
+    guests = forms.IntegerField(required=False, min_value=1)
+    bedrooms = forms.IntegerField(required=False, min_value=1)
+    beds = forms.IntegerField(required=False, min_value=1)
+    baths = forms.IntegerField(required=False, min_value=1)
     instant_book = forms.BooleanField(required=False)
     superhost = forms.BooleanField(required=False)
 

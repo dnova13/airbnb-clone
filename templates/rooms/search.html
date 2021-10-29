@@ -1,44 +1,120 @@
+
 {% extends "base.html" %}
 
 {% block page_title %}
     Search
 {% endblock page_title %}
 
-{% block search-bar %}
-{% endblock search-bar %}
+{% comment %} {% block search-bar %}
+{% endblock search-bar %} {% endcomment %}
 
 {% block content %}
+    <div class="container mx-auto pt-8 pb-12">
+        <div class="container ">
+            <form class="search" method="get" action="{% url "rooms:search" %}">
+                <div class="flex mx-auto justify-around">
+                    {% for field in form %}
+                        {% if forloop.counter == 1 %}
+                            <div class="w-1/6">
+                                <div style="display:none">
+                        {% endif %}
+                            <div class="input  {% if field.errors %}has_error{% endif %}">
+                                {{field.label}}
+                                {% if forloop.counter == 11 %}
+                                <div class="amenities-scroll">
+                                {% endif %}
+                                {{field}}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <span class="text-red-700 font-medium text-sm">{{error}}</span> 
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% if forloop.counter == 1 %}
+                            </div>
+                        {% endif %}
+                        {% if forloop.counter == 5 %}
+                            </div>
+                            <div class="w-1/6">
+                        {% endif %}
+                        {% if forloop.counter == 10 %}
+                            </div>
+                            <div class="w-1/5 amenities">
+                        {% endif %}
+                        {% if forloop.counter == 11 %}
+                                </div>
+                            </div>
+                            <div class="w-1/5 ">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+                <button id="search" style="display:none">Search</button>
+                {% comment %} <button id="search" >Search</button> {% endcomment %}
+            </form>
+        </div>
 
-    <h2>Search!</h2>
+        <div class="container pt-12 border-t border-gray-300 mt-9">
+            
+            <div class="flex flex-wrap -mx-5 mb-10">
+                {% for room in rooms  %}
+                    {% include 'mixins/room_card.html' with room=room %}
+                {% endfor %}
+            </div>
+            <div class="flex items-center justify-center mx-auto container">
+                {% if page_obj.has_previous %}
+                    <a href="{{current_url}}page={{page_obj.previous_page_number}}" class=" rounded-circle p-1 hover:bg-gray-100">
+                        <i class="fas fa-arrow-left fa-lg"></i>
+                    </a>
+                {% else %} 
+                    <a class="text-gray-300"  disabled>
+                        <i class="fas fa-arrow-left fa-lg"></i>
+                    </a>                
+                {% endif %}
 
-    <form method="get" action="{% url "rooms:search" %}">
-        {{form.as_p}}
-        <button>Search</button>
-    </form>
+                {% if page_obj.number > 2 %}
+                    <a class="font-medium text-lg page_hover" href="{{current_url}}page=1">1</a>
+                    {% if first_ellipsis %}
+                        ...
+                    {% endif %}
+                {% endif %}
 
-    <h3>Results</h3>
+                {% for page in page_range %}
 
-    {% for room in rooms %}
-        <h3>
-            <a href="{% url "rooms:detail" room.pk %}">
-                {{room.name}} / ${{room.price}}
-            </a>
-        </h3>
-    {% endfor %}
+                    {% if page == page_obj.number %}
+                        <a class="rounded-circle mx-3 pb-1 px-10px font-medium text-lg bg-red-500 text-red-50" href="{{current_url}}page={{page}}">{{page}}</a>
+                    {% else %}    
+                        <a class="font-medium text-lg page_hover" href="{{current_url}}page={{page}}">{{page}}</a>
+                    {% endif %}
+                {% endfor %}
 
-    <h5>
-    {% comment %} {% if page_obj.has_previous %}
-        <a href="{{current_url}}&page={{page_obj.previous_page_number}}">Previous</a>
-    {% endif %}
-
-    {% for page in page_obj.paginator.page_range %}
-        <a href="{{current_url}}&page={{page}}">{{page}}</a>
-    {% endfor %}
-
-    Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
-    
-    {% if page_obj.has_next  %}
-        <a href="{{current_url}}&page={{page_obj.previous_page_number}}">Next</a>
-    {% endif %} {% endcomment %}
+                {% if last_range < page_obj.paginator.num_pages %}
+                    {% if last_ellipsis %}
+                        ...
+                    {% endif %}
+                    <a class="font-medium text-lg page_hover" href="{{current_url}}page={{page_obj.paginator.num_pages}}">{{page_obj.paginator.num_pages}}</a>
+                        
+                {% endif %}
+                
+                
+                {% if page_obj.has_next  %}
+                    <a href="{{current_url}}page={{page_obj.next_page_number}}" class="rounded-circle p-1 hover:bg-gray-100">
+                        <i class="fas fa-arrow-right fa-lg"></i>
+                    </a>
+                {% else %} 
+                    <a class="text-gray-300" disabled>
+                        <i class="fas fa-arrow-right fa-lg"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector(".search-btn").addEventListener("click", e=>{
+            e.preventDefault() 
+            document.querySelector("#id_city").value = document.querySelector(".search-box").value
+            document.querySelector("#search").click()
+        });
+    </script>
 
 {% endblock content %}
