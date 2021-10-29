@@ -8,6 +8,7 @@ urlpatterns = [
     path("create/", views.CreateRoomView.as_view(), name="create"),
     path("<int:pk>", views.RoomDetail.as_view(), name="detail"),
     path("<int:pk>/edit/", views.EditRoomView.as_view(), name="edit"),
+    path("<int:pk>/delete/", views.delete_room, name="delete"),
     path("<int:pk>/photos/", views.RoomPhotosView.as_view(), name="photos"),
     path("<int:pk>/photos/add", views.AddPhotoView.as_view(), name="add-photo"),
     path(

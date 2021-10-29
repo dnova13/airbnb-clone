@@ -6,11 +6,11 @@ from . import models
 
 class SearchForm(forms.Form):
 
-    # initial : 초기값 Anywhere 로 지정
-    city = forms.CharField(initial="Anywhere")
+    # initial : 초기값 로 지정
+    city = forms.CharField(required=False)
 
     # default : 초기 체크박스 선태값 지정.
-    country = CountryField(default="KR").formfield()
+    country = CountryField(default="KR").formfield(required=False, empty_value="KR")
 
     # 방타입을 불러와 셀렉박스 셋팅해줌.
     # 빈칸 --- 보이는게 싫으므로 empty_label을 통해 초기 선택할 텍스트 표시 가능.
