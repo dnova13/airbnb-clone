@@ -19,7 +19,7 @@ class HomeView(ListView):
     model = models.Room
 
     # 페이지에서 보일 목록의 개수
-    paginate_by = 8
+    paginate_by = 12
     paginate_orphans = 5
 
     # 정렬 : 내림차순, 오름차순 "created"
@@ -163,7 +163,7 @@ class SearchView(View):
 
             qs = models.Room.objects.filter(**filter_args).order_by("-created")
 
-            page_size = 8
+            page_size = 12
             per_page_cnt = 4
 
             paginator = Paginator(qs, page_size, orphans=5)

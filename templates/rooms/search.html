@@ -9,10 +9,16 @@
 {% endblock search-bar %} {% endcomment %}
 
 {% block content %}
-    <div class="container mx-auto pt-8 pb-12">
+    <div class="container mx-auto pt-5 pb-12">
         <div class="container ">
+            <div class="flax">
+                <button class="filter-btn">
+                    <img class="w-8" src="/static/img/filter.png" />
+                </button>
+                {% comment %} <span>filiter</span> {% endcomment %}
+            </div>
             <form class="search" method="get" action="{% url "rooms:search" %}">
-                <div class="flex mx-auto justify-around">
+                <div class="filter-screen hidden mx-auto justify-around mt-3">
                     {% for field in form %}
                         {% if forloop.counter == 1 %}
                             <div class="w-1/6">
@@ -21,7 +27,9 @@
                             <div class="input  {% if field.errors %}has_error{% endif %}">
                                 {{field.label}}
                                 {% if forloop.counter == 11 %}
-                                <div class="amenities-scroll">
+                                <div class="filter-scroll border-t mt-2 pt-1">
+                                {% elif forloop.counter == 12 %}
+                                <div class="filter-scroll border-t mt-2 pt-1">
                                 {% endif %}
                                 {{field}}
                                 {% if field.errors %}
@@ -54,7 +62,7 @@
             </form>
         </div>
 
-        <div class="container pt-12 border-t border-gray-300 mt-9">
+        <div class="container pt-11 pb-10 border-t border-gray-200 mt-6">
             
             <div class="flex flex-wrap -mx-5 mb-10">
                 {% for room in rooms  %}
@@ -114,6 +122,17 @@
             e.preventDefault() 
             document.querySelector("#id_city").value = document.querySelector(".search-box").value
             document.querySelector("#search").click()
+        });
+
+        document.querySelector(".filter-btn").addEventListener("click", e=>{
+            e.preventDefault() 
+
+            const filter_screen = document.querySelector(".filter-screen")
+            
+            if (filter_screen.className.includes("hidden"))
+                filter_screen.classList.replace("hidden","flex")
+            else
+                filter_screen.classList.replace("flex","hidden")
         });
     </script>
 

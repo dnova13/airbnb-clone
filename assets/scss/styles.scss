@@ -160,7 +160,7 @@ input[name=instant_book] {
   @apply w-full text-center rounded p-1 cursor-pointer;
 }
 
-.amenities-scroll  {
+.filter-scroll  {
   -ms-overflow-style: none;
   /*overflow-y: scroll;*/
   max-height: 25rem;
@@ -168,13 +168,13 @@ input[name=instant_book] {
   overflow: auto;
 }
 
-.amenities-scroll::-webkit-scrollbar {
+.filter-scroll::-webkit-scrollbar {
   // display: compact;
   width: 10px;
   height: 10px;
 }
 
-.amenities-scroll::-webkit-scrollbar-thumb {
+.filter-scroll::-webkit-scrollbar-thumb {
 background-color: #d3d3d3;
 border-radius: 10px;
 background-clip: padding-box;
