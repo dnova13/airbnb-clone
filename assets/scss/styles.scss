@@ -65,7 +65,7 @@ select {
 
 form {
   .input {
-    @apply mb-4 w-full;
+    @apply mb-6 w-full;
     &.has_error {
       input {
         @apply bg-red-200 border-gray-600;
@@ -78,6 +78,18 @@ form {
 }
 
 form.search {
+  input[type=checkbox] {
+    @apply w-8
+  }
+  input {
+    @apply py-3
+  }
+  input[name=baths] {
+    @apply mb-4
+  }
+}
+
+form.room-form {
   input[type=checkbox] {
     @apply w-8
   }
@@ -180,7 +192,35 @@ border-radius: 10px;
 background-clip: padding-box;
 border: 2px solid transparent;
 }
+
 .amenities-scroll::-webkit-scrollbar-track {
+background-color: transparent;
+border-radius: 10px;
+box-shadow: inset 0px 0px 5px white;
+}
+
+.mulchk-scroll  {
+  -ms-overflow-style: none;
+  /*overflow-y: scroll;*/
+  max-height: 12rem;
+  padding-right: 3px;
+  overflow: auto;
+}
+
+.mulchk-scroll::-webkit-scrollbar {
+  // display: compact;
+  width: 10px;
+  height: 10px;
+}
+
+.mulchk-scroll::-webkit-scrollbar-thumb {
+background-color: #d3d3d3;
+border-radius: 10px;
+background-clip: padding-box;
+border: 2px solid transparent;
+}
+
+.mulchk-scroll::-webkit-scrollbar-track {
 background-color: transparent;
 border-radius: 10px;
 box-shadow: inset 0px 0px 5px white;

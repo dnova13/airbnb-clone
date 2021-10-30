@@ -1,6 +1,15 @@
+{% load field_type %}
 <div class="input w-full {% if field.errors %}has_error{% endif %}">
         {{field.label}}
-        {{field}}
+        {% if field|field_type == "CheckboxSelectMultiple" %}
+            <div class="truncate">
+                <div class="mulchk-scroll border rounded-sm border-gray-600 mt-2 pt-1 ">
+                    {{field}}        
+                </div>
+            </div>
+        {% else %}
+            {{field}}
+        {% endif %}
         {% if field.errors %}
             {% for error in field.errors %}
                 <span class="text-red-700 font-medium text-sm">{{error}}</span> 

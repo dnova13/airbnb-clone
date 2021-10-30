@@ -43,6 +43,11 @@ def create_reservation(request, room, year, month, day, timedelta):
             check_in=date_obj,
             check_out=date_obj + datetime.timedelta(days=timedelta),
         )
+
+        if not reservation.pk:
+            messages.error(request, "Can't Reserve That Room")
+            return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
+
         return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
 
 

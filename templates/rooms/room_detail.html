@@ -94,7 +94,7 @@
                                     {% if day.past %}
                                         <span class="cal-number bg-gray-100 w-full text-center p-1 text-gray-400">{{day}}</span>
                                     {% elif is_booked_bool %}
-                                        <span class="cal-number bg-red-200 text-gray-400 line-through">{{day}}</span>
+                                        <span class="sel-number cal-number is_booked bg-red-200 text-gray-400 line-through">{{day}}</span>
                                     {% else %}                                       
                                         <span class="sel-number cal-number bg-white text-gray-700 hover:bg-teal-500 hover:text-white hover:font-medium" value="{{day.year}}-{{day.month}}-{{day}}">{{day}}</span>
                                     {% endif %}

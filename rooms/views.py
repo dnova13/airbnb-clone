@@ -204,12 +204,8 @@ class SearchView(View):
 
             current_url = "".join(request.get_full_path().split("page")[0])
 
-            print(current_url)
-
             if current_url[-1] != "&":
                 current_url = "".join(request.get_full_path().split("page")[0]) + "&"
-
-            print(current_url)
 
             return render(
                 request,
@@ -236,6 +232,15 @@ class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
+
+        form.fields["amenities"].widget = forms.forms.CheckboxSelectMultiple()
+        form.fields["amenities"].queryset = form["amenities"].field._queryset
+
+        form.fields["facilities"].widget = forms.forms.CheckboxSelectMultiple()
+        form.fields["facilities"].queryset = form["facilities"].field._queryset
+
+        form.fields["house_rules"].widget = forms.forms.CheckboxSelectMultiple()
+        form.fields["house_rules"].queryset = form["house_rules"].field._queryset
 
         form.fields["check_in"].widget = forms.forms.TimeInput(
             format="%H:%M", attrs={"type": "time"}
@@ -298,14 +303,14 @@ class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
 
-        """ 
-        print(vars(form["facilities"].field))
+        form.fields["amenities"].widget = forms.forms.CheckboxSelectMultiple()
+        form.fields["amenities"].queryset = form["amenities"].field._queryset
 
-        form.fields["facilities"] = forms.forms.ModelMultipleChoiceField(
-            queryset=form["facilities"].field._queryset,
-            widget=forms.forms.CheckboxSelectMultiple,
-            required=True,
-        ) """
+        form.fields["facilities"].widget = forms.forms.CheckboxSelectMultiple()
+        form.fields["facilities"].queryset = form["facilities"].field._queryset
+
+        form.fields["house_rules"].widget = forms.forms.CheckboxSelectMultiple()
+        form.fields["house_rules"].queryset = form["house_rules"].field._queryset
 
         form.fields["check_in"].widget = forms.forms.TimeInput(
             format="%H:%M", attrs={"type": "time"}

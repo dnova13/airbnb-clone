@@ -40,6 +40,14 @@ cal_days.forEach((day, idx) => {
             clearDays();
 
             for (let i = a.idx; i <= b.idx; i++) {
+
+                if (cal_days[i].className.includes("is_booked")) {
+                    alert("invalid select");
+                    clearAll();
+                    return;
+                }
+
+
                 selDay(cal_days[i])
             }
 
