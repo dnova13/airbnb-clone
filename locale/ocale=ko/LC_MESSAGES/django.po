@@ -19,12 +19,12 @@ msgstr ""
 
 #: .\templates\base.html:24
 msgid "Search By City"
-msgstr ""
+msgstr "도시를 찾으세요."
 
 #: .\templates\partials\footer.html:4
 msgid "Please don't copy us."
-msgstr ""
+msgstr "카피하지 마세요."
 
 #: .\templates\partials\footer.html:6
 msgid "All rights reserved"
-msgstr ""
+msgstr "All rights reserved"
