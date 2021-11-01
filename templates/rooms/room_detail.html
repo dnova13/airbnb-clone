@@ -31,12 +31,14 @@
             {% if user.is_authenticated %}
                 {% on_favs room as on_favs_boolean %}
                 {% if on_favs_boolean %}
-                    <a class="block mb-10 w-2/6 text-teal-500 font-bold" href="{% url 'lists:toggle-room' room.pk %}?action=remove">
-                        <span class="text-red-600">♥</span>
+                    <a class="fav block mb-10 w-2/6 text-teal-500 font-bold" href="{% url 'lists:toggle-room' room.pk %}?action=remove">
+                        <span class="text-red-600">♥ </span>
                         {% trans "Saved" %}
                     </a>
                 {% else %}
-                    <a class="block mb-10 w-2/6 text-teal-500 font-bold" href="{% url 'lists:toggle-room' room.pk %}?action=add">{% trans "♡ Save" %}</a>
+                    <a class="fav block mb-10 w-2/6 text-teal-500 font-bold" href="{% url 'lists:toggle-room' room.pk %}?action=add">
+                    {% trans "♡ Save" %}
+                    </a>
                 {% endif %}
             {% endif %}
             <div class="flex border-section">
@@ -119,8 +121,12 @@
             {% endif %}
         </div>
     </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment-with-locales.min.js"></script>
     <script src="{% static 'js/calendar_select.js' %}"></script>
     <script src="{% static 'js/review_section.js' %}"></script>
     <script src="{% static 'js/ajax_call.js' %}"></script>
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'js/fav_action.js' %}"></script>
+    
 {% endblock %}

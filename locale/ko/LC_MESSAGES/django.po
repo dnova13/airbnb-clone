@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-01 18:50+0900\n"
+"POT-Creation-Date: 2021-11-02 01:21+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,20 +47,28 @@ msgid "Profile"
 msgstr "프로필"
 
 #: .\templates\partials\nav.html:22
+msgid "Favs"
+msgstr "선호"
+
+#: .\templates\partials\nav.html:23
 msgid "Log out"
 msgstr "로그아웃"
 
-#: .\templates\partials\nav.html:24
+#: .\templates\partials\nav.html:25
 msgid "Log in"
 msgstr "로그인"
 
-#: .\templates\partials\nav.html:25
+#: .\templates\partials\nav.html:26
 msgid "Sign up"
 msgstr "회원가입"
 
-#: .\templates\rooms\room_detail.html:32
-msgid "Save to Favourites"
-msgstr "관심있는 방 추가"
+#: .\templates\rooms\room_detail.html:36
+msgid "Saved"
+msgstr "저장완료"
+
+#: .\templates\rooms\room_detail.html:39
+msgid "♡ Save"
+msgstr "♡ 저장"
 
 #: .\users\mixins.py:14 .\users\mixins.py:29
 msgid "Can't go there"
@@ -101,6 +109,9 @@ msgstr "언어"
 #: .\users\models.py:98
 msgid "Verify Airbnb Account"
 msgstr "계정을 인증하세요."
+
+#~ msgid "Save to Favourites"
+#~ msgstr "관심있는 방 추가"
 
 #~ msgid "Page %(current_page)s of %(total_pages)s"
 #~ msgstr "%(total_pages)s 페이지 중에서 %(current_page)s 페이지"
