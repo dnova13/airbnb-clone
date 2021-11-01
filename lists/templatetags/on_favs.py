@@ -13,4 +13,4 @@ def on_favs(context, room):
     )
     # print(room in the_list.rooms.all())
 
-    return room in the_list.rooms.all()  # 해당 리스트에
+    return room in the_list.rooms.all()  # 해당 리스트에 요청한 룸이 있으면 true로 반환
