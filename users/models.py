@@ -1,6 +1,7 @@
 import uuid
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
@@ -17,15 +18,18 @@ class User(AbstractUser):
     GENDER_OTHER = "other"
 
     GENDER_CHOICES = (
-        (GENDER_MALE, "Male"),
-        (GENDER_FEMALE, "Female"),
-        (GENDER_OTHER, "Other"),
+        (GENDER_MALE, _("Male")),
+        (GENDER_FEMALE, _("Female")),
+        (GENDER_OTHER, _("Other")),
     )
 
     LANGUAGE_ENGLISH = "en"
     LANGUAGE_KOREAN = "kr"
 
-    LANGUAGE_CHOICES = ((LANGUAGE_ENGLISH, "English"), (LANGUAGE_KOREAN, "Korean"))
+    LANGUAGE_CHOICES = (
+        (LANGUAGE_ENGLISH, _("English")),
+        (LANGUAGE_KOREAN, _("Korean")),
+    )
 
     CURRENCY_USD = "usd"
     CURRENCY_KRW = "krw"
@@ -43,11 +47,17 @@ class User(AbstractUser):
     )
 
     avatar = models.ImageField(upload_to="avatars", blank=True)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
-    bio = models.TextField(blank=True)
+    gender = models.CharField(
+        _("gender"), choices=GENDER_CHOICES, max_length=10, blank=True
+    )
+    bio = models.TextField(_("bio"), blank=True)
     birthdate = models.DateField(blank=True, null=True)
     language = models.CharField(
-        choices=LANGUAGE_CHOICES, max_length=2, blank=True, default=LANGUAGE_KOREAN
+        _("language"),
+        choices=LANGUAGE_CHOICES,
+        max_length=2,
+        blank=True,
+        default=LANGUAGE_KOREAN,
     )
     currency = models.CharField(
         choices=CURRENCY_CHOICES, max_length=3, blank=True, default=CURRENCY_KRW
@@ -85,7 +95,7 @@ class User(AbstractUser):
             )
 
             send_mail(
-                "Verify Airbnb Account",  # 메일 제목
+                _("Verify Airbnb Account"),  # 메일 제목
                 strip_tags(html_message),  # 메일 메세지, strip_tags : 태그를 제회하고 문자로 반환
                 settings.EMAIL_FROM,  # 발신 메일
                 [self.email],  # 보낼 메일 주소 리스트
