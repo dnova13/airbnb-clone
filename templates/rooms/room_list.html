@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% comment %} {% load i18n %} {% endcomment %}
 
 {% block page_title %}
     Home
@@ -62,11 +62,11 @@
             {% endif %}
             
         </div>
-        <div class="flex items-center justify-center mx-auto container mt-2">
+        {% comment %} <div class="flex items-center justify-center mx-auto container mt-2">
             <span class="mx-3 font-medium text-lg">
                     {% blocktrans with current_page=page_obj.number total_pages=page_obj.paginator.num_pages %}Page {{current_page}} of {{total_pages}}{% endblocktrans %}
             </span>
-        </div>
+        </div> {% endcomment %}
 
     </div>
 {% endblock content %}
