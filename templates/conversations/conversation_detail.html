@@ -11,18 +11,18 @@
      
     <div class="container mx-auto my-10 mt-32 flex justify-between min-h-50vh">
 
-        <div class="border w-1/4 p-10">
+        <div class="border w-1/4 p-10 ">
             <span class="text-center w-full block text-lg font-medium">Conversation between:</span>
             <div class="flex justify-between mt-10 items-center">
-                {% for user in conversation.participants.all  %}
-                    <div class="flex flex-col items-center">
-                        {% include "mixins/user_avatar.html" with user=user %}
-                        <span class="mt-2 text-gray-500">{{user.first_name}}</span>
-                    </div>
-                    {% if forloop.first %}
-                      <span class="font-medium text-2xl">&</span>
-                    {% endif %}
-                {% endfor %}
+                <div class="flex flex-col items-center">
+                    {% include "mixins/user_avatar.html" with user=me %}
+                    <span class="mt-2 text-gray-500 ">{{me.first_name}}</span>
+                </div>
+                <span class="font-medium text-2xl">&</span>
+                <div class="flex flex-col items-center">
+                    {% include "mixins/user_avatar.html" with user=opponent %}
+                    <span class="mt-2 text-gray-500">{{opponent.first_name}}</span>
+                </div>
             </div>
         </div>
         <div class="flex-grow">
