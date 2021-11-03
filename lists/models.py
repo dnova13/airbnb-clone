@@ -10,7 +10,11 @@ class List(core_models.TimeStampedModel):
     user = models.OneToOneField(
         "users.User", related_name="list", on_delete=models.CASCADE
     )
-    rooms = models.ManyToManyField("rooms.Room", related_name="lists", blank=True)
+    rooms = models.ManyToManyField(
+        "rooms.Room",
+        related_name="lists",
+        blank=True,  # through="Order"
+    )
 
     def __str__(self):
         return self.name
@@ -20,3 +24,13 @@ class List(core_models.TimeStampedModel):
         return self.rooms.count()
 
     count_rooms.short_description = "Number of Rooms"
+
+
+""" class Order(models.Model):
+    number = models.PositiveIntegerField()
+    lists = models.ForeignKey(
+        "lists.List", related_name="list", on_delete=models.CASCADE
+    )
+    rooms = models.ForeignKey(
+        "rooms.Room", related_name="list", on_delete=models.CASCADE
+    ) """

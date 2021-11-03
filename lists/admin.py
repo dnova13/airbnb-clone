@@ -14,3 +14,11 @@ class ListAdmin(admin.ModelAdmin):
 
     # 다 대 다 필터 생성
     filter_horizontal = ("rooms",)
+
+
+""" @admin.register(models.Order)
+class OrderAdmin(admin.ModelAdmin):
+
+    list_display = ("number",)
+
+    filter_horizontal = ("rooms", "lists.list",  )"""

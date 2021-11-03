@@ -42,7 +42,20 @@ def go_conversation(request, a_pk, b_pk):
         )
 
 
-class ConversationDetailView(View):
+class ConversationListView(View):
+    def get(self, *args, **kwargs):
+        conversation = models.Conversation.objects.filter(
+            participants=self.request.user
+        )
+
+        return render(
+            self.request,
+            "conversations/conversation_list.html",
+            {"conversation": conversation},
+        )
+
+
+class ConversationDetailView(mixins.LoggedInOnlyView, View):
     def get(self, *args, **kwargs):
         pk = kwargs.get("pk")
         conversation = models.Conversation.objects.get_or_none(pk=pk)
@@ -54,7 +67,6 @@ class ConversationDetailView(View):
         valid_chk = False
 
         for i, user in enumerate(conversation.participants.all()):
-            print(i)
             if user.id == self.request.user.pk:
                 valid_chk = True
                 me = user
