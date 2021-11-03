@@ -1,4 +1,5 @@
 import datetime
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
 from django.views.generic import View
 from django.contrib import messages
@@ -6,7 +7,12 @@ from django.shortcuts import render, redirect, reverse
 from rooms import models as room_models
 from reviews import forms as review_forms
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from users import mixins
 from . import models
+from .serializers import ReservationListSerializer
 
 
 class CreateError(Exception):
@@ -49,6 +55,54 @@ def create_reservation(request, room, year, month, day, timedelta):
             return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
 
         return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
+
+
+class ReservationListView(mixins.LoggedInOnlyView, View):
+    def get(self, *args, **kwargs):
+
+        # 접속한 유저가 예약 신청한 게스트이거나, 방 주인일때 접속 가능.
+        return render(
+            self.request,
+            "reservations/list.html",
+        )
+
+
+@api_view(["GET"])
+def list_reservations(request, noun):
+
+    _status = request.GET.get("status", "all")
+    page = int(request.GET.get("page", 1))
+    page_size = 12
+    limit = page_size * page
+    offset = limit - page_size
+
+    if noun == "reserved":
+        if _status == "all":
+            reservs = models.Reservation.objects.filter(guest=request.user)
+        else:
+            reservs = models.Reservation.objects.filter(
+                guest=request.user, status=_status
+            )
+    elif noun == "request":
+        reservs = models.Reservation.objects.filter(
+            room__host=request.user, status="pending"
+        )
+
+    reservs_list = reservs.order_by("-created")[offset:limit]
+    total_reservs = reservs.count()
+
+    if not reservs:
+        return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
+
+    serialized_reservs = ReservationListSerializer(reservs_list, many=True)
+
+    __data = {
+        "success": True,
+        "data": serialized_reservs.data,
+        "total_reservs": total_reservs,
+    }
+
+    return Response(data=__data, status=status.HTTP_200_OK)
 
 
 class ReservationDetailView(View):

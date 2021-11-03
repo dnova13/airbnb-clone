@@ -1,4 +1,4 @@
-{% load is_msgs_read i18n %}
+{% load is_msgs_read is_reserv_request i18n %}
 <ul class="flex items-center text-sm font-medium h-full">
     {% if user.is_authenticated %}
         <li class="nav_link">
@@ -17,19 +17,39 @@
             {% include "mixins/user_avatar.html" with user=user h_and_w='w-11 h-11' %}
         </a>
         {% is_msgs_read user as new_msg %}
-        <li class="nav_link"><a href="{{user.get_absolute_url}}">{% trans "Profile" %}</a></li>
+        {% is_reserv_request user as new_reserv_req %}
+        <li id="users/{{user.id}}" class="nav_link"><a href="{{user.get_absolute_url}}">{% trans "Profile" %}</a></li>
         {% comment %} <li class="nav_link"><a href="{% url "users:profile" user.pk %}">Profile</a></li> {% endcomment %}
-        <li class="nav_link"><a href="{% url 'conversations:list' %}">{% trans "Rservs" %}</a></li>
-        <li class="nav_link">
+        <li id="reservations" class="nav_link">
+            <a href="{% url 'reservations:list' %}">{% trans "Reservs" %}
+            {% if new_reserv_req %}
+                <span class="text-xs text-red-500">●</span>
+            {% endif %}
+            </a>
+        </li>
+        <li id="conversations" class="nav_link">
             <a href="{% url 'conversations:list' %}">{% trans "Convs" %}</a>
             {% if new_msg %}
                 <span class="text-xs text-red-500">●</span>
             {% endif %}
-            </li>
-        <li class="nav_link"><a href="{% url 'lists:see-favs' %}">{% trans "Favs" %} (<span class="fav-count">{{user.list.rooms.count|default:'0'}}</span>)</a></li>
+        </li>
+        <li id="favs" class="nav_link"><a href="{% url 'lists:see-favs' %}">{% trans "Favs" %} (<span class="fav-count">{{user.list.rooms.count|default:'0'}}</span>)</a></li>
         <li class="nav_link"><a href="{% url "users:logout" %}">{% trans "Log out" %}</a></li>
     {% else %}
         <li class="nav_link"><a href="{% url "users:login" %}">{% trans "Log in" %}</a></li>
         <li class="nav_link"><a href="{% url "users:signup" %}">{% trans "Sign up" %}</a></li>
     {% endif %}
 </ul>
+<script>
+
+    pathname = location.pathname
+
+    document.querySelectorAll("li.nav_link").forEach(link => {
+        
+        if(link.id && pathname.includes(link.id)) {
+            link.classList.add("border-gray-600")
+        }
+
+    })
+
+</script>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block page_title %}
     Conversation
@@ -12,7 +13,7 @@
     <div class="container mx-auto my-10 mt-32 flex justify-between min-h-50vh">
 
         <div class="border w-1/4 p-10 ">
-            <span class="text-center w-full block text-lg font-medium">Conversation between:</span>
+            <span class="text-center w-full block text-lg font-medium">{% trans "Conversation between:" %}</span>
             <div class="flex justify-between mt-10 items-center">
                 <div class="flex flex-col items-center">
                     {% include "mixins/user_avatar.html" with user=me %}
@@ -30,7 +31,7 @@
         <div class="flex-grow">
         <div class="chat-scroll border ml-10 p-10 flex flex-col">
                 {% if conversation.messages.count == 0 %}
-                    no messages
+                    {% trans "no messages" %}
                 {% else %}
                     {% for message in conversation.messages.all  %}
                         <div class="mb-10 {% if message.user.pk == user.pk %}

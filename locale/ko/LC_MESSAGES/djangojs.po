@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 02:20+0900\n"
+"POT-Creation-Date: 2021-11-04 03:42+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,3 +25,15 @@ msgstr "저장"
 #: .\static\js\fav_action.js:5
 msgid "Saved"
 msgstr "저장완료"
+
+#: .\static\js\reservation_section.js:43
+msgid "Confirmed"
+msgstr "예약완료"
+
+#: .\static\js\reservation_section.js:44
+msgid "Canceled"
+msgstr "취소"
+
+#: .\static\js\reservation_section.js:45
+msgid "Pending"
+msgstr "대기중"

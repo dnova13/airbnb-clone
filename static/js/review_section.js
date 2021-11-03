@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 async function addReviews(page) {
 
     let room_pk = window.location.pathname.replace('/rooms/', "")
-    let url = `/api/v1/reviews/list/${room_pk}?page=${page ? page : 1}`;
+    let url = `/api/v1/reviews/list/${room_pk}/?page=${page ? page : 1}`;
 
     let img = document.createElement('img')
 
@@ -19,15 +19,14 @@ async function addReviews(page) {
     document.querySelector("#review-section").appendChild(img)
 
     await ajaxCall(url, "GET").then(async res => {
-        let data = await res.json()
-
+        /* let data = await res.json()
         img.remove()
 
         if (data["success"]) {
             reviewTotal = data["total_reviews"]
             console.log(reviewTotal)
             appendReviews(data["data"])
-        }
+        } */
     })
 }
 

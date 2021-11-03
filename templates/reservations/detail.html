@@ -45,18 +45,18 @@
                                         {{field}}
                                     </div>
                                 {% endfor %}
-                                <button class="btn-link mt-5">Submit Review</button>
+                                <button class="btn-link mt-5 mb-4">Submit Review</button>
                             </form>
                     {% else %}
                         {% if reservation.status == 'pending' %}
-                            <a href="{% url 'reservations:edit' reservation.pk 'cancel' %}" class="btn-link block px-5">Cancel Reservation</a>
                             {% if reservation.room.host == user %}
-                                <a href="{% url 'reservations:edit' reservation.pk 'confirm' %}" class="btn-link block px-3 mb-5">Confirm Reservation</a>
+                                <a href="{% url 'reservations:edit' reservation.pk 'confirm' %}" class="btn-link block px-3 mb-1 bg-blue-400">Confirm Reservation</a>
                             {% endif %}
+                            <a href="{% url 'reservations:edit' reservation.pk 'cancel' %}" class="btn-link block px-5 mb-7">Cancel Reservation</a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
-                <a href="{% url 'rooms:detail' reservation.room.pk  %}" class="btn-back block px-3 mt-4 ">Back to Room</a>
+                <a href="{% url 'rooms:detail' reservation.room.pk  %}" class="btn-back block px-3">Back to Room</a>
             </div>
         </div>
 

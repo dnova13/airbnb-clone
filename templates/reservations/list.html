@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n is_reserv_request static %}
+
+{% block page_title %}
+    reservations
+{% endblock page_title %}
+
+{% block content %}
+     
+     {% is_reserv_request user as new_reserv_req %}
+    <div class="min-h-75vh">
+        <div class="mx-auto mb-9 w-1/2 ">
+            <ul class="flex pt-6">
+                <li id="reserv" class="reserv-forcus reserv_link mx-auto ">
+                    <button class="p-3 text-2xl text-center">{% trans "Reserved" %}</button>
+                </li>
+                {% if new_reserv_req %}
+                <li id="confirm" class="reserv_link mx-auto">
+                    <button class="p-3 text-2xl text-center">{% trans "Confirm Requests" %}</button>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="rev-option mx-auto mb-7 w-1/2 ">
+            <ul class="rev-op-link flex pt-1">
+                <li id="all" class="nav_link reserv-op-forcus mx-auto">
+                    <button class="p-3 text-base font-semibold">{% trans "All" %}</button>
+                </li>
+                <li id="pending" class="nav_link mx-auto">
+                    <button class="p-3 text-base font-semibold text-yellow-500 ">{% trans "Pending" %}</button>
+                </li>
+                <li id="confirmed" class="nav_link mx-auto">
+                    <button class="p-3 text-base font-semibold text-teal-500">{% trans "Confirmed" %}</button>
+                </li>
+                <li id="canceled" class="nav_link mx-auto">
+                    <button class="p-3 text-base font-semibold text-red-600">{% trans "Canceled" %}</button>
+                </li>
+            </ul>
+        </div>
+        <div class="rev-section container mx-auto pb-10 pt-10 border-t border-gray-300">
+            <div id="rev-cards" class="flex flex-wrap -mx-5 mb-5">
+                {% comment %} {% for rev in user.reservations.all %}
+                    <div class="w-1/4 mb-10 px-2 overflow-hidden">
+                        <a href="{% url 'reservations:detail' rev.pk %}">
+                            <div class="w-full h-64 bg-full bg-center rounded-lg mb-2 " style="background-image: url({{rev.room.first_photo}});"></div>
+                            <span class="text-black w-11/12 block truncate">{{rev.room.name}}</span>
+                            <div class="flex justify-between mb-2 truncate">
+                                <div class="w-4/5 overflow-hidden flex font-bold">
+                                    <span class="{% if rev.status == 'pending' %} text-yellow-500 {% elif rev.status == 'canceled' %} text-red-600 {% else %} text-teal-500 {% endif %}">{{rev.get_status_display}}</span>
+                                </div>
+                            </div>
+                            <div class="w-4/5 overflow-hidden flex">
+                                <span class="text-sm text-gray-600 block truncate">{{rev.created}}</span>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %} {% endcomment %}
+            </div>
+        </div> 
+    </div>
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'js/ajax_call.js' %}"></script>
+    <script src="{% static 'js/reservation_section.js' %}"></script>
+{% endblock content %}
+

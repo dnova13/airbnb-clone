@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 01:21+0900\n"
+"POT-Creation-Date: 2021-11-04 03:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,18 @@ msgstr ""
 #: .\templates\base.html:24
 msgid "Search By City"
 msgstr "도시 검색"
+
+#: .\templates\conversations\conversation_detail.html:15
+msgid "Conversation between:"
+msgstr "대화 상대"
+
+#: .\templates\conversations\conversation_detail.html:33
+msgid "no messages"
+msgstr "메세지가 없습니다."
+
+#: .\templates\conversations\conversation_list.html:15
+msgid "Conversation"
+msgstr "대화"
 
 #: .\templates\partials\footer.html:5
 msgid "Please don't copy us."
@@ -42,31 +54,63 @@ msgstr "호스팅 시작"
 msgid "Create Room"
 msgstr "방 만들기"
 
-#: .\templates\partials\nav.html:19
+#: .\templates\partials\nav.html:21
 msgid "Profile"
 msgstr "프로필"
 
-#: .\templates\partials\nav.html:22
+#: .\templates\partials\nav.html:25
+msgid "Reservs"
+msgstr "예약"
+
+#: .\templates\partials\nav.html:32
+msgid "Convs"
+msgstr "대화"
+
+#: .\templates\partials\nav.html:37
 msgid "Favs"
 msgstr "선호"
 
-#: .\templates\partials\nav.html:23
+#: .\templates\partials\nav.html:38
 msgid "Log out"
 msgstr "로그아웃"
 
-#: .\templates\partials\nav.html:25
+#: .\templates\partials\nav.html:40
 msgid "Log in"
 msgstr "로그인"
 
-#: .\templates\partials\nav.html:26
+#: .\templates\partials\nav.html:41
 msgid "Sign up"
 msgstr "회원가입"
+
+#: .\templates\reservations\list.html:15
+msgid "Reserved"
+msgstr "예약 내역"
+
+#: .\templates\reservations\list.html:19
+msgid "Confirm Requests"
+msgstr "승인 요청"
+
+#: .\templates\reservations\list.html:27
+msgid "All"
+msgstr "모두"
+
+#: .\templates\reservations\list.html:30
+msgid "Pending"
+msgstr "대기중"
+
+#: .\templates\reservations\list.html:33
+msgid "Confirmed"
+msgstr "예약완료"
+
+#: .\templates\reservations\list.html:36
+msgid "Canceled"
+msgstr "취소"
 
 #: .\templates\rooms\room_detail.html:36
 msgid "Saved"
 msgstr "저장완료"
 
-#: .\templates\rooms\room_detail.html:39
+#: .\templates\rooms\room_detail.html:40
 msgid "♡ Save"
 msgstr "♡ 저장"
 
@@ -74,39 +118,39 @@ msgstr "♡ 저장"
 msgid "Can't go there"
 msgstr "그쪽을 갈 수 없습니다."
 
-#: .\users\models.py:21
+#: .\users\models.py:22
 msgid "Male"
 msgstr "남성"
 
-#: .\users\models.py:22
+#: .\users\models.py:23
 msgid "Female"
 msgstr "여성"
 
-#: .\users\models.py:23
+#: .\users\models.py:24
 msgid "Other"
 msgstr "기타"
 
-#: .\users\models.py:30
+#: .\users\models.py:31
 msgid "English"
 msgstr "영어"
 
-#: .\users\models.py:31
+#: .\users\models.py:32
 msgid "Korean"
 msgstr "한국어"
 
-#: .\users\models.py:51
+#: .\users\models.py:52
 msgid "gender"
 msgstr "성별"
 
-#: .\users\models.py:53
+#: .\users\models.py:54
 msgid "bio"
 msgstr "하고 싶은 말"
 
-#: .\users\models.py:56
+#: .\users\models.py:57
 msgid "language"
 msgstr "언어"
 
-#: .\users\models.py:98
+#: .\users\models.py:101
 msgid "Verify Airbnb Account"
 msgstr "계정을 인증하세요."
 
