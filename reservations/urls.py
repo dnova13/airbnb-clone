@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.views.i18n import JavaScriptCatalog
+from django.conf.urls.i18n import i18n_patterns
 
 app_name = "reservations"
 
@@ -14,3 +16,5 @@ urlpatterns = [
     path("<int:pk>/<str:verb>", views.edit_reservation, name="edit"),
     path("api/list/<str:noun>/", views.list_reservations, name="api_list"),
 ]
+
+# urlpatterns = i18n_patterns(urlpatterns)

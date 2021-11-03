@@ -1,4 +1,7 @@
-let _total_reservs;
+let _total_reservs = 100;
+let loc = gettext("en")
+
+moment.locale(loc)
 
 document.addEventListener("DOMContentLoaded", async function (event) {
 
@@ -44,6 +47,7 @@ function appendReservations(items) {
         let _cancel = gettext("Canceled")
         let _pending = gettext("Pending")
         let __status
+        let _created = loc == "en" ? moment(item.created).format("MMM. DD YYYY, h:mm a") : moment(item.created).format("lll")
 
         switch (item.status) {
             case 'pending':
@@ -71,7 +75,7 @@ function appendReservations(items) {
                 </div >
             </div >
             <div class="w-4/5 overflow-hidden flex">
-                <span class="text-sm text-gray-600 block truncate">${item.created}</span>
+                <span class="text-sm text-gray-600 block truncate">${_created}</span>
             </div>
         </a>`
 
@@ -90,14 +94,21 @@ window.addEventListener("scroll", async e => {
 
     e.preventDefault();
 
-    if (Math.abs(document.body.scrollHeight - window.innerHeight - window.scrollY) <= 250) {
+    // console.log("cn", scrCnt)
+    // console.log(Math.abs(document.body.scrollHeight - window.innerHeight - window.scrollY))
 
-        // console.log(scrCnt)
+    if (Math.abs(document.body.scrollHeight - window.innerHeight - window.scrollY) <= 250) {
 
         let _cnt = document.querySelectorAll('.rev-card').length
         scrCnt++;
 
+        // console.log("aa", _total_reservs > _cnt)
+        // console.log(_total_reservs)
+        // console.log(_cnt)
+
         if (scrCnt === 1 && _total_reservs > _cnt) {
+
+            // console.log("!!!!!!!!!!!!!!!!!!!!")
 
             _page++
             await addReservations(_page, "reserved")

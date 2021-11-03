@@ -14,6 +14,7 @@ from django.core.files.base import ContentFile
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from core.forms import CustomClearableFileInput
+from django.core.paginator import Paginator
 from . import forms, models, mixins
 
 
@@ -97,7 +98,8 @@ def complete_verification(request, key):
 
 def github_login(request):
     client_id = os.environ.get("GH_ID")
-    redirect_uri = "http://127.0.0.1:8000/users/login/github/callback"
+    url = os.environ.get("URL")
+    redirect_uri = f"{url}/users/login/github/callback"
     scope = "read:user user:email"  # 메일 정보를 추출하기위해 스코프 범위 변경.
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
@@ -225,7 +227,8 @@ def github_callback(request):
 
 def kakao_login(request):
     client_id = os.environ.get("KAKAO_ID")
-    redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback"
+    url = os.environ.get("URL")
+    redirect_uri = f"{url}/users/login/kakao/callback"
     return redirect(
         f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
     )
@@ -239,7 +242,8 @@ def kakao_callback(request):
     try:
         code = request.GET.get("code")
         client_id = os.environ.get("KAKAO_ID")
-        redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback"
+        url = os.environ.get("URL")
+        redirect_uri = f"{url}/users/login/kakao/callback"
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
         )
@@ -310,6 +314,59 @@ class UserProfileView(DetailView):
 
     model = models.User
     context_object_name = "user_obj"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        qs = self.object.rooms.all().order_by("-created")
+
+        page_size = 12
+        per_page_cnt = 4
+
+        paginator = Paginator(qs, page_size, orphans=5)
+        page = self.request.GET.get("page", 1)
+        rooms = paginator.get_page(page)
+
+        start_page = (
+            0
+            if rooms.number - 2 <= 0
+            else rooms.number - 2
+            if paginator.num_pages - (rooms.number - 2) > per_page_cnt
+            else paginator.num_pages - per_page_cnt
+            if paginator.num_pages != per_page_cnt
+            else paginator.num_pages - per_page_cnt + 1
+        )
+
+        end_page = per_page_cnt + abs(start_page)
+
+        last_range = (
+            rooms.number + per_page_cnt - 2
+            if paginator.num_pages != per_page_cnt
+            else rooms.number + per_page_cnt - 2 + 1
+        )
+
+        first_ellipsis = (
+            True
+            if rooms.number > per_page_cnt - 1
+            and paginator.num_pages > per_page_cnt + 1
+            else False
+        )
+
+        last_ellipsis = (
+            True
+            if last_range + 1 < paginator.num_pages
+            and paginator.num_pages > per_page_cnt + 1
+            else False
+        )
+
+        context["rooms"] = rooms
+        context["page_obj"] = rooms
+        context["page_range"] = paginator.page_range[abs(start_page) : end_page]
+        context["last_range"] = last_range
+        context["first_ellipsis"] = first_ellipsis
+        context["last_ellipsis"] = last_ellipsis
+
+        return context
 
 
 class UpdateProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):

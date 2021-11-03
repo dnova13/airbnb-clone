@@ -4,6 +4,7 @@ from django.http import Http404
 from django.views.generic import View
 from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
+from django.utils.translation import ugettext as _
 from rooms import models as room_models
 from reviews import forms as review_forms
 from django.contrib.auth.decorators import login_required
@@ -93,6 +94,11 @@ def list_reservations(request, noun):
 
     if not reservs:
         return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
+
+    """ req = request.GET.copy()
+    _req.__setitem__("Accept-Language", "ko")
+
+    # print(_req.headers.get("Accept-Language"))  """
 
     serialized_reservs = ReservationListSerializer(reservs_list, many=True)
 

@@ -1,4 +1,4 @@
-let reviewTotal;
+let reviewTotal = 100;
 
 document.addEventListener("DOMContentLoaded", async function (event) {
 
@@ -19,14 +19,13 @@ async function addReviews(page) {
     document.querySelector("#review-section").appendChild(img)
 
     await ajaxCall(url, "GET").then(async res => {
-        /* let data = await res.json()
+        let data = await res.json()
         img.remove()
 
         if (data["success"]) {
             reviewTotal = data["total_reviews"]
-            console.log(reviewTotal)
             appendReviews(data["data"])
-        } */
+        }
     })
 }
 

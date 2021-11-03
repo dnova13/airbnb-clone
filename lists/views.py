@@ -5,6 +5,7 @@ from rooms import models as room_models
 from . import models
 from users import mixins
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 # 선호하는 방 추가
 @login_required
@@ -32,21 +33,57 @@ class SeeFavsView(mixins.LoggedInOnlyView, TemplateView):
 
     def get(self, request, *args, **kwargs):
 
-        # request.GET.ge
+        qs = request.user.list.rooms.all()
 
         page_size = 12
+        per_page_cnt = 4
 
-        # qs = models.List.objects.get(user=request.user, name="My Favorite Houses")
+        paginator = Paginator(qs, page_size, orphans=5)
+        page = self.request.GET.get("page", 1)
+        rooms = paginator.get_page(page)
 
-        # print(qs.rooms.all().values())
+        start_page = (
+            0
+            if rooms.number - 2 <= 0
+            else rooms.number - 2
+            if paginator.num_pages - (rooms.number - 2) > per_page_cnt
+            else paginator.num_pages - per_page_cnt
+            if paginator.num_pages != per_page_cnt
+            else paginator.num_pages - per_page_cnt + 1
+        )
 
-        page = request.GET.get("page", 1)
+        end_page = per_page_cnt + abs(start_page)
+
+        last_range = (
+            rooms.number + per_page_cnt - 2
+            if paginator.num_pages != per_page_cnt
+            else rooms.number + per_page_cnt - 2 + 1
+        )
+
+        first_ellipsis = (
+            True
+            if rooms.number > per_page_cnt - 1
+            and paginator.num_pages > per_page_cnt + 1
+            else False
+        )
+
+        last_ellipsis = (
+            True
+            if last_range + 1 < paginator.num_pages
+            and paginator.num_pages > per_page_cnt + 1
+            else False
+        )
 
         # return JsonResponse({"result": True})
         return render(
             request,
             "lists/list_detail.html",
             {
-                "rm": "qs",
+                "rooms": rooms,
+                "page_obj": rooms,
+                "page_range": paginator.page_range[abs(start_page) : end_page],
+                "last_range": last_range,
+                "first_ellipsis": first_ellipsis,
+                "last_ellipsis": last_ellipsis,
             },
         )

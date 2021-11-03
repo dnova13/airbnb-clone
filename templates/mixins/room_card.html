@@ -13,5 +13,8 @@
             </span>
         </div>
         <span class="text-black w-11/12 block truncate">{{room.name}}</span>
+        {% if profile and user.pk == room.host.pk %}
+        <span class="text-sm mt-1 text-gray-600 block truncate">{{room.created}}</span>
+        {% endif %}  
     </a>
 </div>

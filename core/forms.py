@@ -24,7 +24,7 @@ class CustomClearableFileInput(ClearableFileInput):
         # 커스텀 위젯 템플릿으로 전달할 context를 만들어주고
         context = {"value": value, "name": name, "id": attrs["id"]}
 
-        print(value)
+        # print(value)
 
         # render_to_string을 이용해 HTML코드와 context를 잘 버무려줍니다.
         html = render_to_string("widgets/preview_imagefile_widget.html", context)
