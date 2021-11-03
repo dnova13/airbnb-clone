@@ -83,6 +83,8 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
             else conversation.participants.all()[1]
         )
 
+        conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+
         return render(
             self.request,
             "conversations/conversation_detail.html",

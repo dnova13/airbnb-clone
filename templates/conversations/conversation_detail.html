@@ -48,6 +48,11 @@
                             ">
                                 {{message.message}}
                             </div>
+                            {% if message.user.pk == user.pk  %}
+                                {% if message.is_read == False %}
+                                    1
+                                {% endif %}
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% endif %}
