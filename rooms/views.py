@@ -20,7 +20,7 @@ class HomeView(ListView):
 
     # 페이지에서 보일 목록의 개수
     paginate_by = 12
-    paginate_orphans = 5
+    paginate_orphans = 0
 
     # 정렬 : 내림차순, 오름차순 "created"
     ordering = "-created"
@@ -166,7 +166,7 @@ class SearchView(View):
             page_size = 12
             per_page_cnt = 4
 
-            paginator = Paginator(qs, page_size, orphans=5)
+            paginator = Paginator(qs, page_size, orphans=0)
             page = request.GET.get("page", 1)
             rooms = paginator.get_page(page)
 
@@ -206,6 +206,8 @@ class SearchView(View):
 
             if current_url[-1] != "&":
                 current_url = "".join(request.get_full_path().split("page")[0]) + "&"
+
+            print(paginator.page_range[abs(start_page) : end_page])
 
             return render(
                 request,

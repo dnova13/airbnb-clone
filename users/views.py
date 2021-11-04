@@ -323,7 +323,7 @@ class UserProfileView(DetailView):
         page_size = 12
         per_page_cnt = 4
 
-        paginator = Paginator(qs, page_size, orphans=5)
+        paginator = Paginator(qs, page_size, orphans=0)
         page = self.request.GET.get("page", 1)
         rooms = paginator.get_page(page)
 

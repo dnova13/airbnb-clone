@@ -10,8 +10,8 @@
         <h3 class="pt-4 mb-12 text-2xl text-center">My Favorite</h3>
         <div class="container mx-auto pb-5">
                 <div class="flex flex-wrap -mx-5 mb-5"> 
-                {% for room in rooms %}
-                    {% include 'mixins/room_card.html' with room=room %}
+                {% for order in orders %}
+                    {% include 'mixins/room_card.html' with room=order.room %}
                 {% endfor %}
             </div>
         </div> 
@@ -37,7 +37,6 @@
             {% endif %}
 
             {% for page in page_range %}
-
                 {% if page == page_obj.number %}
                     <a class="rounded-circle mx-3 pb-1 px-10px font-medium text-lg bg-red-500 text-red-50" href="?page={{page}}">{{page}}</a>
                 {% else %}    

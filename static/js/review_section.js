@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 
 async function addReviews(page) {
 
-    let room_pk = window.location.pathname.replace('/rooms/', "")
+    let room_pk = document.querySelector(".room").id
     let url = `/api/v1/reviews/list/${room_pk}/?page=${page ? page : 1}`;
 
     let img = document.createElement('img')

@@ -5,11 +5,6 @@ from reservations import models
 register = template.Library()
 
 
-""" reservs = models.Reservation.objects.filter(
-            room__host=request.user, status="pending"
-        ) """
-
-
 @register.simple_tag
 def is_reserv_request(user):
     try:

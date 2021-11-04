@@ -41,6 +41,10 @@ def go_conversation(request, a_pk, b_pk):
             reverse("conversations:detail", kwargs={"pk": conversation[0].pk})
         )
 
+    else:
+        messages.error(request, "Invalid Account")
+        return redirect(reverse("core:home"))
+
 
 class ConversationListView(View):
     def get(self, *args, **kwargs):

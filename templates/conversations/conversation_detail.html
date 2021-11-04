@@ -14,32 +14,31 @@
 
         <div class="border w-1/4 p-10 ">
             <span class="text-center w-full block text-lg font-medium">{% trans "Conversation between:" %}</span>
-            <div class="flex justify-between mt-10 items-center">
+            <div class="flex justify-center mt-10 items-center">
                 <div class="flex flex-col items-center">
                     {% include "mixins/user_avatar.html" with user=me %}
-                    <span class="mt-2 text-gray-500 ">{{me.first_name}}</span>
+                    <span class="mt-2 text-gray-500 truncate" style="max-width:5rem">{{me.first_name}}</span>
                 </div>
                 <span class="font-medium text-2xl">&</span>
                 <a href="{{opponent.get_absolute_url}}">
                     <div class="flex flex-col items-center">
                         {% include "mixins/user_avatar.html" with user=opponent %}
-                        <span class="mt-2 text-gray-500">{{opponent.first_name}}</span>
+                        <span class="mt-2 text-gray-500 ml truncate" style="max-width:5rem">{{opponent.first_name}}</span>
                     </div>
                 </a>
             </div>
         </div>
         <div class="flex-grow">
-        <div class="chat-scroll border ml-10 p-10 flex flex-col">
+            <div class="chat-scroll border ml-10 p-10 pb-0 flex flex-col">
                 {% if conversation.messages.count == 0 %}
                     {% trans "no messages" %}
                 {% else %}
                     {% for message in conversation.messages.all  %}
                         <div class="mb-10 {% if message.user.pk == user.pk %}
-                            self-end
-                            text-right
+                            self-end text-right
                         {% endif %}">
-                            <span class="text-sm font-medium text-gray-600">{{message.user.first_name}}</span>
-                            <div class="mt-px p-5 w-56 rounded
+                            <span class="text-sm font-medium  w-56 text-gray-600 truncate">{{message.user.first_name | slice:12}}{% if last_msg_obj.message|length > 12 %}...{% endif %}</span>
+                            <div class="mt-px p-5 w-56 rounded break-words text-left
                                 {% if message.user.pk == user.pk %}
                                     bg-teal-500
                                     text-white
@@ -49,9 +48,10 @@
                             ">
                                 {{message.message}}
                             </div>
+                            <p class="text-xs">{{message.created}}</p>
                             {% if message.user.pk == user.pk  %}
                                 {% if message.is_read == False %}
-                                    1
+                                    <p class="text-xs">1</p>
                                 {% endif %}
                             {% endif %}
                         </div>

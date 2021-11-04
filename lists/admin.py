@@ -7,18 +7,22 @@ class ListAdmin(admin.ModelAdmin):
 
     """List Admin Definition"""
 
-    list_display = ("name", "user", "count_rooms")
+    list_display = (
+        "name",
+        "user",  # "count_rooms"
+    )
 
     # 이름으로 검색하는 서치바 생성
     search_fields = ("name",)
 
-    # 다 대 다 필터 생성
-    filter_horizontal = ("rooms",)
 
-
-""" @admin.register(models.Order)
+@admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
 
-    list_display = ("number",)
-
-    filter_horizontal = ("rooms", "lists.list",  )"""
+    list_display = (
+        "room",
+        "list",
+        "list_user",
+        "number",
+        "room_created",
+    )
