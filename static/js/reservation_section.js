@@ -47,7 +47,8 @@ function appendReservations(items) {
         let _cancel = gettext("Canceled")
         let _pending = gettext("Pending")
         let __status
-        let _created = loc == "en" ? moment(item.created).format("MMM. DD YYYY, h:mm a") : moment(item.created).format("lll")
+        let _created = loc == "en" ? moment(item.created).format("MMM. D YYYY, h:mm a") : moment(item.created).format("lll")
+        _created = _created.replace("am", "a.m.").replace("pm", "p.m.")
 
         switch (item.status) {
             case 'pending':

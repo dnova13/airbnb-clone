@@ -16,7 +16,15 @@ testnova0713@gmail.com
 
 
 # channel setting
+
+#### commend
 ```
 pipenv install channls
 pipenv install channels-redis
 ```
+
+#### docker
+```
+docker run -p 6379:6379 -d redis:6.2.6
+```
+

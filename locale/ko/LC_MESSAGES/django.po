@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-04 03:35+0900\n"
+"POT-Creation-Date: 2021-11-05 20:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Search By City"
 msgstr "도시 검색"
 
-#: .\templates\conversations\conversation_detail.html:15
+#: .\templates\conversations\conversation_detail.html:16
 msgid "Conversation between:"
 msgstr "대화 상대"
 
-#: .\templates\conversations\conversation_detail.html:33
+#: .\templates\conversations\conversation_detail.html:34
 msgid "no messages"
 msgstr "메세지가 없습니다."
 
@@ -54,31 +54,31 @@ msgstr "호스팅 시작"
 msgid "Create Room"
 msgstr "방 만들기"
 
-#: .\templates\partials\nav.html:21
+#: .\templates\partials\nav.html:22
 msgid "Profile"
 msgstr "프로필"
 
-#: .\templates\partials\nav.html:25
+#: .\templates\partials\nav.html:24
 msgid "Reservs"
 msgstr "예약"
 
-#: .\templates\partials\nav.html:32
+#: .\templates\partials\nav.html:31
 msgid "Convs"
 msgstr "대화"
 
-#: .\templates\partials\nav.html:37
+#: .\templates\partials\nav.html:36
 msgid "Favs"
 msgstr "선호"
 
-#: .\templates\partials\nav.html:38
+#: .\templates\partials\nav.html:37
 msgid "Log out"
 msgstr "로그아웃"
 
-#: .\templates\partials\nav.html:40
+#: .\templates\partials\nav.html:39
 msgid "Log in"
 msgstr "로그인"
 
-#: .\templates\partials\nav.html:41
+#: .\templates\partials\nav.html:40
 msgid "Sign up"
 msgstr "회원가입"
 

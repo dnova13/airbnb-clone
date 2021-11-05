@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block page_title %}
     Conversation
@@ -48,65 +48,45 @@
                             ">
                                 {{message.message}}
                             </div>
-                            <p class="text-xs">{{message.created}}</p>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            <p class="text-xs">
+                                {% if LANGUAGE_CODE == "en" %}
+                                    {{ message.created|date:"M. j Y, h:i a" }}
+                                {% else %}
+                                    {{ message.created }}
+                                {% endif %}
+                            </p>
                             {% if message.user.pk == user.pk  %}
                                 {% if message.is_read == False %}
-                                    <p class="text-xs">1</p>
+                                    <p class="is-read text-xs">1</p>
                                 {% endif %}
                             {% endif %}
                         </div>
                     {% endfor %}
                 {% endif %}
-                
             </div>
             <form class="mt-10 w-1/2 mx-auto" method="POST">
                 {% csrf_token %}
                 <input class="border-box mb-5" name="message" placeholder="Write a Message" required />
-                <button class="btn-link">Send Comment</button>
+                <button id="send_msg" class="btn-link">Send Comment</button>
             </form>
         </div>
 
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment-with-locales.min.js"></script>
     <script>
-        let objDiv = document.querySelector(".chat-scroll"); 
-        objDiv.scrollTop = objDiv.scrollHeight;
+        let scrDiv = document.querySelector(".chat-scroll"); 
+        let loc = "{{LANGUAGE_CODE}}"
+        
+        const _id = {{user.pk}}
+        const _name = "{{user.first_name}}"
+
+        scrDiv.scrollTop = scrDiv.scrollHeight;
+        moment.locale(loc)
     </script>
-    <script type="text/javascript">
-
-        let _pk = document.querySelector(".conv").id
-        let chatSocket = new WebSocket(
-            `ws://${window.location.host}/ws/conversation/${_pk}/`
-        );
-
-        chatSocket.onmessage = (e) => {
-            let data = JSON.parse(e.data);
-            console.log(data)
-            let message = data['message'];
-            console.log("!!!!!!!!!!!!!!!");
-            document.querySelector("#chat-log").value += (message + '\n');
-        };
-
-        chatSocket.onclose = (e) => {
-            console.error('Chat socket closed unexpectedly');
-        };
-
-       {% comment %}  document.querySelector("#chat-message-input").focus();
-        document.querySelector("#chat-message-input").addEventListener("keyup",(e) => {
-            if (e.keyCode === 13) { 
-                document.querySelector("#chat-message-submit").click();
-            }
-        });
-
-        document.querySelector("#chat-message-submit").addEventListener("click", (e) => {
-            let messageInputDom = document.querySelector("#chat-message-input");
-            let message = messageInputDom.value;
-            
-            chatSocket.send(JSON.stringify({
-                'message' : message,
-                "abc" : "DDDD"
-            }));
-
-            messageInputDom.value = '';
-        }); {% endcomment %}
-    </script>
+    <script src="{% static 'js/socket.js' %}"></script>
+    <script src="{% static 'js/socket_coversation.js' %}"></script>
 {% endblock content %}
+
+
+
