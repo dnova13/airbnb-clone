@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 DJANGO_APPS = [
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -207,4 +208,18 @@ LOGIN_URL = "/users/login/"
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+}
+
+
+# chanel
+
+ASGI_APPLICATION = "config.routing.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }

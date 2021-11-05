@@ -10,7 +10,7 @@
 
 {% block content %}
      
-    <div class="container mx-auto my-10 mt-32 flex justify-between min-h-50vh">
+    <div id={{ conversation.pk }} class="conv container mx-auto my-10 mt-32 flex justify-between min-h-50vh">
 
         <div class="border w-1/4 p-10 ">
             <span class="text-center w-full block text-lg font-medium">{% trans "Conversation between:" %}</span>
@@ -70,6 +70,43 @@
     <script>
         let objDiv = document.querySelector(".chat-scroll"); 
         objDiv.scrollTop = objDiv.scrollHeight;
+    </script>
+    <script type="text/javascript">
 
+        let _pk = document.querySelector(".conv").id
+        let chatSocket = new WebSocket(
+            `ws://${window.location.host}/ws/conversation/${_pk}/`
+        );
+
+        chatSocket.onmessage = (e) => {
+            let data = JSON.parse(e.data);
+            console.log(data)
+            let message = data['message'];
+            console.log("!!!!!!!!!!!!!!!");
+            document.querySelector("#chat-log").value += (message + '\n');
+        };
+
+        chatSocket.onclose = (e) => {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+       {% comment %}  document.querySelector("#chat-message-input").focus();
+        document.querySelector("#chat-message-input").addEventListener("keyup",(e) => {
+            if (e.keyCode === 13) { 
+                document.querySelector("#chat-message-submit").click();
+            }
+        });
+
+        document.querySelector("#chat-message-submit").addEventListener("click", (e) => {
+            let messageInputDom = document.querySelector("#chat-message-input");
+            let message = messageInputDom.value;
+            
+            chatSocket.send(JSON.stringify({
+                'message' : message,
+                "abc" : "DDDD"
+            }));
+
+            messageInputDom.value = '';
+        }); {% endcomment %}
     </script>
 {% endblock content %}

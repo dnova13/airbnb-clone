@@ -11,6 +11,8 @@ django-seed = "*"
 django-dotenv = "*"
 requests = "*"
 djangorestframework = "*"
+channels-redis = "*"
+channels = "*"
 
 [dev-packages]
 flake8 = "*"

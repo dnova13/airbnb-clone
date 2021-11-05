@@ -13,3 +13,10 @@ dn@gmail.com
 
 # mail accout
 testnova0713@gmail.com
+
+
+# channel setting
+```
+pipenv install channls
+pipenv install channels-redis
+```
