@@ -11,12 +11,12 @@
     <div class="min-h-75vh">
         <div class="mx-auto mb-9 w-1/2 ">
             <ul class="flex pt-6">
-                <li id="reserv" class="reserv-forcus reserv_link mx-auto ">
+                <li id="reserved" class="reserv-forcus reserv_link mx-auto ">
                     <button class="p-3 text-2xl text-center">{% trans "Reserved" %}</button>
                 </li>
                 {% if new_reserv_req %}
-                <li id="confirm" class="reserv_link mx-auto">
-                    <button class="p-3 text-2xl text-center">{% trans "Confirm Requests" %}</button>
+                <li id="requested" class="reserv_link mx-auto">
+                    <button class="p-3 text-2xl text-center">{% trans "Requested" %}</button>
                 </li>
                 {% endif %}
             </ul>

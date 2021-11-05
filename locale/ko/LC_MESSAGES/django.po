@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-06 00:52+0900\n"
+"POT-Creation-Date: 2021-11-06 07:32+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,8 +99,8 @@ msgid "Reserved"
 msgstr "예약 내역"
 
 #: .\templates\reservations\list.html:19
-msgid "Confirm Requests"
-msgstr "승인 요청"
+msgid "Requested"
+msgstr "예약요청 내역"
 
 #: .\templates\reservations\list.html:27
 msgid "All"
@@ -153,6 +153,9 @@ msgstr "언어"
 #: .\users\models.py:101
 msgid "Verify Airbnb Account"
 msgstr "계정을 인증하세요."
+
+#~ msgid "Confirm Requests"
+#~ msgstr "승인 요청"
 
 #~ msgid "Save to Favourites"
 #~ msgstr "관심있는 방 추가"

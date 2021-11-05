@@ -54,6 +54,10 @@
         }
     })
 
+    document.querySelector("#reservations").addEventListener("click",e => {
+        sessionStorage.clear()
+    })
+
     __notiSocket.onmessage = (e) => {
         let data = JSON.parse(e.data);
 

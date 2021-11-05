@@ -1,13 +1,28 @@
 let _total_reservs = 100;
 let loc = gettext("en")
 let _btnControl = false;
+let __t = getParam("t")
 
 moment.locale(loc)
 
+function getParam(key) {
+    return new URLSearchParams(location.search).get(key);
+};
+
 document.addEventListener("DOMContentLoaded", async function (event) {
 
-    // event.preventDefault();
-    await addReservations(1, "reserved")
+    if (!__t) __t = "reserved"
+
+    let _st = sessionStorage.getItem(__t)
+    _st = _st ? _st : "all"
+
+    document.querySelector(".reserv-forcus").classList.remove("reserv-forcus")
+    document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
+
+    document.querySelector(`#${__t}`).classList.add("reserv-forcus")
+    document.querySelector(`#${_st}`).classList.add("reserv-op-forcus")
+
+    await addReservations(1, __t)
 });
 
 async function addReservations(page, _type) {
@@ -110,16 +125,16 @@ window.addEventListener("scroll", async e => {
         if (scrCnt === 1 && _total_reservs > _cnt) {
 
             // console.log("!!!!!!!!!!!!!!!!!!!!")
-
+            let type = document.querySelector(".reserv-forcus").id
             _page++
-            await addReservations(_page, "reserved")
+            await addReservations(_page, type)
 
             scrCnt = 0;
         }
     }
 });
 
-// 예약 내역 옵션 선택
+// 예약 최하위 옵션 4개 선택
 document.querySelectorAll(".rev-op-link > li").forEach(li => {
 
     li.addEventListener("click", async e => {
@@ -129,12 +144,14 @@ document.querySelectorAll(".rev-op-link > li").forEach(li => {
         document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
         li.classList.add("reserv-op-forcus")
 
+        let type = document.querySelector(".reserv-forcus").id
+        sessionStorage.setItem(__t, li.id)
 
-        await addReservations(1, "reserved")
+        await addReservations(1, type)
     })
 })
 
-// 예약 내역 보기
+// 예약 옵션 2개 보기
 document.querySelectorAll(".reserv_link").forEach(li => {
 
     li.addEventListener("click", async e => {
@@ -142,27 +159,22 @@ document.querySelectorAll(".reserv_link").forEach(li => {
         e.preventDefault()
 
         if (_btnControl) {
-            resetList();
 
-            document.querySelector(".reserv-forcus").classList.remove("reserv-forcus")
-            li.classList.add("reserv-forcus")
-
-            let revOp = document.querySelector(".rev-option")
-
-            if (li.id === "confirm") {
-                revOp.style.display = "none"
-                await addReservations(1, "request")
+            if (li.id === "requested") {
+                location.href = location.pathname + "?t=requested"
             }
 
             else {
-                revOp.style.display = "block"
-                document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
-                document.querySelector("#all").classList.add("reserv-op-forcus")
-                await addReservations(1, "reserved")
+                location.href = location.pathname + "?t=reserved"
             }
         }
     })
 })
+
+function resetOptionFocus() {
+    document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
+    document.querySelector("#all").classList.add("reserv-op-forcus")
+}
 
 function resetList() {
     scrCnt = 0

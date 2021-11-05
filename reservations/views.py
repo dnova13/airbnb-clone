@@ -85,10 +85,13 @@ def list_reservations(request, noun):
             reservs = models.Reservation.objects.filter(
                 guest=request.user, status=_status
             )
-    elif noun == "request":
-        reservs = models.Reservation.objects.filter(
-            room__host=request.user, status="pending"
-        )
+    elif noun == "requested":
+        if _status == "all":
+            reservs = models.Reservation.objects.filter(room__host=request.user)
+        else:
+            reservs = models.Reservation.objects.filter(
+                room__host=request.user, status=_status
+            )
 
     reservs_list = reservs.order_by("-created")[offset:limit]
     total_reservs = reservs.count()
