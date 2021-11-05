@@ -5,6 +5,7 @@ let cnt = 0;
 let lastIdx = 0;
 let isBook = false;
 
+
 const cal_days = document.querySelectorAll(".sel-number")
 
 cal_days.forEach((day, idx) => {

@@ -1,5 +1,6 @@
 let _total_reservs = 100;
 let loc = gettext("en")
+let _btnControl = false;
 
 moment.locale(loc)
 
@@ -12,11 +13,10 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 async function addReservations(page, _type) {
 
     let _status = document.querySelector(".reserv-op-forcus").id
-
     let url = `/reservations/api/list/${_type}/?status=${_status}&page=${page}`;
-
     let img = document.createElement('img')
 
+    _btnControl = false
     img.setAttribute("class", "mx-auto ");
     img.setAttribute("src", '/static/img/loading.gif');
 
@@ -24,12 +24,12 @@ async function addReservations(page, _type) {
 
     await ajaxCall(url, "GET").then(async res => {
         let data = await res.json()
-
         img.remove()
 
         if (data["success"]) {
             _total_reservs = data["total_reservs"]
             appendReservations(data["data"])
+            _btnControl = true
         }
     })
 }
@@ -139,23 +139,27 @@ document.querySelectorAll(".reserv_link").forEach(li => {
 
     li.addEventListener("click", async e => {
 
-        resetList();
+        e.preventDefault()
 
-        document.querySelector(".reserv-forcus").classList.remove("reserv-forcus")
-        li.classList.add("reserv-forcus")
+        if (_btnControl) {
+            resetList();
 
-        let revOp = document.querySelector(".rev-option")
+            document.querySelector(".reserv-forcus").classList.remove("reserv-forcus")
+            li.classList.add("reserv-forcus")
 
-        if (li.id === "confirm") {
-            revOp.style.display = "none"
-            await addReservations(1, "request")
-        }
+            let revOp = document.querySelector(".rev-option")
 
-        else {
-            revOp.style.display = "block"
-            document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
-            document.querySelector("#all").classList.add("reserv-op-forcus")
-            await addReservations(1, "reserved")
+            if (li.id === "confirm") {
+                revOp.style.display = "none"
+                await addReservations(1, "request")
+            }
+
+            else {
+                revOp.style.display = "block"
+                document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
+                document.querySelector("#all").classList.add("reserv-op-forcus")
+                await addReservations(1, "reserved")
+            }
         }
     })
 })

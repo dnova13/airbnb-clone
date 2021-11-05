@@ -5,7 +5,7 @@ function socket_connect(url) {
     );
 
     socket.onclose = (e) => {
-        console.error('Chat socket closed unexpectedly');
+        console.error('Socket closed unexpectedly');
     };
 
     return socket

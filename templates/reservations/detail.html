@@ -14,8 +14,11 @@
         <div class="border-t border-l border-r bg-cover bg-center h-56 rounded-t-lg" style="background-image: url({{reservation.room.first_photo}});"></div>
 
         <div class="flex flex-col items-start border-l border-r border-t border-b">
-            <div class="font-medium border-b py-8 px-5 w-full">
-                {{reservation.check_in}} - {{reservation.check_out}} <span class="ml-5 {% if reservation.status == 'pending' %} text-yellow-500 {% elif reservation.status == 'canceled' %} text-red-600 {% else %} text-teal-500 {% endif %}">{{reservation.get_status_display}}</span>
+            <div class="font-medium border-b py-6 px-5 w-full">
+                {{reservation.check_in}}, {{reservation.room.check_in}} - {{reservation.check_out}}, {{reservation.room.check_out}}
+                <p class="mt-2 {% if reservation.status == 'pending' %} text-yellow-500 {% elif reservation.status == 'canceled' %} text-red-600 {% else %} text-teal-500 {% endif %}">
+                    {{reservation.get_status_display}}
+                </p>
             </div>
     
             <span class="text-2xl border-b p-5 mt-2 w-full">
@@ -59,7 +62,45 @@
                 <a href="{% url 'rooms:detail' reservation.room.pk  %}" class="btn-back block px-3">Back to Room</a>
             </div>
         </div>
-
-
     </div>
+    <script>
+        let _msgTag = document.querySelector(".message");
+        let h_id = {{reservation.room.host.pk}}
+        let g_id = {{reservation.guest.pk}}
+        let _id = {{user.pk}} 
+
+        let noti_url = `${window.location.host}/ws/noti/`
+
+        if (_msgTag) {
+            if (_msgTag.id =="success") {
+                
+                noti_url = `${noti_url}${h_id}/`
+                const sendNotiSocket = socket_connect(noti_url)
+
+                const data = {"type": "reservation", "rev_id": {{reservation.pk}}, "noti": true, status : "pending" }
+                sendNotiSocket.onopen = () =>  sendNotiSocket.send(JSON.stringify(data));
+            }
+
+            else if (_msgTag.id =="confirm") {
+
+                noti_url = `${noti_url}${g_id}/`
+                const sendNotiSocket = socket_connect(noti_url)
+
+                const data = {"type": "reservation", "rev_id": {{reservation.pk}}, "noti": true, status : "confirm" }
+                sendNotiSocket.onopen = () =>  sendNotiSocket.send(JSON.stringify(data));
+            }
+
+            else if (_msgTag.id =="cancel") {
+
+                if (h_id === _id) {
+
+                    noti_url = `${noti_url}${g_id}/`
+                    const sendNotiSocket = socket_connect(noti_url)
+
+                    const data = {"type": "reservation", "rev_id": {{reservation.pk}}, "noti": true, status : "cancel" }
+                    sendNotiSocket.onopen = () =>  sendNotiSocket.send(JSON.stringify(data));
+                }
+            }
+        }
+    </script>
 {% endblock content %}

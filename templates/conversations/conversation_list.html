@@ -26,7 +26,7 @@
                     {% for participant in cov.participants.all  %}
                         {% if participant.pk != user.pk and cov.count_messages > 0 %}
                             <div class="flax items-center mb-2 p-4 rounded-lg font-light text-lg w-full text-black bg-yellow-200 hover:bg-yellow-100">
-                                <a class="flex items-center" href="{% url 'conversations:go' user.pk participant.pk %}">
+                                <a id="{{ cov.id }}" class="convs flex items-center" href="{% url 'conversations:go' user.pk participant.pk %}">
                                     {% include "mixins/user_avatar.html" with user=participant h_and_w='w-11 h-11' %}           
                                     <div class="ml-5 w-full overflow-hidden">
                                         {% last_msg cov user as last_msg_obj %}

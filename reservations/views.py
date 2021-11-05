@@ -55,6 +55,7 @@ def create_reservation(request, room, year, month, day, timedelta):
             messages.error(request, "Can't Reserve That Room")
             return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
 
+        messages.success(request, "Reservation Is Successful", extra_tags="success")
         return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
 
 
@@ -114,6 +115,7 @@ def list_reservations(request, noun):
 class ReservationDetailView(View):
     def get(self, *args, **kwargs):
         pk = kwargs.get("pk")
+
         reservation = models.Reservation.objects.get_or_none(pk=pk)
 
         # 데이터가 없거나
@@ -148,13 +150,13 @@ def edit_reservation(request, pk, verb):
 
     if verb == "confirm":
         reservation.status = models.Reservation.STATUS_CONFIRMED
+        messages.success(request, "Reservation Updated", extra_tags="confirm")
 
     elif verb == "cancel":
         reservation.status = models.Reservation.STATUS_CANCELED
         models.BookedDay.objects.filter(reservation=reservation).delete()
+        messages.success(request, "Reservation Updated", extra_tags="cancel")
 
     reservation.save()
-
-    messages.success(request, "Reservation Updated")
 
     return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))

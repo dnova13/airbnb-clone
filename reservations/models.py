@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from core import models as core_models
+from django.utils.translation import gettext_lazy as _
 
 
 class BookedDay(core_models.TimeStampedModel):
@@ -26,9 +27,9 @@ class Reservation(core_models.TimeStampedModel):
     STATUS_CANCELED = "canceled"
 
     STATUS_CHOICES = (
-        (STATUS_PENDING, "Pending"),
-        (STATUS_CONFIRMED, "Confirmed"),
-        (STATUS_CANCELED, "Canceled"),
+        (STATUS_PENDING, _("Pending")),
+        (STATUS_CONFIRMED, _("Confirmed")),
+        (STATUS_CANCELED, _("Canceled")),
     )
 
     # 셀렉트 박스 작성.

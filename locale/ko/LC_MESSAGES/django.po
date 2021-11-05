@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-05 20:05+0900\n"
+"POT-Creation-Date: 2021-11-06 00:52+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\reservations\models.py:30 .\templates\reservations\list.html:30
+msgid "Pending"
+msgstr "대기중"
+
+#: .\reservations\models.py:31 .\templates\reservations\list.html:33
+msgid "Confirmed"
+msgstr "예약완료"
+
+#: .\reservations\models.py:32 .\templates\reservations\list.html:36
+msgid "Canceled"
+msgstr "취소"
 
 #: .\templates\base.html:24
 msgid "Search By City"
@@ -93,18 +105,6 @@ msgstr "승인 요청"
 #: .\templates\reservations\list.html:27
 msgid "All"
 msgstr "모두"
-
-#: .\templates\reservations\list.html:30
-msgid "Pending"
-msgstr "대기중"
-
-#: .\templates\reservations\list.html:33
-msgid "Confirmed"
-msgstr "예약완료"
-
-#: .\templates\reservations\list.html:36
-msgid "Canceled"
-msgstr "취소"
 
 #: .\templates\rooms\room_detail.html:36
 msgid "Saved"

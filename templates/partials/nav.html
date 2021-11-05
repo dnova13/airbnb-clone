@@ -1,4 +1,4 @@
-{% load is_msgs_read is_reserv_request fav_count i18n %}
+{% load is_msgs_read is_reserv_request fav_count static  i18n %}
 <ul class="flex items-center text-sm font-medium h-full">
     {% if user.is_authenticated %}
         <li class="nav_link">
@@ -40,16 +40,69 @@
         <li class="nav_link"><a href="{% url "users:signup" %}">{% trans "Sign up" %}</a></li>
     {% endif %}
 </ul>
+<script src="{% static 'js/socket.js' %}"></script>
 <script>
 
-    pathname = location.pathname
+    const pathname = location.pathname
+    const __noti_url = `${window.location.host}/ws/noti/{{user.id}}/`
+    const __notiSocket = socket_connect(__noti_url)
 
     document.querySelectorAll("li.nav_link").forEach(link => {
         
         if(link.id && pathname.includes(link.id)) {
             link.classList.add("border-gray-600")
         }
-
     })
 
+    __notiSocket.onmessage = (e) => {
+        let data = JSON.parse(e.data);
+
+        // console.log(data);
+
+        if (!data || !data.message) return
+
+        if (data.message.type == "conversation" ) {
+
+            addNoticePoint("conversations");
+
+            if (pathname.includes("conversations/list")) {
+
+                document.querySelectorAll(".convs").forEach(item => {
+                   if (item.id === data.message.conv_id) {
+                       
+                       if (item.children[2]) return
+
+                       let span = createNoticeePoint();
+                       item.appendChild(span)
+                   }
+                });
+            }
+
+            else if (pathname.includes(`conversations/${data.message.conv_id}`)) {
+                // console.log(pathname)
+            }
+
+        }
+        else if (data.message.type == "reservation" ) {
+            addNoticePoint("reservations");
+        }
+        
+    };
+
+    function createNoticeePoint() {
+        
+        let span = document.createElement("span");
+        span.className = pathname.includes("conversations/list") ? 'flex text-right text-sm text-red-500' : "text-xs text-red-500"
+        span.innerText = "●"
+
+        return span
+    }
+
+    function addNoticePoint(_id) {
+        if (document.querySelector(`#${_id} > span`)) return 
+
+        let span = createNoticeePoint();
+        document.querySelector(`#${_id}`).appendChild(span)
+    }
+    
 </script>

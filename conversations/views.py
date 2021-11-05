@@ -106,8 +106,8 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
 
         valid_chk = False
 
-        for user in conversation.participants.all():
-            if user.id == self.request.user.pk:
+        for participant in conversation.participants.all():
+            if participant.id == self.request.user.pk:
                 valid_chk = True
                 break
 
