@@ -7,7 +7,17 @@ from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from core import managers as core_managers
+
+
+def file_size(value):
+    MB = 1024 * 1024
+    limit = 2 * MB
+
+    if value.size > limit:
+        raise ValidationError(_("File too large. Size should not exceed 2 MiB."))
 
 
 class User(AbstractUser):
@@ -47,7 +57,7 @@ class User(AbstractUser):
         (LOGING_KAKAO, "Kakao"),
     )
 
-    avatar = models.ImageField(upload_to="avatars", blank=True)
+    avatar = models.ImageField(upload_to="avatars", blank=True, validators=[file_size])
     gender = models.CharField(
         _("gender"), choices=GENDER_CHOICES, max_length=10, blank=True
     )

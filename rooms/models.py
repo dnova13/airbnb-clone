@@ -1,3 +1,4 @@
+from django.core import validators
 from django.utils import timezone
 from django.db import models
 from django.urls import reverse
@@ -5,6 +6,16 @@ from django_countries.fields import CountryField
 from django.core.validators import MinValueValidator
 from core import models as core_models
 from cal import Calendar
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def file_size(value): 
+    MB = 1024 * 1024
+    limit = 2 * MB
+
+    if value.size > limit:
+        raise ValidationError(_("File too large. Size should not exceed 2 MiB."))
 
 
 class AbstractItem(core_models.TimeStampedModel):
@@ -63,7 +74,7 @@ class Photo(core_models.TimeStampedModel):
     caption = models.CharField(max_length=80)
 
     #  이미지 파일
-    file = models.ImageField(upload_to="room_photos")
+    file = models.ImageField(upload_to="room_photos", validators=[file_size])
 
     # 방이 삭제 되면 거기에 종속된 포토도 삭제
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)

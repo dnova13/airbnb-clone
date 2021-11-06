@@ -9,18 +9,23 @@ const noti_url = `${window.location.host}/ws/noti/${_id_op}/`
 
 const chatSocket = socket_connect(url)
 const sendNotiSocket = socket_connect(noti_url)
+const scrDiv = document.querySelector(".chat-scroll");
 
+let bt_scrCnt = false;
+
+scrDiv.scrollTop = scrDiv.scrollHeight;
 
 // 요청 후 다시 소켓에서 온 데이터 받아서 처리
-chatSocket.onmessage = async e => {
+chatSocket.onmessage = e => {
     let data = JSON.parse(e.data);
     receive_data = data["message"];
 
-    console.log(receive_data)
+    // console.log(receive_data)
 
     if (receive_data.type == "conversation" && receive_data.user.id != _id) {
+        bt_scrCnt = false;
         addMessage(receive_data, "opponent")
-        await read_msg();
+
     }
 };
 
@@ -157,3 +162,30 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+
+// 스크롤 페이징 이벤트
+scrDiv.addEventListener("scroll", async e => {
+
+    e.preventDefault();
+
+    if (Math.abs(scrDiv.scrollHeight - scrDiv.scrollTop - scrDiv.offsetHeight) <= 2) {
+
+        if (!bt_scrCnt) {
+
+            bt_scrCnt = true
+
+            let __msgs = document.querySelectorAll(".conv-msg")
+
+            if (__msgs[__msgs.length - 1].classList.contains('self-end'))
+                return
+
+            await read_msg()
+            const opp_noti_url = `${window.location.host}/ws/noti/${_id_op}/`
+            const opp_notiSocket = socket_connect(opp_noti_url)
+
+            opp_notiSocket.onopen = () => opp_notiSocket.send(JSON.stringify({ "type": "read", "op_id": _id_op, "conv_id": _pk, "noti": true }))
+        }
+    }
+});

@@ -68,6 +68,7 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
     def get(self, *args, **kwargs):
         pk = kwargs.get("pk")
         conversation = models.Conversation.objects.get_or_none(pk=pk)
+        conversation.is_over_messges()
 
         if not conversation:
             messages.error(self.request, "cant' go there")
@@ -105,6 +106,33 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
                 "conv_messages": conv_messages,
             },
         )
+
+    """ def post(self, *args, **kwargs):
+        message = self.request.POST.get("message", None)
+        pk = kwargs.get("pk")
+        conversation = models.Conversation.objects.get_or_none(pk=pk)
+
+        if not conversation:
+            messages.error(self.request, "cant' go there")
+            return redirect(reverse("core:home"))
+
+        valid_chk = False
+
+        for participant in conversation.participants.all():
+            if participant.id == self.request.user.pk:
+                valid_chk = True
+                break
+
+        if not valid_chk:
+            messages.error(self.request, "Invalid Account")
+            return redirect(reverse("core:home"))
+
+        if message is not None:
+            models.Message.objects.create(
+                message=message, user=self.request.user, conversation=conversation
+            )
+
+        return redirect(reverse("conversations:detail", kwargs={"pk": pk})) """
 
 
 @api_view(["POST"])

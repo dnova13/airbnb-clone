@@ -1,3 +1,4 @@
+from django.core.validators import ProhibitNullCharactersValidator
 from django.db import models
 from core import models as core_models
 
@@ -24,6 +25,18 @@ class Conversation(core_models.TimeStampedModel):
     # 메세지 수
     def count_messages(self):
         return self.messages.count()
+
+    def is_over_messges(self):
+
+        msgs = Message.objects.filter(conversation=self)
+
+        is_over_messges = msgs.count() > 150
+
+        if is_over_messges:
+            msg_ids = msgs[: msgs.count() - 150].values_list("id", flat=True)
+            Message.objects.filter(id__in=msg_ids).delete()
+
+        return is_over_messges
 
     count_messages.short_description = "Number of Messages"
 

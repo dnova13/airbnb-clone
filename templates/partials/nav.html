@@ -46,6 +46,7 @@
     const pathname = location.pathname
     const __noti_url = `${window.location.host}/ws/noti/{{user.id}}/`
     const __notiSocket = socket_connect(__noti_url)
+    let _noti_data
 
     document.querySelectorAll("li.nav_link").forEach(link => {
         
@@ -59,20 +60,20 @@
     })
 
     __notiSocket.onmessage = (e) => {
-        let data = JSON.parse(e.data);
+        _noti_data = JSON.parse(e.data);
 
-        // console.log(data);
+        // console.log(_noti_data)
 
-        if (!data || !data.message) return
+        if (!_noti_data || !_noti_data.message) return
 
-        if (data.message.type == "conversation" ) {
+        if (_noti_data.message.type == "conversation" ) {
 
             addNoticePoint("conversations");
 
             if (pathname.includes("conversations/list")) {
 
                 document.querySelectorAll(".convs").forEach(item => {
-                   if (item.id === data.message.conv_id) {
+                   if (item.id === _noti_data.message.conv_id) {
                        
                        if (item.children[2]) return
 
@@ -81,14 +82,20 @@
                    }
                 });
             }
-
-            else if (pathname.includes(`conversations/${data.message.conv_id}`)) {
-                // console.log(pathname)
-            }
-
         }
-        else if (data.message.type == "reservation" ) {
+        else if (_noti_data.message.type == "reservation" ) {
             addNoticePoint("reservations");
+        }
+
+        else if (_noti_data.message.type === "read") {
+            
+            if (pathname.includes(`conversations/${_noti_data.message.conv_id}`) && _noti_data.message.op_id == {{user.id}} ) {
+                
+                let read_arr = document.querySelectorAll(".is-read")
+
+                if (read_arr)
+                    read_arr.forEach((elem) => elem.remove());
+            }   
         }
         
     };

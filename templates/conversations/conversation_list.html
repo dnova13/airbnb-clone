@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load last_msg  i18n %}
+{% load last_msg last_msg_oppenent i18n %}
 
 {% block page_title %}
     Conversation
@@ -34,7 +34,8 @@
                                         <p class="text-sm truncate">{{last_msg_obj.message | slice:40}}{% if last_msg_obj.message|length > 40 %}...{% endif %}  </p>
                                         <p class="text-xs mt-3 text-gray-600 truncate">{{last_msg_obj.created}}</p>
                                     </div>
-                                    {% if last_msg_obj.is_read == False %}
+                                    {% last_msg_oppenent cov user as last_msg_oppenent %}
+                                    {% if last_msg_oppenent.is_read == False %}
                                         <span class="flex text-right text-sm text-red-500">●</span>
                                     {% endif %}
                                 </a>
