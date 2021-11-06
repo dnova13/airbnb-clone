@@ -207,8 +207,6 @@ class SearchView(View):
             if current_url[-1] != "&":
                 current_url = "".join(request.get_full_path().split("page")[0]) + "&"
 
-            print(paginator.page_range[abs(start_page) : end_page])
-
             return render(
                 request,
                 "rooms/search.html",

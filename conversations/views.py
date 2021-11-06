@@ -1,3 +1,4 @@
+import json
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.query_utils import PathInfo
@@ -6,11 +7,15 @@ from django.shortcuts import redirect, reverse, render
 from django.views.generic import View
 from users import models as user_models
 from django.contrib.auth.decorators import login_required
-from . import models, forms
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from . import models, forms, serializers
 from users import mixins
 
 
 def get_or_none(user_pk):
+
     try:
         return user_models.User.objects.get(pk=user_pk)
     except user_models.DoesNotExist:
@@ -88,36 +93,79 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
         )
 
         conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+        conv_messages = conversation.messages.order_by("-id")[0:30]
 
         return render(
             self.request,
             "conversations/conversation_detail.html",
-            {"conversation": conversation, "me": me, "opponent": opponent},
+            {
+                "conversation": conversation,
+                "me": me,
+                "opponent": opponent,
+                "conv_messages": conv_messages,
+            },
         )
 
-    def post(self, *args, **kwargs):
-        message = self.request.POST.get("message", None)
-        pk = kwargs.get("pk")
-        conversation = models.Conversation.objects.get_or_none(pk=pk)
 
-        if not conversation:
-            messages.error(self.request, "cant' go there")
-            return redirect(reverse("core:home"))
+@api_view(["POST"])
+def create_msg(request, pk):
 
-        valid_chk = False
+    _data = request.data
 
-        for participant in conversation.participants.all():
-            if participant.id == self.request.user.pk:
-                valid_chk = True
-                break
+    conversation = models.Conversation.objects.get_or_none(pk=pk)
 
-        if not valid_chk:
-            messages.error(self.request, "Invalid Account")
-            return redirect(reverse("core:home"))
+    if not ("msg" in _data):
+        messages.error(request, "cant' go there")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
 
-        if message is not None:
-            models.Message.objects.create(
-                message=message, user=self.request.user, conversation=conversation
-            )
+    if not conversation:
+        messages.error(request, "cant' go there")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
 
-        return redirect(reverse("conversations:detail", kwargs={"pk": pk}))
+    valid_chk = False
+
+    for participant in conversation.participants.all():
+        if participant.id == request.user.pk:
+            valid_chk = True
+            break
+
+    if not valid_chk:
+        messages.error(request, "Invalid Account")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+
+    msg_obj = models.Message.objects.create(
+        message=_data["msg"], user=request.user, conversation=conversation
+    )
+
+    _data = {
+        "data": {"created": msg_obj.created, "is_read": msg_obj.is_read},
+    }
+
+    return Response(data={"success": True, "data": _data}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def read_msg(request, pk):
+
+    conversation = models.Conversation.objects.get_or_none(pk=pk)
+
+    if not conversation:
+        messages.error(request, "cant' go there")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+
+    valid_chk = False
+
+    for participant in conversation.participants.all():
+        if participant.id == request.user.pk:
+            valid_chk = True
+            me = participant
+        else:
+            opponent = participant
+
+    if not valid_chk:
+        messages.error(request, "Invalid Account")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+
+    conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+
+    return Response(data={"success": True}, status=status.HTTP_200_OK)

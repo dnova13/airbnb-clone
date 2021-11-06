@@ -32,6 +32,6 @@ class NotiConsumer(AsyncWebsocketConsumer):
 
         # event 에서 위에서 보낸 데이터 {"type": "notice_message", "message": message} 받음
         message = event["message"]
-        print(message)
+        # print(message)
 
         await self.send(text_data=json.dumps({"message": message}, default=str))
