@@ -4,6 +4,12 @@ module.exports = {
     // extend : 테마 안에 객체를 추가합니다. 
     extend: {
       spacing: {
+        "8vw": "8vw",
+        "9vw": "9vw",
+        "10vw": "10vw",
+        "8vh": "8vh",
+        "9vh": "9vh",
+        "10vh": "10vh",
         "25vh": "25vh",
         "50vh": "50vh",
         "75vh": "75vh",

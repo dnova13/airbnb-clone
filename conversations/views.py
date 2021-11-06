@@ -94,7 +94,7 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
         )
 
         conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
-        conv_messages = conversation.messages.order_by("-id")[0:30]
+        conv_messages = conversation.messages.order_by("-id")[0:20]
 
         return render(
             self.request,
@@ -133,6 +133,55 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
             )
 
         return redirect(reverse("conversations:detail", kwargs={"pk": pk})) """
+
+
+@api_view(["GET"])
+def get_msgs(request, pk):
+    conversation = models.Conversation.objects.get_or_none(pk=pk)
+
+    page_size = 20
+
+    offset = int(request.GET.get("start", 1)) - 1
+    limit = page_size + offset
+
+    if offset < 0:
+        messages.error(request, "cant' go there")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+
+    if not conversation:
+        messages.error(request, "cant' go there")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+
+    valid_chk = False
+
+    for participant in conversation.participants.all():
+        if participant.id == request.user.pk:
+            valid_chk = True
+        else:
+            opponent = participant
+
+    if not valid_chk:
+        messages.error(request, "Invalid Account")
+        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+
+    conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+
+    print(offset, limit)
+
+    total_msgs = conversation.messages.count()
+    conv_msgs = conversation.messages.order_by("-id")[offset:limit]
+
+    print(conv_msgs.count())
+
+    serialized_msgs = serializers.MessagesSerializer(conv_msgs, many=True)
+
+    __data = {
+        "success": True,
+        "data": serialized_msgs.data,
+        "total_msgs": total_msgs,
+    }
+
+    return Response(data=__data, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])

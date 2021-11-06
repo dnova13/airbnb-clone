@@ -9,4 +9,5 @@ urlpatterns = [
     path("<int:pk>/", views.ConversationDetailView.as_view(), name="detail"),
     path("<int:pk>/send/", views.create_msg, name="send"),
     path("<int:pk>/read/", views.read_msg, name="read"),
+    path("<int:pk>/list/", views.get_msgs, name="message_list"),
 ]

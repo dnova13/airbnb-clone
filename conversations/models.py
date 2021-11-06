@@ -20,7 +20,7 @@ class Conversation(core_models.TimeStampedModel):
 
         # join을 이용해 배열에 , 붙이며 스트링화
         # "a, b" 로 출력됨
-        return ", ".join(usernames)
+        return f", ".join(usernames)
 
     # 메세지 수
     def count_messages(self):
@@ -67,4 +67,4 @@ class Message(core_models.TimeStampedModel):
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user} says: {self.message}"
+        return f"{self.conversation.pk} {self.user} says: {self.message}"

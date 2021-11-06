@@ -12,6 +12,7 @@ const sendNotiSocket = socket_connect(noti_url)
 const scrDiv = document.querySelector(".chat-scroll");
 
 let bt_scrCnt = false;
+let tp_scrCnt = false;
 
 scrDiv.scrollTop = scrDiv.scrollHeight;
 
@@ -84,7 +85,7 @@ btn_send.addEventListener("click", async e => {
     addMessage(msg_data, "fail")
 });
 
-function addMessage(_data, status) {
+function addMessage(_data, status, pend, _height) {
 
     let addClassName = ""
     let bgColoer = ""
@@ -131,6 +132,12 @@ function addMessage(_data, status) {
     div.innerHTML = tags + stSpan
 
     let _div = document.querySelector(".chat-scroll")
+
+    if (pend === "prepend") {
+        _div.prepend(div)
+        return
+    }
+
     _div.appendChild(div)
     _div.scrollTop = _div.scrollHeight;
 }
@@ -186,6 +193,50 @@ scrDiv.addEventListener("scroll", async e => {
             const opp_notiSocket = socket_connect(opp_noti_url)
 
             opp_notiSocket.onopen = () => opp_notiSocket.send(JSON.stringify({ "type": "read", "op_id": _id_op, "conv_id": _pk, "noti": true }))
+        }
+    }
+
+    else if (scrDiv.scrollTop <= 0) {
+
+        if (!tp_scrCnt) {
+            tp_scrCnt = true
+
+            len = document.querySelectorAll(".conv-msg").length
+            let url = `/conversations/${_pk}/list/?start=${len + 1}`
+
+            let img = document.createElement('img')
+
+            img.setAttribute("class", "mx-auto mt-3");
+            img.setAttribute("src", '/static/img/loading.gif');
+
+            scrDiv.prepend(img)
+
+            await ajaxCall(url, "GET").then(async res => {
+                result = await res.json()
+                img.remove()
+
+                if (result["success"]) {
+                    // console.log(result["data"])
+
+                    for (_item of result["data"]) {
+                        // console.log(_item)
+                        _item.user.name = _item.user.first_name
+                        _item.msg = _item.message //+ " " + _item.id
+
+                        if (_item.user.id == _id) {
+                            addMessage(_item, "success", "prepend")
+                        }
+                        else {
+                            addMessage(_item, "opponent", "prepend")
+
+                        }
+                    }
+
+                    scrDiv.scrollTop = 2900
+
+                    tp_scrCnt = false
+                }
+            })
         }
     }
 });
