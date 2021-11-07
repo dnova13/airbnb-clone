@@ -19,12 +19,16 @@ async function addReviews(page) {
     document.querySelector("#review-section").appendChild(img)
 
     await ajaxCall(url, "GET").then(async res => {
-        let data = await res.json()
+
         img.remove()
+        if (res.status === 204) return
+
+        let data = await res.json()
 
         if (data["success"]) {
             reviewTotal = data["total_reviews"]
             appendReviews(data["data"])
+            scrCnt = 0;
         }
     })
 }
@@ -89,7 +93,6 @@ window.addEventListener("scroll", async e => {
 
             await addReviews(page)
 
-            scrCnt = 0;
         }
     }
 });

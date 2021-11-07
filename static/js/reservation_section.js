@@ -38,13 +38,17 @@ async function addReservations(page, _type) {
     document.querySelector(".rev-section").appendChild(img)
 
     await ajaxCall(url, "GET").then(async res => {
-        let data = await res.json()
+
         img.remove()
+        if (res.status === 204) return
+
+        let data = await res.json()
 
         if (data["success"]) {
             _total_reservs = data["total_reservs"]
             appendReservations(data["data"])
             _btnControl = true
+            scrCnt = 0;
         }
     })
 }
@@ -128,8 +132,6 @@ window.addEventListener("scroll", async e => {
             let type = document.querySelector(".reserv-forcus").id
             _page++
             await addReservations(_page, type)
-
-            scrCnt = 0;
         }
     }
 });

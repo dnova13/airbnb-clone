@@ -95,14 +95,10 @@ def list_reservations(request, noun):
 
     reservs_list = reservs.order_by("-created")[offset:limit]
     total_reservs = reservs.count()
+    # HTTP_204_NO_CONTENT
 
-    if not reservs:
-        return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
-
-    """ req = request.GET.copy()
-    _req.__setitem__("Accept-Language", "ko")
-
-    # print(_req.headers.get("Accept-Language"))  """
+    if not reservs_list:
+        return Response(data={"success": False}, status=status.HTTP_204_NO_CONTENT)
 
     serialized_reservs = ReservationListSerializer(reservs_list, many=True)
 

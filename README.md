@@ -1,6 +1,6 @@
 # Airbnb Clone
 
-Cloning Airbnb with Python, Django, Tailwind and more... 🇰🇷💖🐍
+Cloning Airbnb with Python, Django, Tailwind and more..
 
 # admin account
 dnova
@@ -14,6 +14,20 @@ dn@gmail.com
 # mail accout
 testnova0713@gmail.com
 
+# 
+
+# translate commend
+```
+django-admin makemessages -l ko
+django-admin makemessages -d djangojs -l ko
+django-admin compilemessages
+```
+
+# migration command
+```
+python manage.py makemigrations
+python manage.py migrate
+```
 
 # channel setting
 

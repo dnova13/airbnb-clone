@@ -139,7 +139,7 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
 def get_msgs(request, pk):
     conversation = models.Conversation.objects.get_or_none(pk=pk)
 
-    page_size = 20
+    page_size = 50
 
     offset = int(request.GET.get("start", 1)) - 1
     limit = page_size + offset
@@ -166,12 +166,11 @@ def get_msgs(request, pk):
 
     conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
 
-    print(offset, limit)
-
     total_msgs = conversation.messages.count()
     conv_msgs = conversation.messages.order_by("-id")[offset:limit]
 
-    print(conv_msgs.count())
+    if not conv_msgs:
+        return Response(data={"success": False}, status=status.HTTP_204_NO_CONTENT)
 
     serialized_msgs = serializers.MessagesSerializer(conv_msgs, many=True)
 

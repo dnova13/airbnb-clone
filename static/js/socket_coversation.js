@@ -13,6 +13,7 @@ const scrDiv = document.querySelector(".chat-scroll");
 
 let bt_scrCnt = false;
 let tp_scrCnt = false;
+let chatTotal;
 
 scrDiv.scrollTop = scrDiv.scrollHeight;
 
@@ -198,11 +199,11 @@ scrDiv.addEventListener("scroll", async e => {
 
     else if (scrDiv.scrollTop <= 0) {
 
-        if (!tp_scrCnt) {
+        if (!tp_scrCnt && (!chatTotal || chatTotal > chatCnt)) {
             tp_scrCnt = true
 
-            len = document.querySelectorAll(".conv-msg").length
-            let url = `/conversations/${_pk}/list/?start=${len + 1}`
+            chatCnt = document.querySelectorAll(".conv-msg").length
+            let url = `/conversations/${_pk}/list/?start=${chatCnt + 1}`
 
             let img = document.createElement('img')
 
@@ -212,11 +213,16 @@ scrDiv.addEventListener("scroll", async e => {
             scrDiv.prepend(img)
 
             await ajaxCall(url, "GET").then(async res => {
-                result = await res.json()
+
                 img.remove()
+                if (res.status === 204) return
+
+                result = await res.json()
 
                 if (result["success"]) {
                     // console.log(result["data"])
+
+                    chatTotal = result["total_msgs"]
 
                     for (_item of result["data"]) {
                         // console.log(_item)

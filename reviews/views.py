@@ -64,7 +64,7 @@ def list_reviews(request, room_pk):
     total_reviews = Review.objects.filter(room=room_pk).count()
 
     if not reviews:
-        return Response(data={"success": False}, status=status.HTTP_404_NOT_FOUND)
+        return Response(data={"success": False}, status=status.HTTP_204_NO_CONTENT)
 
     # 직렬화는 기본값이 하나만 하게 되어있기 때문에
     # iterable 객체를 list 같은 객체를 넣을 때는 many를 True로 바꿔줘야함.
