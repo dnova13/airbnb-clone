@@ -14,12 +14,9 @@ document.addEventListener("DOMContentLoaded", async function (event) {
     if (!__t) __t = "reserved"
 
     let _st = sessionStorage.getItem(__t)
-    _st = _st ? _st : "all"
+    _st = _st ? _st : __t == "requested" ? "pending" : "all"
 
-    document.querySelector(".reserv-forcus").classList.remove("reserv-forcus")
     document.querySelector(".reserv-op-forcus").classList.remove("reserv-op-forcus")
-
-    document.querySelector(`#${__t}`).classList.add("reserv-forcus")
     document.querySelector(`#${_st}`).classList.add("reserv-op-forcus")
 
     await addReservations(1, __t)
@@ -40,7 +37,10 @@ async function addReservations(page, _type) {
     await ajaxCall(url, "GET").then(async res => {
 
         img.remove()
-        if (res.status === 204) return
+        if (res.status === 204) {
+            _btnControl = true
+            return
+        }
 
         let data = await res.json()
 

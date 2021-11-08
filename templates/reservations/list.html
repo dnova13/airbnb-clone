@@ -11,11 +11,11 @@
     <div class="min-h-75vh">
         <div class="mx-auto mb-9 w-1/2 ">
             <ul class="flex pt-6">
-                <li id="reserved" class="reserv-forcus reserv_link mx-auto ">
+                <li id="reserved" class="{% if not request.GET.t or  request.GET.t == "reserved" %}reserv-forcus{% endif %} reserv_link mx-auto ">
                     <button class="p-3 text-2xl text-center">{% trans "Reserved" %}</button>
                 </li>
                 {% if new_reserv_req %}
-                <li id="requested" class="reserv_link mx-auto">
+                <li id="requested" class="{% if request.GET.t == "requested" %} reserv-forcus {% endif %} reserv_link mx-auto">
                     <button class="p-3 text-2xl text-center">{% trans "Requested" %}</button>
                 </li>
                 {% endif %}
@@ -23,12 +23,21 @@
         </div>
         <div class="rev-option mx-auto mb-7 w-1/2 ">
             <ul class="rev-op-link flex pt-1">
-                <li id="all" class="nav_link reserv-op-forcus mx-auto">
+                {% if request.GET.t == "requested" %}
+                    <li id="pending" class="reserv-op-forcus nav_link mx-auto">
+                        <button class="p-3 text-base font-semibold text-yellow-500 ">{% trans "Pending" %}</button>
+                    </li>
+                    <li id="all" class="nav_link mx-auto">
+                        <button class="p-3 text-base font-semibold">{% trans "All" %}</button>
+                    </li>
+                {% else %}
+                    <li id="all" class="nav_link reserv-op-forcus mx-auto">
                     <button class="p-3 text-base font-semibold">{% trans "All" %}</button>
-                </li>
-                <li id="pending" class="nav_link mx-auto">
-                    <button class="p-3 text-base font-semibold text-yellow-500 ">{% trans "Pending" %}</button>
-                </li>
+                    </li>
+                    <li id="pending" class="nav_link mx-auto">
+                        <button class="p-3 text-base font-semibold text-yellow-500 ">{% trans "Pending" %}</button>
+                    </li>
+                {% endif %}
                 <li id="confirmed" class="nav_link mx-auto">
                     <button class="p-3 text-base font-semibold text-teal-500">{% trans "Confirmed" %}</button>
                 </li>
@@ -39,22 +48,7 @@
         </div>
         <div class="rev-section container mx-auto pb-10 pt-10 border-t border-gray-300">
             <div id="rev-cards" class="flex flex-wrap -mx-5 mb-5">
-                {% comment %} {% for rev in user.reservations.all %}
-                    <div class="w-1/4 mb-10 px-2 overflow-hidden">
-                        <a href="{% url 'reservations:detail' rev.pk %}">
-                            <div class="w-full h-64 bg-full bg-center rounded-lg mb-2 " style="background-image: url({{rev.room.first_photo}});"></div>
-                            <span class="text-black w-11/12 block truncate">{{rev.room.name}}</span>
-                            <div class="flex justify-between mb-2 truncate">
-                                <div class="w-4/5 overflow-hidden flex font-bold">
-                                    <span class="{% if rev.status == 'pending' %} text-yellow-500 {% elif rev.status == 'canceled' %} text-red-600 {% else %} text-teal-500 {% endif %}">{{rev.get_status_display}}</span>
-                                </div>
-                            </div>
-                            <div class="w-4/5 overflow-hidden flex">
-                                <span class="text-sm text-gray-600 block truncate">{{rev.created}}</span>
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %} {% endcomment %}
+               
             </div>
         </div> 
     </div>

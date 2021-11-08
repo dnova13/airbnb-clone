@@ -139,7 +139,7 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
 def get_msgs(request, pk):
     conversation = models.Conversation.objects.get_or_none(pk=pk)
 
-    page_size = 50
+    page_size = 15
 
     offset = int(request.GET.get("start", 1)) - 1
     limit = page_size + offset
