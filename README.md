@@ -14,7 +14,12 @@ dn@gmail.com
 # mail accout
 testnova0713@gmail.com
 
-# 
+# package install
+```
+pipenv install pillow django-countries django-seed django-dotenv requests djangorestframework channels-redis channels
+pipenv install awsebcli flake8 --dev
+pipenv install black --dev --pre
+```
 
 # translate commend
 ```

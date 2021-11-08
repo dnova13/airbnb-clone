@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 02:08+0900\n"
+"POT-Creation-Date: 2021-11-09 04:59+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\reservations\models.py:30 .\templates\reservations\list.html:30
+#: .\reservations\models.py:30 .\templates\reservations\list.html:28
+#: .\templates\reservations\list.html:38
 msgid "Pending"
 msgstr "대기중"
 
-#: .\reservations\models.py:31 .\templates\reservations\list.html:33
+#: .\reservations\models.py:31 .\templates\reservations\list.html:42
 msgid "Confirmed"
 msgstr "예약완료"
 
-#: .\reservations\models.py:32 .\templates\reservations\list.html:36
+#: .\reservations\models.py:32 .\templates\reservations\list.html:45
 msgid "Canceled"
 msgstr "취소"
 
@@ -78,23 +79,23 @@ msgstr "프로필"
 msgid "Reservs"
 msgstr "예약"
 
-#: .\templates\partials\nav.html:31
+#: .\templates\partials\nav.html:30
 msgid "Convs"
 msgstr "대화"
 
-#: .\templates\partials\nav.html:36
+#: .\templates\partials\nav.html:35
 msgid "Favs"
 msgstr "선호"
 
-#: .\templates\partials\nav.html:37
+#: .\templates\partials\nav.html:36
 msgid "Log out"
 msgstr "로그아웃"
 
-#: .\templates\partials\nav.html:39
+#: .\templates\partials\nav.html:38
 msgid "Log in"
 msgstr "로그인"
 
-#: .\templates\partials\nav.html:40
+#: .\templates\partials\nav.html:39
 msgid "Sign up"
 msgstr "회원가입"
 
@@ -106,7 +107,7 @@ msgstr "예약 내역"
 msgid "Requested"
 msgstr "예약요청 내역"
 
-#: .\templates\reservations\list.html:27
+#: .\templates\reservations\list.html:31 .\templates\reservations\list.html:35
 msgid "All"
 msgstr "모두"
 
