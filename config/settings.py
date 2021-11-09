@@ -32,7 +32,7 @@ SECRET_KEY = "django-insecure-4uw@vuf04+u@1(i3l@a$ax-5k(^dh_!ll(bi#fl313%z7cn0mr
 # DEBUG = bool(os.environ.get("DEBUG"))
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".elasticbeanstalk.com"]
 
 
 # Application definition
