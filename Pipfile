@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pathspec = "*"
 django = "*"
+pipenv-to-requirements = "*"
 pillow = "*"
 django-countries = "*"
 django-seed = "*"
@@ -14,11 +15,11 @@ requests = "*"
 djangorestframework = "*"
 channels-redis = "*"
 channels = "*"
-black = "*"
 
 [dev-packages]
 awsebcli = "*"
 flake8 = "*"
+black = "*"
 
 [requires]
 python_version = "3.9"
