@@ -15,6 +15,7 @@ djangorestframework = "*"
 pipenv-to-requirements = "*"
 channels = "*"
 channels-redis = "*"
+pytz = "==2021.3"
 
 [dev-packages]
 flake8 = "*"
