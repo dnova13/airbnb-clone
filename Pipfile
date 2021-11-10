@@ -16,6 +16,7 @@ pipenv-to-requirements = "*"
 channels = "*"
 channels-redis = "*"
 pytz = "==2021.3"
+sentry-sdk = "*"
 
 [dev-packages]
 flake8 = "*"
