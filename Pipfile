@@ -17,10 +17,12 @@ channels = "*"
 channels-redis = "*"
 pytz = "==2021.3"
 sentry-sdk = "*"
+django-storages = "*"
+boto3 = "*"
 
 [dev-packages]
 flake8 = "*"
-awsebcli = "*"
+black = "*"
 
 [requires]
 python_version = "3.9"
