@@ -32,7 +32,7 @@ django-countries==7.2.1
 django-dotenv==1.4.2
 django-seed==0.3.1
 django-storages==1.12.3
-django==4.0b1
+django==3.2.7
 djangorestframework==3.12.4
 faker==9.8.0 ; python_version >= '3.6'
 filelock==3.3.2 ; python_version >= '3.6'

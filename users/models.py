@@ -17,7 +17,7 @@ def file_size(value):
     limit = 2 * MB
 
     if value.size > limit:
-        raise Exception(_("File too large. Size should not exceed 2 MiB."))
+        raise ValidationError(_("File too large. Size should not exceed 2 MiB."))
 
 
 class User(AbstractUser):
