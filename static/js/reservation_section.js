@@ -30,7 +30,7 @@ async function addReservations(page, _type) {
 
     _btnControl = false
     img.setAttribute("class", "mx-auto ");
-    img.setAttribute("src", '/static/img/loading.gif');
+    img.setAttribute("src", f_url + '/static/img/loading.gif');
 
     document.querySelector(".rev-section").appendChild(img)
 

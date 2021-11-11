@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET", "NTfF6fEHnYx^P6@HJx@K6MDD")
 DEBUG = bool(os.environ.get("DEBUG"))
 # DEBUG = True
 
-ALLOWED_HOSTS = [".elasticbeanstalk.com", "localhost"]
+ALLOWED_HOSTS = [".elasticbeanstalk.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -99,8 +99,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# if DEBUG is False:
 if DEBUG:
+# if DEBUG is False:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -251,6 +251,7 @@ AWS_STORAGE_BUCKET_NAME = "airbnb-clone-dnova12222"
 AWS_DEFAULT_ACL = "public-read" """
 
 if not DEBUG:
+# if DEBUG:
     # S3 Setting
 
     DEFAULT_FILE_STORAGE = "config.custom_storages.UploadStorage"

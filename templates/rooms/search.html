@@ -1,6 +1,6 @@
 
 {% extends "base.html" %}
-
+{% load static %}
 {% block page_title %}
     Search
 {% endblock page_title %}
@@ -13,7 +13,7 @@
         <div class="container ">
             <div class="flax ">
                 <button class="filter-btn hover:shadow-lg focus:outline-none">
-                    <img class="w-7" src="/static/img/filter.png" />
+                    <img class="w-7" src="{% static 'img/filter.png' %}" />
                 </button>
                 {% comment %} <span>filiter</span> {% endcomment %}
             </div>
