@@ -79,22 +79,17 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
 
         valid_chk = False
 
-        for i, user in enumerate(conversation.participants.all()):
-            if user.id == self.request.user.pk:
+        for i, participant in enumerate(conversation.participants.all()):
+            if participant.id == self.request.user.pk:
                 valid_chk = True
-                me = user
+                me = participant
                 idx = i
-                break
+            else:
+                opponent = participant
 
         if not valid_chk:
             messages.error(self.request, "Invalid Account")
             return redirect(reverse("core:home"))
-
-        opponent = (
-            conversation.participants.all()[0]
-            if idx == 1
-            else conversation.participants.all()[1]
-        )
 
         conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
         conv_messages = conversation.messages.order_by("-id")[0:15]
