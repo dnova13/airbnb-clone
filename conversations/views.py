@@ -41,9 +41,12 @@ def go_conversation(request, a_pk, b_pk):
         if conversation.count() == 0:
             conversation = models.Conversation.objects.create()
             conversation.participants.add(user_one, user_two)
-
+            pk = conversation.pk
+        else:
+            pk = conversation[0].pk   
+    
         return redirect(
-            reverse("conversations:detail", kwargs={"pk": conversation[0].pk})
+            reverse("conversations:detail", kwargs={"pk": pk})
         )
 
     else:
@@ -94,7 +97,7 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
         )
 
         conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
-        conv_messages = conversation.messages.order_by("-id")[0:20]
+        conv_messages = conversation.messages.order_by("-id")[0:15]
 
         return render(
             self.request,

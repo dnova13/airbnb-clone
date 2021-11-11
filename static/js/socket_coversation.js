@@ -136,7 +136,7 @@ function addMessage(_data, status, pend, _height) {
 
     if (pend === "prepend") {
         _div.prepend(div)
-        return
+        return div.offsetHeight
     }
 
     _div.appendChild(div)
@@ -222,23 +222,26 @@ scrDiv.addEventListener("scroll", async e => {
                 if (result["success"]) {
                     // console.log(result["data"])
 
+                    let i = 0
+                    let height;
                     chatTotal = result["total_msgs"]
 
                     for (_item of result["data"]) {
+                        i++;
                         // console.log(_item)
                         _item.user.name = _item.user.first_name
                         _item.msg = _item.message //+ " " + _item.id
 
                         if (_item.user.id == _id) {
-                            addMessage(_item, "success", "prepend")
+                            height = addMessage(_item, "success", "prepend")
                         }
                         else {
-                            addMessage(_item, "opponent", "prepend")
+                            height = addMessage(_item, "opponent", "prepend")
 
                         }
                     }
-
-                    scrDiv.scrollTop = 2900
+                    // console.log(i, 162 * i)
+                    scrDiv.scrollTop = (height + 40) * i
 
                     tp_scrCnt = false
                 }
