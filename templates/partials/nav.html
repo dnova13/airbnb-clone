@@ -46,6 +46,7 @@
     const __noti_url = `${window.location.host}/ws/noti/{{user.id}}/`
     const __notiSocket = socket_connect(__noti_url)
     let _noti_data
+    let f_url = `https://airbnb-clone-dnova12222.s3.amazonaws.com`
 
     document.querySelectorAll("li.nav_link").forEach(link => {
         

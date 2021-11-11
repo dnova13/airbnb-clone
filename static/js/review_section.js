@@ -14,7 +14,7 @@ async function addReviews(page) {
     let img = document.createElement('img')
 
     img.setAttribute("class", "mx-auto mt-3");
-    img.setAttribute("src", '/static/img/loading.gif');
+    img.setAttribute("src", f_url + '/static/img/loading.gif');
 
     document.querySelector("#review-section").appendChild(img)
 
