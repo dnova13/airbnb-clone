@@ -5,10 +5,11 @@ from django.contrib.admin.utils import flatten
 from django_seed import Seed
 from rooms import models as room_models
 from users import models as user_models
+from django.utils import timezone
 
 
 class Command(BaseCommand):
-
+    
     help = "This command creates rooms"
 
     def add_arguments(self, parser):
@@ -51,6 +52,7 @@ class Command(BaseCommand):
             "beds": lambda x: random.randint(1, 5),
             "bedrooms": lambda x: random.randint(1, 5),
             "baths": lambda x: random.randint(1, 5),
+            # "created": lambda x: timezone.now()
         }
 
         if country:
@@ -78,7 +80,7 @@ class Command(BaseCommand):
                 room_models.Photo.objects.create(
                     caption=seeder.faker.sentence(),
                     room=room,
-                    file=f"room_photos/{random.randint(1, 31)}.jpg",
+                    file=f"room_photos/{random.randint(1, 90)}.jpg",
                 )
             for a in amenities:
                 # 0-15 랜덤으로 숫자생성

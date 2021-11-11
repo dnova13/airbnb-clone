@@ -21,7 +21,7 @@ def file_size(value):
 
 
 class User(AbstractUser):
-
+   
     """Custom User Model"""
 
     GENDER_MALE = "male"

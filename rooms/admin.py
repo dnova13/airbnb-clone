@@ -54,9 +54,11 @@ class RoomAdmin(admin.ModelAdmin):
     )
 
     list_display = (
+        "pk",
         "name",
         "country",
         "city",
+        "created",
         "price",
         "guests",
         "beds",

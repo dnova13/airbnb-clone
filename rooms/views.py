@@ -124,7 +124,7 @@ class SearchView(View):
             filter_args = {}
 
             if city:
-                filter_args["city__startswith"] = city
+                filter_args["city__istartswith"] = city
 
             filter_args["country"] = country
 

@@ -99,8 +99,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if DEBUG:
 # if DEBUG is False:
+if DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -118,7 +118,7 @@ else:
             "PASSWORD": os.environ.get("RDS_PASSWORD"),
             "PORT": "5432",
         }
-    }
+    } 
 
 
 # Password validation
@@ -260,6 +260,7 @@ if not DEBUG:
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = "airbnb-clone-dnova12222"
     AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
