@@ -1,22 +1,13 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
 {% load static i18n %}
-=======
-{% load static %}
->>>>>>> 5e7bedd3bf1c38908ddf8b1c2202e4f9ea32580f
+
 {% block page_title %}
     Home
 {% endblock page_title %}
 {% block content %}
 
     <div class="container mx-auto pb-10">
-<<<<<<< HEAD
         <div class="rounded-xl bg-gray-800 -mx-16  h-50vh mt-32 mb-24 bg-cover bg-bottom" style="background-image:url({% static 'img/backimg.webp' %});"></div>
-=======
-    
-        <div class="rounded-xl bg-gray-800 -mx-16  h-50vh mt-32 mb-24 bg-cover bg-bottom" style="background-image:url({% static '/img/backimg.webp' %})"></div>
-
->>>>>>> 5e7bedd3bf1c38908ddf8b1c2202e4f9ea32580f
         <div class="flex flex-wrap -mx-5 mb-10">
             {% for room in rooms  %}
                 {% include 'mixins/room_card.html' with room=room %}
