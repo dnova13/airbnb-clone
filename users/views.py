@@ -185,10 +185,10 @@ def github_callback(request):
                         user = models.User.objects.get(username=email)
 
                         # 로깅 방법 검사.
-                        if user.login_method != models.User.LOGIN_GITHUB:
+                        """ if user.login_method != models.User.LOGIN_GITHUB:
                             raise GithubException(
                                 f"Please log in with: {user.login_method}"
-                            )
+                            ) """
 
                     # 유저 정보가 없다면 회원가입 진행.
                     except models.User.DoesNotExist:
@@ -277,8 +277,8 @@ def kakao_callback(request):
         try:
             user = models.User.objects.get(email=email)
 
-            if user.login_method != models.User.LOGING_KAKAO:
-                raise KakaoException(f"Please log in with: {user.login_method}")
+            """ if user.login_method != models.User.LOGING_KAKAO:
+                raise KakaoException(f"Please log in with: {user.login_method}") """
 
         except models.User.DoesNotExist:
             user = models.User.objects.create(
