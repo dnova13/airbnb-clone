@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 pathspec = "*"
-django = "*"
 pillow = "*"
 django-countries = "*"
 django-seed = "*"
@@ -20,6 +19,7 @@ sentry-sdk = "*"
 django-storages = "*"
 boto3 = "*"
 psycopg2 = "*"
+django = "==3.2.7"
 
 [dev-packages]
 flake8 = "*"
