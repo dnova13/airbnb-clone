@@ -1,7 +1,13 @@
 function socket_connect(url) {
 
+    let wsStart = `ws://`
+
+    if (window.location.protocol == 'https:') {
+        wsStart = 'wss://'
+    }
+
     let socket = new WebSocket(
-        `ws://${url}`
+        `${wsStart}${url}`
     );
 
     socket.onclose = (e) => {

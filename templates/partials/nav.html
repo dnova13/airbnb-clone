@@ -43,7 +43,7 @@
 <script>
 
     const pathname = location.pathname
-    const __noti_url = `wss://${window.location.host}/ws/noti/{{user.id}}/`
+    const __noti_url = `${window.location.host}/ws/noti/{{user.id}}/`
     const __notiSocket = socket_connect(__noti_url)
     let _noti_data
 
