@@ -46,7 +46,6 @@
     const __noti_url = `${window.location.host}/ws/noti/{{user.id}}/`
     const __notiSocket = socket_connect(__noti_url)
     let _noti_data
-    let f_url = `${document.location.protocol}//${document.location.host}`
 
     document.querySelectorAll("li.nav_link").forEach(link => {
         

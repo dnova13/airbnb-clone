@@ -27,10 +27,11 @@ async function addReservations(page, _type) {
     let _status = document.querySelector(".reserv-op-forcus").id
     let url = `/reservations/api/list/${_type}/?status=${_status}&page=${page}`;
     let img = document.createElement('img')
+    let s_url = `https://airbnb-clone-dnova12222.s3.amazonaws.com`
 
     _btnControl = false
     img.setAttribute("class", "mx-auto ");
-    img.setAttribute("src", f_url + '/static/img/loading.gif');
+    img.setAttribute("src", s_url + '/static/img/loading.gif');
 
     document.querySelector(".rev-section").appendChild(img)
 

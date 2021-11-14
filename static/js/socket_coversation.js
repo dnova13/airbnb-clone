@@ -204,11 +204,12 @@ scrDiv.addEventListener("scroll", async e => {
 
             chatCnt = document.querySelectorAll(".conv-msg").length
             let url = `/conversations/${_pk}/list/?start=${chatCnt + 1}`
+            let s_url = `https://airbnb-clone-dnova12222.s3.amazonaws.com`
 
             let img = document.createElement('img')
 
             img.setAttribute("class", "mx-auto mt-3");
-            img.setAttribute("src", f_url + '/static/img/loading.gif');
+            img.setAttribute("src", s_url + '/static/img/loading.gif');
 
             scrDiv.prepend(img)
 
