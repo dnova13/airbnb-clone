@@ -32,7 +32,8 @@ chatSocket.onmessage = e => {
 };
 
 chatSocket.onclose = (e) => {
-    alert(gettext("Failed to send"))
+    // alert(gettext("Failed to send"))
+    console.log(gettext("Failed to send"))
 };
 
 btn_send.addEventListener("click", async e => {

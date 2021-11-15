@@ -39,5 +39,8 @@ pipenv install channels-redis
 yum -y install docker 
 systemctl start docker
 docker run -p 6379:6379 -d redis:6.2.6
+
+docker network create redis-net
+docker run --name airb -p 6379:6379 --network redis-net -d redis:6.2.6 redis-server --appendonly yes
 ```
 
