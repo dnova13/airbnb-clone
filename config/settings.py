@@ -15,8 +15,8 @@ from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
-## django 4.0에서는 ugettext_lazy 사용 불가
-### from django.utils.translation import gettext_lazy as _ 로 변경.
+# django 4.0에서는 ugettext_lazy 사용 불가
+# from django.utils.translation import gettext_lazy as _ 로 변경.
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,9 +31,11 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET", "NTfF6fEHnYx^P6@HJx@K6MDD")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG"))
+MODE = int(os.environ.get("MODE"))
 # DEBUG = True
 
-ALLOWED_HOSTS = [".elasticbeanstalk.com", "localhost", "127.0.0.1", ".fatexyzea.ml"]
+ALLOWED_HOSTS = [".elasticbeanstalk.com",
+                 "localhost", "127.0.0.1", ".fatexyzea.ml"]
 
 
 # Application definition
@@ -48,7 +50,8 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["django_countries", "django_seed", "rest_framework", "storages"]
+THIRD_PARTY_APPS = ["django_countries",
+                    "django_seed", "rest_framework", "storages"]
 
 # 내가 만든 앱을 서치
 PROJECT_APPS = [
@@ -100,7 +103,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # if DEBUG is False:
-if DEBUG:
+if MODE == 0:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -250,8 +253,7 @@ AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = "airbnb-clone-dnova12222"
 AWS_DEFAULT_ACL = "public-read" """
 
-if not DEBUG:
-    # if DEBUG:
+if not MODE:
     # S3 Setting
 
     DEFAULT_FILE_STORAGE = "config.custom_storages.UploadStorage"
