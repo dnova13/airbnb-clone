@@ -1,16 +1,62 @@
 # Airbnb Clone
-
 Cloning Airbnb with Python, Django, Tailwind and more..
 
 
-# mail accout
+# mail account
 testnova0713@gmail.com
 
-# package install
+
+# virtual enviroment setting.
+
+
+## 1. pipenv setting(recommed window)
+### pipenv shell & pakage install
+```
+pipenv shell
+pipenv install <package-name>
+```
+
+
+### package install
 ```
 pipenv install pillow django-countries django-seed django-dotenv requests djangorestframework channels-redis channels
 pipenv install awsebcli flake8 --dev
 pipenv install black --dev --pre
+```
+  
+
+  
+## 2. venv setting
+### venv 
+```
+python -m venv .venv
+source .venv/Scripts/activate
+```
+  
+
+# pip upgrade
+```
+pip install --upgrade pip
+```
+  
+
+# pip rollback
+```
+python -m ensurepip
+```
+  
+
+# rerequirements 
+```
+pip freeze > requirements.txt
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+pip uninstall -r requirements.txt -y
+```
+
+# stat django-project
+```
+django-admin startproject config
 ```
 
 # translate commend
@@ -27,11 +73,15 @@ python manage.py migrate
 ```
 
 # channel setting
-
 #### commend
 ```
 pipenv install channls
 pipenv install channels-redis
+```
+
+# static file upload
+```
+python manage.py collectstatic
 ```
 
 #### docker

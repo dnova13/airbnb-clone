@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 
-def file_size(value): 
+def file_size(value):
     MB = 1024 * 1024
     limit = 2 * MB
 
@@ -93,7 +93,9 @@ class Room(core_models.TimeStampedModel):
     city = models.CharField(max_length=80)
     price = models.IntegerField(validators=[MinValueValidator(1)])
     address = models.CharField(max_length=140)
-    guests = models.IntegerField(validators=[MinValueValidator(1)],help_text="How many people will be staying?")
+    guests = models.IntegerField(
+        validators=[MinValueValidator(1)], help_text="How many people will be staying?"
+    )
     beds = models.IntegerField(validators=[MinValueValidator(1)])
     bedrooms = models.IntegerField(validators=[MinValueValidator(1)])
     baths = models.IntegerField(validators=[MinValueValidator(1)])
@@ -110,8 +112,8 @@ class Room(core_models.TimeStampedModel):
     facilities = models.ManyToManyField("Facility", related_name="rooms", blank=True)
     house_rules = models.ManyToManyField("HouseRule", related_name="rooms", blank=True)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
     # __str__ 처럼 sava() 오버라이딩, 자세한거는 문서 참조
     # https://docs.djangoproject.com/en/3.2/topics/db/models/#overriding-model-methods

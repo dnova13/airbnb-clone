@@ -52,7 +52,7 @@ class Message(core_models.TimeStampedModel):
 
     """Message Model Definition"""
 
-    message = models.TextField()
+    message = models.TextField(default="")
 
     # 채팅하는 유저
     user = models.ForeignKey(
