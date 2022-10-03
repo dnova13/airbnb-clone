@@ -34,8 +34,9 @@ DEBUG = bool(os.environ.get("DEBUG"))
 MODE = int(os.environ.get("MODE"))
 # DEBUG = True
 
-ALLOWED_HOSTS = [".elasticbeanstalk.com",
-                 "localhost", "127.0.0.1", ".fatexyzea.ml"]
+# ALLOWED_HOSTS = [".elasticbeanstalk.com",
+#                  "localhost", "127.0.0.1", ".fatexyzea.ml"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
