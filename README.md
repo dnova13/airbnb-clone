@@ -95,7 +95,28 @@ docker network create redis-net
 docker run --name airb -p 6379:6379 --network redis-net -d redis:6.2.6 redis-server --appendonly yes
 ```
 
+
+#### 배포 
+```
+sudo yum install postgresql-devel
+sudo yum install gettext-devel
+
+python manage.py compilemessages
+python manage.py collectstatic --no-input
+```
+
 #### 배포시 psycopg2 설치 되지않아 에러날 시
 ```
 requirements.txt psycopg2 대신에 psycopg2-binary 로 변경.
+```
+
+#### 로그 확인
+```
+sudo tail -f /var/log/service/uwsgi.log
+```
+
+#### 서버 재시작
+```
+sudo systemctl restart uwsgi nginx
+sudo uwsgi --reload /tmp/service.pid 
 ```
