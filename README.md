@@ -96,7 +96,7 @@ docker run --name airb -p 6379:6379 --network redis-net -d redis:6.2.6 redis-ser
 ```
 
 
-#### 배포 
+#### 배포 시 명령어.
 ```
 sudo yum install postgresql-devel
 sudo yum install gettext-devel
@@ -119,4 +119,10 @@ sudo tail -f /var/log/service/uwsgi.log
 ```
 sudo systemctl restart uwsgi nginx
 sudo uwsgi --reload /tmp/service.pid 
+```
+
+#### 다프네 실행 테스트 명령어.
+```
+daphne -b 0.0.0.0 -p 8000 프로젝트이름.asgi:application
+
 ```
