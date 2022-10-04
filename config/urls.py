@@ -1,10 +1,12 @@
 import os
+import local_settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.i18n import JavaScriptCatalog
 from django.conf.urls.i18n import i18n_patterns
+from utills.utill import get_cls_attr
 
 
 def trigger_error(request):
@@ -19,7 +21,7 @@ urlpatterns = [
     path("reviews/", include("reviews.urls", namespace="reviews")),
     path("lists/", include("lists.urls", namespace="lists")),
     path("conversations/", include("conversations.urls", namespace="conversations")),
-    path(os.environ.get("DJANGO_ADMIN", "admin/"), admin.site.urls),
+    path(get_cls_attr(local_settings, 'DJANGO_ADMIN', 'admin/'), admin.site.urls),
     path("api/v1/reviews/", include("reviews.urls", namespace="reviews_api")),
     path("sentry-debug/", trigger_error),
 ]
@@ -29,4 +31,5 @@ urlpatterns += i18n_patterns(
 )
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

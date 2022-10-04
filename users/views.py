@@ -1,5 +1,6 @@
 import os
 import requests
+import local_settings
 from django.http import HttpResponse
 from django.utils import translation
 from config import settings
@@ -16,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 from core.forms import CustomClearableFileInput
 from django.core.paginator import Paginator
 from . import forms, models, mixins
+from utills.utill import get_cls_attr
 
 
 class LoginView(mixins.LoggedOutOnlyView, FormView):
@@ -97,8 +99,8 @@ def complete_verification(request, key):
 
 
 def github_login(request):
-    client_id = os.environ.get("GH_ID")
-    url = os.environ.get("URL")
+    client_id = get_cls_attr(local_settings, 'GH_ID')
+    url = get_cls_attr(local_settings, 'URL')
     redirect_uri = f"{url}/users/login/github/callback"
     scope = "read:user user:email"  # 메일 정보를 추출하기위해 스코프 범위 변경.
     return redirect(
@@ -113,8 +115,8 @@ class GithubException(Exception):
 
 def github_callback(request):
     try:
-        client_id = os.environ.get("GH_ID")
-        client_secret = os.environ.get("GH_SECRET")
+        client_id = get_cls_attr(local_settings, 'GH_ID')
+        client_secret = get_cls_attr(local_settings, 'GH_SECRET')
         code = request.GET.get("code", None)
 
         if code is not None:
@@ -208,12 +210,14 @@ def github_callback(request):
                         if profile_image is not None:
                             photo_request = requests.get(profile_image)
                             user.avatar.save(
-                                f"{email}-avatar", ContentFile(photo_request.content)
+                                f"{email}-avatar", ContentFile(
+                                    photo_request.content)
                             )
 
                     # 회원 가입 후 로깅 상태로 만듬.
                     login(request, user)
-                    messages.success(request, f"Welcome back {user.first_name}")
+                    messages.success(
+                        request, f"Welcome back {user.first_name}")
                     return redirect(reverse("core:home"))
                 else:
                     raise GithubException("Can't get your profile")
@@ -226,8 +230,8 @@ def github_callback(request):
 
 
 def kakao_login(request):
-    client_id = os.environ.get("KAKAO_ID")
-    url = os.environ.get("URL")
+    client_id = get_cls_attr(local_settings, "KAKAO_ID")
+    url = get_cls_attr(local_settings, "URL")
     redirect_uri = f"{url}/users/login/kakao/callback"
     return redirect(
         f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
@@ -241,8 +245,8 @@ class KakaoException(Exception):
 def kakao_callback(request):
     try:
         code = request.GET.get("code")
-        client_id = os.environ.get("KAKAO_ID")
-        url = os.environ.get("URL")
+        client_id = get_cls_attr(local_settings, "KAKAO_ID")
+        url = get_cls_attr(local_settings, "URL")
         redirect_uri = f"{url}/users/login/kakao/callback"
         token_request = requests.get(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
@@ -271,7 +275,8 @@ def kakao_callback(request):
         properties = profile_json.get("properties")
         nickname = properties.get("nickname")
         profile_image = (
-            profile_json.get("kakao_account").get("profile").get("profile_image_url")
+            profile_json.get("kakao_account").get(
+                "profile").get("profile_image_url")
         )
 
         try:
@@ -298,7 +303,8 @@ def kakao_callback(request):
 
                 # photo_request.content : 파일의 이진 정보를 가져옴.
                 # ContentFile 을 통해 파일을 담고 저장.
-                user.avatar.save(f"{email}-avatar", ContentFile(photo_request.content))
+                user.avatar.save(f"{email}-avatar",
+                                 ContentFile(photo_request.content))
 
         # 로그인 성공 메세지 보냄
         messages.success(request, f"Welcome back {user.first_name}")
@@ -361,7 +367,7 @@ class UserProfileView(DetailView):
 
         context["rooms"] = rooms
         context["page_obj"] = rooms
-        context["page_range"] = paginator.page_range[abs(start_page) : end_page]
+        context["page_range"] = paginator.page_range[abs(start_page): end_page]
         context["last_range"] = last_range
         context["first_ellipsis"] = first_ellipsis
         context["last_ellipsis"] = last_ellipsis
@@ -428,8 +434,10 @@ class UpdatePasswordView(
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
-        form.fields["old_password"].widget.attrs = {"placeholder": "Current password"}
-        form.fields["new_password1"].widget.attrs = {"placeholder": "New password"}
+        form.fields["old_password"].widget.attrs = {
+            "placeholder": "Current password"}
+        form.fields["new_password1"].widget.attrs = {
+            "placeholder": "New password"}
         form.fields["new_password2"].widget.attrs = {
             "placeholder": "Confirm new password"
         }

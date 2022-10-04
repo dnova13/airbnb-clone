@@ -27,11 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get("DJANGO_SECRET", "NTfF6fEHnYx^P6@HJx@K6MDD")
+SECRET_KEY = "NTfF6fEHnYx^P6@HJx@K6MDD"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = bool(os.environ.get("DEBUG"))
-# MODE = int(os.environ.get("MODE"))
 DEBUG = False
 
 # ALLOWED_HOSTS = [".elasticbeanstalk.com",
@@ -101,27 +99,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# if DEBUG is False:
-# if MODE == 0:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#         },
-#     }
-# else:
-
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.postgresql",
-#             "HOST": os.environ.get("RDS_HOST"),
-#             "NAME": os.environ.get("RDS_NAME"),
-#             "USER": os.environ.get("RDS_USER"),
-#             "PASSWORD": os.environ.get("RDS_PASSWORD"),
-#             "PORT": "5432",
-#         }
-#     }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    },
+}
 
 
 # Password validation
@@ -208,17 +191,6 @@ MEDIA_ROOT = BASE_DIR / "uploads"
 MEDIA_URL = "/media/"
 
 
-# Email Configuration
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = os.environ.get("GMAIL_USERNAME")
-EMAIL_HOST_PASSWORD = os.environ.get("GMAIL_PASSWORD")
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_FROM = "myemail@gmail.com"  # 설정하고 싶은 이메일로
-
-
 # Auth
 LOGIN_URL = "/users/login/"
 
@@ -241,44 +213,6 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("127.0.0.1", 6379)],
         },
-    },
-}
-
-""" DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = "airbnb-clone-dnova12222"
-AWS_DEFAULT_ACL = "public-read" """
-
-# if MODE > 0:
-#     # S3 Setting
-
-#     DEFAULT_FILE_STORAGE = "config.custom_storages.UploadStorage"
-#     STATICFILES_STORAGE = "config.custom_storages.StaticStorage"
-#     AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-#     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-#     AWS_STORAGE_BUCKET_NAME = "airbnb-clone12"
-#     AWS_DEFAULT_ACL = "public-read"
-#     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-
-#     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-#     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-
-#     # Sentry
-
-#     sentry_sdk.init(
-#         dsn=os.environ.get("SENTRY_URL"),
-#         integrations=[DjangoIntegration()],
-#         traces_sample_rate=1.0,
-#         send_default_pii=True,
-#     )
-
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     },
 }
 
