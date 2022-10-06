@@ -204,7 +204,6 @@ REST_FRAMEWORK = {
 
 
 # chanel
-
 ASGI_APPLICATION = "config.routing.application"
 
 CHANNEL_LAYERS = {

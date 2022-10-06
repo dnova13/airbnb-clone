@@ -85,7 +85,7 @@ python manage.py collectstatic
 python manage.py collectstatic --no-input ## 서버 배포시
 ```
 
-#### docker
+#### docker(local)
 ```
 yum -y install docker 
 systemctl start docker
@@ -115,14 +115,7 @@ requirements.txt psycopg2 대신에 psycopg2-binary 로 변경.
 sudo tail -f /var/log/service/uwsgi.log
 ```
 
-#### 서버 재시작
+#### 서버 재시작 명령어
 ```
-sudo systemctl restart uwsgi nginx
-sudo uwsgi --reload /tmp/service.pid 
-```
-
-#### 다프네 실행 테스트 명령어.
-```
-daphne -b 0.0.0.0 -p 8000 프로젝트이름.asgi:application
-
+sudo systemctl start nginx uwsgi daphne 
 ```

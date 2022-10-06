@@ -7,7 +7,7 @@ Group=root
 WorkingDirectory=/project/airbnb/
 
 Environment="DJANGO_SETTINGS_MODULE=config.settings"
-ExecStart=/project/venv/bin/daphne -b 0.0.0.0 -p 8080 config.asgi:application
+ExecStart=/project/venv/bin/daphne -b 0.0.0.0 -p 8080 --access-log /var/log/daphne/daphne.log config.asgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-abort
@@ -16,3 +16,12 @@ StandardError=file:/tmp/daphne-error.log
 
 [Install]
 WantedBy=multi-user.target
+
+
+/root/Env/24bot/bin/daphne -e ssl:8443:privateKey=/etc/letsencrypt/live/3ab7cf4c.ngrok.io/privkey.pem:certKey=/etc/letsencrypt/live/3ab7cf4c.ngrok.io/cert.pem 
+
+--verbosity 0 
+
+ 
+
+chatbot_project.asgi:application
