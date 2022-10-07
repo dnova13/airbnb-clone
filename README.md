@@ -8,8 +8,13 @@ testnova0713@gmail.com
 
 # virtual enviroment setting.
 
-
 ## 1. pipenv setting(recommed window)
+
+### pipenv install
+```
+pip install --user pipenv
+```
+
 ### pipenv shell & pakage install
 ```
 pipenv shell
@@ -73,7 +78,7 @@ python manage.py migrate
 ```
 
 # channel setting
-#### commend
+### commend
 ```
 pipenv install channls
 pipenv install channels-redis
