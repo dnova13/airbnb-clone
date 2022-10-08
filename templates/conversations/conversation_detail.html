@@ -52,6 +52,8 @@
                             <p class="text-xs">
                                 {% if LANGUAGE_CODE == "en" %}
                                     {{ message.created|date:"M. j Y, h:i a" }}
+                                {% elif LANGUAGE_CODE == "ko" %}
+                                    {{ message.created|date:"Y년 m월 j일 a f" }}
                                 {% else %}
                                     {{ message.created }}
                                 {% endif %}

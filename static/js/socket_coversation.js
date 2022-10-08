@@ -67,7 +67,7 @@ btn_send.addEventListener("click", async e => {
 
     if (result["success"]) {
 
-        msg_data["created"] = result["created"]
+        msg_data["created"] = result["data"]["created"]
 
         addMessage(msg_data, "success")
 
