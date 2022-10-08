@@ -87,7 +87,7 @@ pipenv install channels-redis
 # static file upload
 ```
 python manage.py collectstatic
-python manage.py collectstatic --no-input ## 서버 배포시
+python manage.py collectstatic --no-input ## 따로 인풋없이 static 업로드
 ```
 
 #### docker(local)

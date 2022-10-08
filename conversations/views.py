@@ -43,8 +43,8 @@ def go_conversation(request, a_pk, b_pk):
             conversation.participants.add(user_one, user_two)
             pk = conversation.pk
         else:
-            pk = conversation[0].pk   
-    
+            pk = conversation[0].pk
+
         return redirect(
             reverse("conversations:detail", kwargs={"pk": pk})
         )
@@ -91,7 +91,8 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
             messages.error(self.request, "Invalid Account")
             return redirect(reverse("core:home"))
 
-        conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+        conversation.messages.filter(
+            user=opponent, is_read=False).update(is_read=True)
         conv_messages = conversation.messages.order_by("-id")[0:15]
 
         return render(
@@ -162,7 +163,8 @@ def get_msgs(request, pk):
         messages.error(request, "Invalid Account")
         return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
 
-    conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+    conversation.messages.filter(
+        user=opponent, is_read=False).update(is_read=True)
 
     total_msgs = conversation.messages.count()
     conv_msgs = conversation.messages.order_by("-id")[offset:limit]
@@ -211,9 +213,7 @@ def create_msg(request, pk):
         message=_data["msg"], user=request.user, conversation=conversation
     )
 
-    _data = {
-        "data": {"created": msg_obj.created, "is_read": msg_obj.is_read},
-    }
+    _data = {"created": msg_obj.created, "is_read": msg_obj.is_read}
 
     return Response(data={"success": True, "data": _data}, status=status.HTTP_200_OK)
 
@@ -240,6 +240,7 @@ def read_msg(request, pk):
         messages.error(request, "Invalid Account")
         return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
 
-    conversation.messages.filter(user=opponent, is_read=False).update(is_read=True)
+    conversation.messages.filter(
+        user=opponent, is_read=False).update(is_read=True)
 
     return Response(data={"success": True}, status=status.HTTP_200_OK)
