@@ -22,7 +22,13 @@ urlpatterns = [
     path("lists/", include("lists.urls", namespace="lists")),
     path("conversations/", include("conversations.urls", namespace="conversations")),
     path(get_cls_attr(local_settings, 'DJANGO_ADMIN', 'admin/'), admin.site.urls),
+
     path("api/v1/reviews/", include("reviews.urls", namespace="reviews_api")),
+    path("api/v1/reservations/",
+         include("reservations.urls", namespace="reservations_api")),
+    path("api/v1/conversations/",
+         include("conversations.urls", namespace="conversations_api")),
+
     path("sentry-debug/", trigger_error),
 ]
 
