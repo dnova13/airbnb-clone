@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 async function addReservations(page, _type) {
 
     let _status = document.querySelector(".reserv-op-forcus").id
-    let url = `/reservations/api/list/${_type}/?status=${_status}&page=${page}`;
+
+    let url = `/api/v1/reservations/list/${_type}/?status=${_status}&page=${page}`;
     let img = document.createElement('img')
     let s_url = `https://airbnb-clone-dnova12222.s3.amazonaws.com`
 

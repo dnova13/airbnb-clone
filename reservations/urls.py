@@ -14,7 +14,7 @@ urlpatterns = [
     path("list/", views.ReservationListView.as_view(), name="list"),
     path("<int:pk>/", views.ReservationDetailView.as_view(), name="detail"),
     path("<int:pk>/<str:verb>", views.edit_reservation, name="edit"),
-    path("api/list/<str:noun>/", views.list_reservations, name="api_list"),
+    path("list/<str:noun>/", views.list_reservations, name="api_list"),
 ]
 
 # urlpatterns = i18n_patterns(urlpatterns)

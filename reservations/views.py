@@ -1,4 +1,5 @@
 import datetime
+from unicodedata import category
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
 from django.views.generic import View
@@ -14,6 +15,7 @@ from rest_framework import status
 from users import mixins
 from . import models
 from .serializers import ReservationListSerializer
+from utills.utill import string_to_positive_int
 
 
 class CreateError(Exception):
@@ -55,7 +57,8 @@ def create_reservation(request, room, year, month, day, timedelta):
             messages.error(request, "Can't Reserve That Room")
             return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
 
-        messages.success(request, "Reservation Is Successful", extra_tags="success")
+        messages.success(request, "Reservation Is Successful",
+                         extra_tags="success")
         return redirect(reverse("reservations:detail", kwargs={"pk": reservation.pk}))
 
 
@@ -73,10 +76,22 @@ class ReservationListView(mixins.LoggedInOnlyView, View):
 def list_reservations(request, noun):
 
     _status = request.GET.get("status", "all")
-    page = int(request.GET.get("page", 1))
+    page = string_to_positive_int(request.GET.get("page", 1))
+
+    if page < 1:
+        return Response(data={"success": False}, status=403)
+
     page_size = 12
     limit = page_size * page
     offset = limit - page_size
+
+    if not request.user.is_authenticated:
+        return Response(data={"success": False}, status=401)
+
+    category = ["all", "pending", "confirmed", "canceled"]
+
+    if not _status in category:
+        return Response(data={"success": False}, status=403)
 
     if noun == "reserved":
         if _status == "all":
@@ -87,7 +102,8 @@ def list_reservations(request, noun):
             )
     elif noun == "requested":
         if _status == "all":
-            reservs = models.Reservation.objects.filter(room__host=request.user)
+            reservs = models.Reservation.objects.filter(
+                room__host=request.user)
         else:
             reservs = models.Reservation.objects.filter(
                 room__host=request.user, status=_status
@@ -95,7 +111,6 @@ def list_reservations(request, noun):
 
     reservs_list = reservs.order_by("-created")[offset:limit]
     total_reservs = reservs.count()
-    # HTTP_204_NO_CONTENT
 
     if not reservs_list:
         return Response(data={"success": False}, status=status.HTTP_204_NO_CONTENT)

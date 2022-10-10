@@ -43,7 +43,7 @@ btn_send.addEventListener("click", async e => {
     if (!msg_input.value) return
 
     let _message = msg_input.value
-    let url = `/conversations/${_pk}/send/`
+    let url = `/api/v1/conversations/${_pk}/send/`
     let _data = { "msg": _message }
     let _tk = document.querySelector("input[name=csrfmiddlewaretoken]").value;
 
@@ -145,7 +145,7 @@ function addMessage(_data, status, pend, _height) {
 }
 
 async function read_msg() {
-    let url = `/conversations/${_pk}/read/`
+    let url = `/api/v1/conversations/${_pk}/read/`
     let _tk = document.querySelector("input[name=csrfmiddlewaretoken]").value;
 
     let _h = {
@@ -204,7 +204,7 @@ scrDiv.addEventListener("scroll", async e => {
             tp_scrCnt = true
 
             chatCnt = document.querySelectorAll(".conv-msg").length
-            let url = `/conversations/${_pk}/list/?start=${chatCnt + 1}`
+            let url = `/api/v1/conversations/${_pk}/list/?start=${chatCnt + 1}`
             let s_url = `https://airbnb-clone-dnova12222.s3.amazonaws.com`
 
             let img = document.createElement('img')

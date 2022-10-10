@@ -1,3 +1,4 @@
+import imp
 import json
 from django.contrib import messages
 from django.db.models import Q
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from . import models,  serializers
 from users import mixins
+from utills.utill import string_to_positive_int
 
 
 def get_or_none(user_pk):
@@ -139,13 +141,13 @@ def get_msgs(request, pk):
     conversation = models.Conversation.objects.get_or_none(pk=pk)
 
     page_size = 15
-
-    offset = int(request.GET.get("start", 1)) - 1
-    limit = page_size + offset
+    offset = string_to_positive_int(request.GET.get("page", 1))
 
     if offset < 0:
         messages.error(request, "cant' go there")
-        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(data={"success": False}, status=403)
+
+    limit = page_size + offset
 
     if not conversation:
         messages.error(request, "cant' go there")
@@ -192,11 +194,11 @@ def create_msg(request, pk):
 
     if not ("msg" in _data):
         messages.error(request, "cant' go there")
-        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(data={"success": False}, status=403)
 
     if not conversation:
         messages.error(request, "cant' go there")
-        return Response(data={"success": False}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(data={"success": False}, status=403)
 
     valid_chk = False
 

@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Review
 from . import forms
+from utills.utill import string_to_positive_int
 
 
 def create_review(request, room_pk, reservation_pk):
@@ -55,12 +56,19 @@ def create_review(request, room_pk, reservation_pk):
 @api_view(["GET"])
 def list_reviews(request, room_pk):
 
-    page = int(request.GET.get("page", 1))
+    page = string_to_positive_int(request.GET.get("page", 1))
+
+    if page < 1:
+        return Response(data={"success": False}, status=403)
+
     page_size = 10
+
     limit = page_size * page
     offset = limit - page_size
 
-    reviews = Review.objects.filter(room=room_pk).order_by("-created")[offset:limit]
+    reviews = Review.objects.filter(
+        room=room_pk).order_by("-created")[offset:limit]
+
     total_reviews = Review.objects.filter(room=room_pk).count()
 
     if not reviews:
