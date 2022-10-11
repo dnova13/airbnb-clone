@@ -94,6 +94,12 @@ function addMessage(_data, status, pend, _height) {
     let stSpan = ""
     let stText = gettext("failed")
 
+    const spNoMsg = document.querySelector(".no-msg")
+
+    if (spNoMsg) {
+        spNoMsg.remove()
+    }
+
     if (status == "success") {
         addClassName = "conv-msg self-end text-right"
         bgColoer = "bg-teal-500 text-white"

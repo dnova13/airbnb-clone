@@ -31,7 +31,7 @@
         <div class="flex-grow">
             <div class="chat-scroll border ml-10 p-10 pb-0 flex flex-col">
                 {% if conversation.messages.count == 0 %}
-                    <span class="pb-10">{% trans "no messages" %}</span>
+                    <span class="no-msg pb-10">{% trans "no messages" %}</span>
                 {% else %}
                     {% for message in conv_messages|dictsort:"id"  %}
                         <div class="conv-msg mb-10 {% if message.user.pk == user.pk %}

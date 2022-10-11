@@ -7,6 +7,14 @@ Cloning Airbnb with Python, Django, Tailwind and more..
 testnova0713@gmail.com
 ```
 
+# test account
+```
+
+id : test_account111@gmail.com
+id : test_account222@gmail.com
+pw : 1q2w3e!
+```
+
 
 # virtual enviroment setting.
 
