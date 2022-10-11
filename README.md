@@ -10,8 +10,9 @@ testnova0713@gmail.com
 # test account
 ```
 
-id : test_account111@gmail.com
-id : test_account222@gmail.com
+id : test_account11@gmail.com
+id : test_account22@gmail.com
+id : test_account33@gmail.com
 pw : 1q2w3e!
 ```
 
