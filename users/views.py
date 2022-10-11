@@ -70,7 +70,10 @@ class SignUpView(mixins.LoggedOutOnlyView, FormView):
         if user is not None:
             login(self.request, user)
 
-        user.verify_email()
+        # 구글 메일 서비스 강화로 임시로 넣음
+        user.email_verified = True
+        user.save()
+        # user.verify_email()
 
         return super().form_valid(form)
 
