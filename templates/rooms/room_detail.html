@@ -41,6 +41,13 @@
                     </a>
                 {% endif %}
             {% endif %}
+            {% if user.is_authenticated %}
+                {% if room.host.pk != user.pk %}
+                    <a href="{% url 'conversations:go' room.host.pk user.pk %}" class="font-medium text-teal-500">Send a Message</a>
+                {% endif %}
+            {% else %}
+                <a href="/users/login/" class="font-medium text-teal-500">Send a Message</a>
+            {% endif %}
             <div class="flex border-section">
                 <span class="mr-5 font-light">{{room.room_type}}</span>
                 <span class="mr-5 font-light">{{room.beds}} bed{{room.beds|pluralize}}</span>
