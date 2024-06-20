@@ -206,9 +206,9 @@ REST_FRAMEWORK = {
 # chanel
 ASGI_APPLICATION = "config.routing.application"
 
+REDIS_ENDPOINT = "127.0.0.1"
 # REDIS_ENDPOINT = "airbnb-clone-001.lioz6z.0001.apn2.cache.amazonaws.com"
-# REDIS_ENDPOINT = "127.0.0.1"
-REDIS_ENDPOINT = "redis"
+# REDIS_ENDPOINT = "redis"
 
 CHANNEL_LAYERS = {
     "default": {

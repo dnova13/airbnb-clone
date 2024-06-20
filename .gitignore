@@ -152,4 +152,11 @@ node_modules/
 data.json
 */migrations
 
+# docker files
+.postgresql/postgres_data/*
+.redis/redis_data/*
+.log/*
+
 .gitignore
+
+

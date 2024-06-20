@@ -1,41 +1,63 @@
 version: '3'
 services:
-    # backend:
-    #     build:
-    #         context: .
-    #         dockerfile: Dockerfile
-    #     container_name: django
-    #     ports:
-    #         - '8080:8080'
-    #         - '2000:22'
-    #     # 최대 메모리양 설정 : 128m : 적은양 간단한 작업식 적절
-    #     volumes:
-    #         - ./uploads:/home/media/hls:ro
-    #     mem_limit: 128m
-    #     networks:
-    #         - django-network
+    django:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: django
+        ports:
+            - '80:80'
+            - '2000:22'
+        # 최대 메모리양 설정 : 128m : 적은양 간단한 작업식 적절
+        # mem_limit: 128m
+        restart: always
+        volumes:
+            - ./uploads/:/app/airbnb-clone/uploads/:rw
+            - ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default
+            - ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+            - ./.log/service/:/var/log/service/
+            - ./.log/nginx/:/var/log/nginx/
+        depends_on:
+            - postgres
+        networks:
+            - django-network
     postgres:
-        # image: postgres:latest
-        image: postgres:14
+        build:
+            context: ./.postgresql
+            dockerfile: Dockerfile
         container_name: postgres
         environment:
-            - POSTGRES_PASSWORD=1234
-            - POSTGRES_USER=postgres
-            - POSTGRES_DB=postgres
+            POSTGRES_PASSWORD: ${RDS_LOC_PASSWORD}
+            POSTGRES_DB: ${RDS_LOC_NAME}
+            POSTGRES_USER: ${RDS_LOC_USER}
+            TZ: ${TIME_ZONE}
             # - POSTGRES_SSL=disable
         ports:
-            # - 0.0.0.0:5432:5432
             - 63100:5432
         # read_only: true
-        # restart: always
+        mem_limit: 128m
+        restart: unless-stopped
         tmpfs: /var/run/postgresql
         volumes:
-            # - ./postgresql/postgres_data:/var/lib/postgresql/data
-            - ./postgresql/sqls:/docker-entrypoint-initdb.d:ro
-            # - ./conf/postgres/init:/docker-entrypoint-initdb.d:ro
-            # - .data/postgres:/var/lib/postgresql/data
-# networks:
-#     django-network:
-#         name: django-network
-#         driver: bridge
-
+            - ./.postgresql/postgres_data/:/var/lib/postgresql/data/
+            - ./.postgresql/init/:/docker-entrypoint-initdb.d/
+        networks:
+            - django-network
+    redis:
+        build:
+            context: ./.redis
+            dockerfile: Dockerfile
+        container_name: redis
+        mem_limit: 128m
+        restart: unless-stopped
+        ports:
+            - 6379:6379
+        volumes:
+            - ./.redis/redis_data/:/data/
+            - ./.redis/my-redis.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            - django-network
+networks:
+    django-network:
+        name: django-network
+        driver: bridge

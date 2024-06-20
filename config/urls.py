@@ -36,6 +36,7 @@ urlpatterns += i18n_patterns(
     path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
 )
 
-if settings.DEBUG:
+# debug 모드 일 경우
+if local_settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
