@@ -1,8 +1,10 @@
+# uwsgi 시스템 데몬파일
+
 [Unit]
 Description=uWSGI service
 After=syslog.target
 [Service]
-ExecStart=/project/venv/bin/uwsgi -i /project/airbnb-clone/.config/uwsgi.ini
+ExecStart=/app/myvenv/bin/uwsgi -i /app/airbnb-clone/.config/uwsgi.ini
 Restart=always
 KillSignal=SIGQUIT
 Type=notify

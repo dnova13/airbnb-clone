@@ -1,0 +1,42 @@
+[uwsgi]
+
+chdir = /project/airbnb-clone/
+module = config.wsgi:application
+callable=application
+
+home = /project/venv/
+virtualenv = /project/venv/
+socket = /tmp/uwsgi_sock
+
+uid = ec2-user
+gid = ec2-user
+
+chmod-socket = 666	
+chown-socket = ec2-user:ec2-user
+
+; http = :8080
+
+env=SOME_VAR=foobar
+
+master = true
+vacuum = true
+
+processes=5
+threads=8
+max-requests=1000
+harakiri=180
+lazy-apps=true
+
+pidfile = /tmp/service.pid
+
+
+# logto = /var/log/service/@(exec://date +%%Y-%%m-%%d).log
+logto = /var/log/service/uwsgi.log
+log-reopen = true
+enable-threads = true
+
+# pidfile : pid 실행 파일 위치 지정.
+pidfile=/tmp/service.pid
+ignore-write-errors=true
+ignore-sigpipe=true
+disable-write-exception=true

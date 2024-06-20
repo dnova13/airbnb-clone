@@ -1,13 +1,15 @@
+# daphne 시스템 데몬파일
+
 [Unit]
 Description=daphne daemon
 
 [Service]
 User=root
 Group=root
-WorkingDirectory=/project/airbnb/
+WorkingDirectory=/app/airbnb-clone/
 
 Environment="DJANGO_SETTINGS_MODULE=config.settings"
-ExecStart=/project/venv/bin/daphne -b 0.0.0.0 -p 8080 --access-log /var/log/daphne/daphne.log config.asgi:application
+ExecStart=/app/myvenv/bin/daphne -b 0.0.0.0 -p 8080 --access-log /var/log/daphne/daphne.log config.asgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-abort

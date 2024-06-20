@@ -1,0 +1,41 @@
+version: '3'
+services:
+    # backend:
+    #     build:
+    #         context: .
+    #         dockerfile: Dockerfile
+    #     container_name: django
+    #     ports:
+    #         - '8080:8080'
+    #         - '2000:22'
+    #     # 최대 메모리양 설정 : 128m : 적은양 간단한 작업식 적절
+    #     volumes:
+    #         - ./uploads:/home/media/hls:ro
+    #     mem_limit: 128m
+    #     networks:
+    #         - django-network
+    postgres:
+        # image: postgres:latest
+        image: postgres:14
+        container_name: postgres
+        environment:
+            - POSTGRES_PASSWORD=1234
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=postgres
+            # - POSTGRES_SSL=disable
+        ports:
+            # - 0.0.0.0:5432:5432
+            - 63100:5432
+        # read_only: true
+        # restart: always
+        tmpfs: /var/run/postgresql
+        volumes:
+            # - ./postgresql/postgres_data:/var/lib/postgresql/data
+            - ./postgresql/sqls:/docker-entrypoint-initdb.d:ro
+            # - ./conf/postgres/init:/docker-entrypoint-initdb.d:ro
+            # - .data/postgres:/var/lib/postgresql/data
+# networks:
+#     django-network:
+#         name: django-network
+#         driver: bridge
+

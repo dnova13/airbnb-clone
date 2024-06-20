@@ -18,9 +18,9 @@ pytz = "==2021.3"
 sentry-sdk = "*"
 django-storages = "*"
 boto3 = "*"
-psycopg2 = "*"
 django = "==3.2.7"
 daphne = "*"
+psycopg2 = "*"
 
 [dev-packages]
 flake8 = "*"

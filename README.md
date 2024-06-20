@@ -1,73 +1,89 @@
 # Airbnb Clone
+
 Cloning Airbnb with Python, Django, Tailwind and more..
 
-
 # mail account
+
 ```
 testnova0713@gmail.com
 ```
 
 # test account
+
 ```
 
 id : test_account11@gmail.com
 id : test_account22@gmail.com
 id : test_account33@gmail.com
-pw : 1q2w3e!
+pw : 1q2w3e4r
 ```
 
+# virtual enviroment setting (select 1 or 2.)
 
-# virtual enviroment setting.
-
-## 1. pipenv setting(recommed window)
+## - pipenv setting(recommed window)
 
 ### pipenv install
+
 ```
 pip install --user pipenv
 ```
 
 ### pipenv shell & pakage install
-```
-pipenv shell
-pipenv install <package-name>
-```
 
+```
+# 가상환경 활성화
+pipenv shell
+
+# 패키치 설치
+pipenv install <package-name>
+
+```
 
 ### package install
+
 ```
 pipenv install pillow django-countries django-seed django-dotenv requests djangorestframework channels-redis channels
 pipenv install awsebcli flake8 --dev
 pipenv install black --dev --pre
 ```
-  
 
-  
-## 2. venv setting
-### venv 
+## - venv setting
+
+### venv
+
 ```
+# 가상환경 위치 셋팅
 python -m venv .venv
+
+# 가상환경 활성화
 source .venv/Scripts/activate
+
+# 가상환경 종료
+deactivate
+
 ```
-  
+
+---
 
 # pip upgrade
+
 ```
 pip install --upgrade pip
 ```
-  
 
 # pip rollback
+
 ```
 python -m ensurepip
 ```
-  
 
-# rerequirements 
+# rerequirements
+
 ```
-# requirements 추출
+# requirements pip 패키지 추출
 pip freeze > requirements.txt
 
-# requirements 
+# requirements 추출한 pip 패키지 설치
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
@@ -75,70 +91,129 @@ pip install -r requirements-dev.txt
 pip uninstall -r requirements.txt -y
 ```
 
-# stat django-project
+# start server
+
 ```
+
+python manage.py runserver <port>
+
+python manage.py runserver 8080
+
+python manage.py runserver --port 8000
+
+python manage.py runserver <ip>:<port>
+
+python manage.py runserver 127.0.0.1:8000
+```
+
+# 장고 셸 활성
+
+python manage.py shell
+
+```
+
+# start django-project
+
+```
+
 django-admin startproject config
+
 ```
 
 # translate commend
+
 ```
+
 django-admin makemessages -l ko
 django-admin makemessages -d djangojs -l ko
 django-admin compilemessages
+
 ```
 
 # migration command
+
 ```
+
+# 장고내 데이터에 대한 추가/수정/삭제시 마이그레이션 파일로 만드는 명령어
+
 python manage.py makemigrations
+
+# 생성된 마이그레이션 파일을 실제 데이터에 적용.
+
 python manage.py migrate
+
 ```
 
 # channel setting install
-### commend
+
+### command
+
 ```
+
 pipenv install channls
 pipenv install channels-redis
+
 ```
 
-# static file upload
+# static file upload( static 파일 s3 등 업로드)
+
 ```
+
 python manage.py collectstatic
 python manage.py collectstatic --no-input ## 따로 인풋없이 static 업로드
+
 ```
 
-# docker(local)
+# docker-redis(local)
+
 ```
-yum -y install docker 
+
+yum -y install docker
 systemctl start docker
 docker run -p 6379:6379 -d redis:6.2.6
 
 docker network create redis-net
 docker run --name airb -p 6379:6379 --network redis-net -d redis:6.2.6 redis-server --appendonly yes
-```
 
+```
 
 # 처음 배포 시 실행 명령어.
+
 ```
+
 sudo yum install postgresql-devel
 sudo yum install gettext-devel
 
-# static 파일 업로드
+# static 파일 s3 등 업로드
+
 python manage.py compilemessages
-or 
+or
 python manage.py collectstatic --no-input
+
 ```
 
 # 배포시 psycopg2 설치 되지않아 에러날 시
+
 ```
+
 requirements.txt psycopg2 대신에 psycopg2-binary 로 변경.
+
 ```
 
 # 로그 확인
+
 ```
+
 sudo tail -f /var/log/service/uwsgi.log
+
 ```
 
 # 서버 재시작 명령어
+
 ```
-sudo systemctl start nginx uwsgi daphne 
+
+sudo systemctl start nginx uwsgi daphne
+
+```
+
 ```
