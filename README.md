@@ -108,6 +108,7 @@ python manage.py runserver 127.0.0.1:8000
 
 # 장고 셸 활성
 
+```
 python manage.py shell
 
 ```
@@ -123,7 +124,6 @@ django-admin startproject config
 # translate commend
 
 ```
-
 django-admin makemessages -l ko
 django-admin makemessages -d djangojs -l ko
 django-admin compilemessages
@@ -133,7 +133,6 @@ django-admin compilemessages
 # migration command
 
 ```
-
 # 장고내 데이터에 대한 추가/수정/삭제시 마이그레이션 파일로 만드는 명령어
 
 python manage.py makemigrations
@@ -183,9 +182,11 @@ docker run --name airb -p 6379:6379 --network redis-net -d redis:6.2.6 redis-ser
 
 sudo yum install postgresql-devel
 sudo yum install gettext-devel
+```
 
 # static 파일 s3 등 업로드
 
+```
 python manage.py compilemessages
 or
 python manage.py collectstatic --no-input
@@ -203,7 +204,6 @@ requirements.txt psycopg2 대신에 psycopg2-binary 로 변경.
 # 로그 확인
 
 ```
-
 sudo tail -f /var/log/service/uwsgi.log
 
 ```
@@ -211,9 +211,22 @@ sudo tail -f /var/log/service/uwsgi.log
 # 서버 재시작 명령어
 
 ```
-
 sudo systemctl start nginx uwsgi daphne
 
 ```
 
+# docker-supervior 명령어
+
+```
+# supervisor start/stop/restart/status
+supervisorctl start uwsgi
+supervisorctl restart uwsgi
+supervisorctl stop uwsgi
+supervisorctl status uwsgi
+
+supervisorctl restart all
+
+
+# supervior 갱신
+supervisorctl reread && supervisorctl update
 ```

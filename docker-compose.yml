@@ -37,6 +37,7 @@ services:
         # read_only: true
         mem_limit: 128m
         restart: unless-stopped
+        # 파일 시스템을 RAM에 마운트하는 기능으로, 매우 빠른 속도로 데이터에 접근할 수 있습니다.
         tmpfs: /var/run/postgresql
         volumes:
             - ./.postgresql/postgres_data/:/var/lib/postgresql/data/

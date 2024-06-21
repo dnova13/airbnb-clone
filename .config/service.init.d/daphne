@@ -1,0 +1,40 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          daphne
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daphne at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
+case "$1" in
+  start)
+    echo "Starting daphne"
+    /app/myvenv/bin/daphne -b 0.0.0.0 -p 8000 --access-log /var/log/service/daphne.log config.asgi:application &
+    ;;
+  stop)
+    echo "Stopping daphne"
+    pkill -f daphne
+    ;;
+  restart)
+    echo "Restarting daphne"
+    pkill -f daphne
+    /app/myvenv/bin/daphne -b 0.0.0.0 -p 8000 --access-log /var/log/service/daphne.log config.asgi:application &
+    ;;
+  status)
+    if pgrep -x "daphne" > /dev/null
+    then
+      echo "daphne is running"
+    else
+      echo "daphne is stopped"
+    fi
+    ;;
+  *)
+    echo "Usage: /etc/init.d/daphne {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+
+exit 0

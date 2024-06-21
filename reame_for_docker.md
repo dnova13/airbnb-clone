@@ -2,22 +2,22 @@
 
 ```
 ## 개발용
-docker build -f Dockerfile.dev -t nodetest ./
+docker build -f Dockerfile.dev -t django-test ./
 
 
 ## 배포용
-docker build -t jun/node ./
+docker build -t django-test ./
 ```
 
 # 도커 컨테이너 생성 및 실행
 
 ```
 ## foreground
-docker run -p 3010:3010 jun/node
+docker run -p 8000:8000 django-test
 
 
 ## background
-docker run -p 3010:3010 --name vi-server -d jun/node
+docker run -p 8000:8000 --name dj-server -d django-test
 
 ```
 
@@ -59,7 +59,9 @@ docker volume prune
 # docker에 불필요 한 데이터 제거 명령어
 
 ```
+# 사용하지 않는 불필요한 리소스 삭제
+docker system prune
+
+# 사용하지 않는 불필요한 리소스 삭제(옵션이 더 많음)
 docker system prune -a
 ```
-
-docker run -p 5050:8080 -v ./uploads/video/:/home/media/hls
