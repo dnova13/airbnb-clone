@@ -116,25 +116,5 @@ COPY .config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # RUN /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 
 # Supervisor를 포그라운드 모드로 실행하도록 CMD 설정
-# CMD ["/usr/bin/supervisord", "-n"]
-# CMD /usr/bin/supervisord -n 
-
 # 관리자 아이디 생성(만약 관리자 아이디 생성시, db 먼저 생성후 실행) & 전 static 폴더 설정. 
-CMD ["/bin/bash", "-c", "source /app/myvenv/bin/activate && python manage.py createsu && python manage.py collectstatic --noinput  && /usr/bin/supervisord -n"]
-
-
-# RUN supervisorctl start uwsgi
-# RUN supervisorctl start uwsgi
-
-# service 설정
-## uwsgi 및 daphne 서비스 파일 복사
-# COPY .config/uwsgi /etc/init.d/uwsgi
-# COPY .config/daphne /etc/init.d/daphne
-
-## 서비스 스크립트에 실행 권한 부여
-# RUN chmod +x /etc/init.d/uwsgi /etc/init.d/daphne
-
-## init 시스템 실행
-# RUN /sbin/init
-# CMD ["/sbin/init"]
-
+CMD ["/bin/bash", "-c", "source /app/myvenv/bin/activate && python manage.py createsu && python manage.py collectstatic --noinput && python manage.py compilemessages && /usr/bin/supervisord -n"]
