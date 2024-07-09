@@ -17,6 +17,7 @@ services:
             - ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
             - ./.log/service/:/var/log/service/
             - ./.log/nginx/:/var/log/nginx/
+            - /etc/letsencrypt/live:/etc/letsencrypt/live
         depends_on:
             - postgres
         networks:
