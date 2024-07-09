@@ -7,6 +7,7 @@ services:
         container_name: django
         ports:
             - '80:80'
+            - '443:443'
             - '2000:22'
         # 최대 메모리양 설정 : 128m : 적은양 간단한 작업식 적절
         # mem_limit: 128m
@@ -17,7 +18,9 @@ services:
             - ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
             - ./.log/service/:/var/log/service/
             - ./.log/nginx/:/var/log/nginx/
-            - /etc/letsencrypt/live:/etc/letsencrypt/live
+            # ssl 설정
+            # - /etc/letsencrypt/live:/etc/certs/live
+            # - /etc/letsencrypt/archive:/etc/certs/archive
         depends_on:
             - postgres
         networks:
@@ -34,7 +37,7 @@ services:
             TZ: ${TIME_ZONE}
             # - POSTGRES_SSL=disable
         ports:
-            - 63100:5432
+            - 5432:5432
         # read_only: true
         mem_limit: 128m
         restart: unless-stopped
