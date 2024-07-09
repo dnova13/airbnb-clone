@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     wget curl git vim nano nginx \
     openssh-server make build-essential \
     libssl-dev zlib1g-dev libffi-dev libbz2-dev libreadline-dev \
-    supervisor postgresql-server-dev-all
+    supervisor postgresql-server-dev-all gettext
     # llvm libncurses5-dev \ 
     # libncursesw5-dev xz-utils liblzma-dev libc-dev libc6-dev \
     

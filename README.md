@@ -130,6 +130,20 @@ django-admin compilemessages
 
 ```
 
+-   주의사항 : 서버 배포시 `gettext` 패키지 필요 없다면 아래 명령어로 `gettext` 설치
+
+```
+# 우분투
+sudo apt-get install gettext
+
+
+# centsot
+sudo yum install gettext-devel
+or
+sudo yum install gettext
+
+```
+
 # migration command
 
 ```
