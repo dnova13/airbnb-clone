@@ -40,5 +40,5 @@ RUN ssh-keygen -A
 EXPOSE 22
 
 # Start SSH service
-# CMD ["/usr/sbin/sshd", "-D"]
-CMD /usr/sbin/sshd && tail -f /dev/null
+CMD ["/usr/sbin/sshd", "-D"]
+# CMD /usr/sbin/sshd && tail -f /dev/null
