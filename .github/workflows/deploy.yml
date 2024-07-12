@@ -31,7 +31,7 @@ jobs:
                     -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
                     -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
                     -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
-                    --name postgres
+                    --name postgres \
                     postgres
 
                   docker ps
