@@ -17,9 +17,9 @@ jobs:
                     -p 5432:5432 \
                     -v $(pwd)/.postgresql/postgres_data:/var/lib/postgresql/data/ \
                     -v $(pwd)/.postgresql/init/:/docker-entrypoint-initdb.d/ \
-                    -e POSTGRES_DB=${{secrets.RDS_NAME}} \
-                    -e POSTGRES_USER=${{secrets.RDS_USER}} \
-                    -e POSTGRES_PASSWORD=${{secrets.RDS_PASSWORD}} \
+                    -e POSTGRES_DB=${{secrets.RDS_TEST_NAME}} \
+                    -e POSTGRES_USER=${{secrets.RDS_TEST_USER}} \
+                    -e POSTGRES_PASSWORD=${{secrets.RDS_TEST_PW}} \
                     postgres
 
                   python -m venv ./myvenv

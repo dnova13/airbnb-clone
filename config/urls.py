@@ -1,5 +1,4 @@
 import os
-import local_settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -8,6 +7,10 @@ from django.views.i18n import JavaScriptCatalog
 from django.conf.urls.i18n import i18n_patterns
 from utills.utill import get_cls_attr
 
+try:
+    import local_settings
+except ImportError:
+    import test_settings as local_settings
 
 def trigger_error(request):
     division_by_zero = 1 / 0

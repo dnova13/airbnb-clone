@@ -1,6 +1,11 @@
 import os
 import requests
-import local_settings
+
+try:
+    import local_settings
+except ImportError:
+    import test_settings as local_settings
+
 from django.http import HttpResponse
 from django.utils import translation
 from config import settings
