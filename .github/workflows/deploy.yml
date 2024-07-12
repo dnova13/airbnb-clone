@@ -26,7 +26,6 @@ jobs:
                   docker build -t postgres ./.postgresql
                   docker run -d \
                     -p 5432:5432 \
-                    -v ./.postgresql/postgres_data:/var/lib/postgresql/data/ \
                     -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
                     -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
                     -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
@@ -36,7 +35,7 @@ jobs:
                     postgres
 
                   docker ps
-                  docker logs postgres
+                  docker logs --tail 50 postgres
                   psql -h localhost -p 5432 -U root
 
                   # # 가상환경 셋팅 및 패키지 설치
