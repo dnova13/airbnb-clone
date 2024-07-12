@@ -26,17 +26,17 @@ jobs:
 
             - name: code test
               run: |
-                  docker compose up -d
-                  # docker build -t postgres ./.postgresql
-                  # docker run -d \
-                  #   -p 5432:5432 \
-                  #   -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
-                  #   -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
-                  #   -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
-                  #   -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
-                  #   -e TZ=Asia/Seoul \
-                  #   --name postgres \
-                  #   postgres
+                  # docker compose up -d
+                  docker build -t postgres ./.postgresql
+                  docker run -d \
+                    -p 5432:5432 \
+                    -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
+                    -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
+                    -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
+                    -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
+                    -e TZ=Asia/Seoul \
+                    --name postgres \
+                    postgres
 
                   # docker ps
                   # docker logs --tail 50 postgres
