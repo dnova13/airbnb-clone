@@ -117,4 +117,4 @@ COPY .config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Supervisor를 포그라운드 모드로 실행하도록 CMD 설정
 # 관리자 아이디 생성(만약 관리자 아이디 생성시, db 먼저 생성후 실행) & 전 static 폴더 설정. 
-CMD ["/bin/bash", "-c", "source /app/myvenv/bin/activate && python manage.py createsu && python manage.py collectstatic --noinput && python manage.py compilemessages && /usr/bin/supervisord -n"]
+CMD ["/bin/bash", "-c", "source /app/myvenv/bin/activate && python manage.py createsu && python manage.py collectstatic --noinput && python manage.py compilemessages && python manage.py migrate && /usr/bin/supervisord -n"]
