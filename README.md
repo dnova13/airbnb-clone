@@ -252,3 +252,17 @@ supervisorctl restart all
 # supervior 갱신
 supervisorctl reread && supervisorctl update
 ```
+
+# error sql
+
+## `CREATE SCHEMA public` 에서 public 존재한다고 에러 뜰 경우 CREATE SCHEMA public 지우고 아래 코드 대신 적음.
+
+```
+DO $$
+BEGIN
+   IF NOT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'public') THEN
+      CREATE SCHEMA public;
+   END IF;
+END
+$$;
+```
