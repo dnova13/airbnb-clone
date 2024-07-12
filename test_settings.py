@@ -13,15 +13,10 @@ DEBUG = True
 MODE = 0
 
 
-# RDS_HOST = os.getenv('RDS_TEST_HOST')
-# RDS_NAME = os.getenv('RDS_TEST_NAME')
-# RDS_USER = os.getenv('RDS_TEST_USER')
-# RDS_PASSWORD = os.getenv('RDS_TEST_PASSWORD')
-
-RDS_HOST = "localhost"
-RDS_NAME = "postgres"
-RDS_USER = "postgres"
-RDS_PASSWORD = "1234"
+RDS_HOST = os.getenv('RDS_TEST_HOST')
+RDS_NAME = os.getenv('RDS_TEST_NAME')
+RDS_USER = os.getenv('RDS_TEST_USER')
+RDS_PASSWORD = os.getenv('RDS_TEST_PASSWORD')
 RDS_PORT = "5432"
 
 DATABASES = {

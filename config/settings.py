@@ -223,4 +223,5 @@ CHANNEL_LAYERS = {
 try:
     from local_settings import *
 except ImportError:
-    pass
+    from test_settings import *
+    # pass
