@@ -35,6 +35,7 @@ jobs:
                     -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
                     -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
                     -e TZ=Asia/Seoul \
+                    --restart unless-stopped \
                     --name postgres \
                     postgres
 
