@@ -16,15 +16,15 @@ jobs:
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
                   echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
-                  echo "RDS_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
-                  echo "RDS_NAME=${{vars.RDS_TEST_NAME}}" >> .env
-                  echo "RDS_USER=${{vars.RDS_TEST_USER}}" >> .env
+                  # echo "RDS_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+                  # echo "RDS_NAME=${{vars.RDS_TEST_NAME}}" >> .env
+                  # echo "RDS_USER=${{vars.RDS_TEST_USER}}" >> .env
 
             - name: Use .env in subsequent steps
               run: |
                   cat .env  # .env 파일 내용 확인
 
-            - name: code test
+            - name: docker build test
               run: |
                   # docker compose up -d
                   docker build -t postgres ./.postgresql
@@ -39,22 +39,20 @@ jobs:
                     --name postgres \
                     postgres
 
+                  # python manage.py runserver
+                  # # 테스트 실행
+                  # python manage.py test --settings='config.test_settings'
+                  # docker logs --tail 50 postgres
+            - name: code test
+              run: |
+                  docker logs postgres
+
                   # # 가상환경 셋팅 및 패키지 설치
                   python -m venv ./myvenv
                   source myvenv/bin/activate
                   pip install --upgrade pip 
                   pip install -r requirements.txt
 
-                  # python manage.py runserver
-                  # # 테스트 실행
-                  # python manage.py test --settings='config.test_settings'
-                  # docker logs --tail 50 postgres
-            - name: postgres
-              run: |
-                  docker logs postgres
-
-                  python -m venv ./myvenv
-                  source myvenv/bin/activate
                   python manage.py test --settings='config.test_settings'
             # - name: SSH and deploy
             #   uses: appleboy/ssh-action@master

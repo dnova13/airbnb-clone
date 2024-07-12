@@ -1,31 +1,31 @@
 version: '3'
 services:
-    # django:
-    #     build:
-    #         context: .
-    #         dockerfile: Dockerfile
-    #     container_name: django
-    #     ports:
-    #         - '80:80'
-    #         - '443:443'
-    #         - '2000:22'
-    #     # 최대 메모리양 설정 : 128m : 적은양 간단한 작업식 적절
-    #     # mem_limit: 128m
-    #     restart: always
-    #     volumes:
-    #         - ./uploads/:/app/airbnb-clone/uploads/:rw
-    #         - ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default
-    #         - ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
-    #         - ./.log/service/:/var/log/service/
-    #         - ./.log/nginx/:/var/log/nginx/
-    #         - ./local_settings.py:/app/app/airbnb-clone/local_settings.py
-    #         # ssl 설정
-    #         # - /etc/letsencrypt/live:/etc/certs/live
-    #         # - /etc/letsencrypt/archive:/etc/certs/archive
-    #     depends_on:
-    #         - postgres
-    #     networks:
-    #         - django-network
+    django:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: django
+        ports:
+            - '80:80'
+            - '443:443'
+            - '2000:22'
+        # 최대 메모리양 설정 : 128m : 적은양 간단한 작업식 적절
+        # mem_limit: 128m
+        restart: always
+        volumes:
+            - ./uploads/:/app/airbnb-clone/uploads/:rw
+            - ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default
+            - ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+            - ./.log/service/:/var/log/service/
+            - ./.log/nginx/:/var/log/nginx/
+            - ./local_settings.py:/app/app/airbnb-clone/local_settings.py
+            # ssl 설정
+            # - /etc/letsencrypt/live:/etc/certs/live
+            # - /etc/letsencrypt/archive:/etc/certs/archive
+        depends_on:
+            - postgres
+        networks:
+            - django-network
     postgres:
         build:
             context: ./.postgresql
