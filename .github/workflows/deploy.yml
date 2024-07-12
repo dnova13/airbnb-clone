@@ -1,12 +1,19 @@
 name: CI/CD Pipeline
+
 on:
     push:
         branches:
             - master
+
+defaults:
+    run:
+        timeout-minutes: 30
+
 jobs:
     depoly:
         runs-on: ubuntu-latest # 테스트할 리눅스
         timeout-minutes: 30 # 타임 아웃 시간 셋팅(분)
+
         steps:
             - name: checkout code
               uses: actions/checkout@v4 # 최신 버전의 체크아웃 액션으로, 리포지토리의 코드를 워크플로우 실행 환경
