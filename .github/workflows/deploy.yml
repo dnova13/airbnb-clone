@@ -84,4 +84,5 @@ jobs:
                       # Docker Compose로 애플리케이션 빌드 및 실행
                       cd ~/project/airbnb-clone
                       sudo docker compose up -d --build
+                      sleep 10
                       sudo docker system prune -af
