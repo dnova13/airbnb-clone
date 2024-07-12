@@ -71,12 +71,12 @@ jobs:
                       git clone https://dnova13:${{ vars.GIT_ACCESS_KEY }}@github.com/dnova13/airbnb-clone
 
                       # 본 프로젝트 디렉토리로 rsync
-                      rsync -av --delete airbnb-clone/ --exclude='.env' --exclude='uploads/' --exclude='local_settings.py'  ~/project/airbnb-clone
+                      sudo rsync -av --delete airbnb-clone/ --exclude='.env' --exclude='uploads/' --exclude='local_settings.py'  ~/project/airbnb-clone
                       # rsync -av --delete airbnb-clone ~/project/airbnb-clone
 
                       # 임시 폴더 삭제
                       cd ..
-                      rm -rf $TEMP_DIR
+                      sudo rm -rf $TEMP_DIR
 
                       # Docker Compose로 애플리케이션 빌드 및 실행
                       cd ~/project/airbnb-clone
