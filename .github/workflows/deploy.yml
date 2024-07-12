@@ -26,8 +26,9 @@ jobs:
 
             - name: code test
               run: |
+                  # docker compose up
                   docker build -t postgres ./.postgresql
-                  docker run -d \
+                  docker run \
                     -p 5432:5432 \
                     -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
                     -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
