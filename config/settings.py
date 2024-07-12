@@ -224,4 +224,4 @@ try:
     from local_settings import *
 except ImportError:
     from test_settings import *
-    # pass
+    pass
