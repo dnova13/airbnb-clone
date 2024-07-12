@@ -56,7 +56,6 @@ jobs:
 
             - name: SSH and deploy
               uses: appleboy/ssh-action@master
-              timeout-minutes: 20 # 타임 아웃 시간 셋팅(분)
               with:
                   host: ${{ secrets.SERVER_IP }}
                   username: ${{ secrets.SERVER_USERNAME }}
