@@ -30,6 +30,7 @@ jobs:
                     -e POSTGRES_PASSWORD=${{secrets.RDS_TEST_PASSWORD}} \
                     postgres
 
+                  ls
                   python -m venv ./myvenv
                   source myvenv/bin/activate
                   pip install --upgrade pip 
