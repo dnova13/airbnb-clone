@@ -10,6 +10,14 @@ jobs:
             - name: checkout code
               uses: actions/checkout@v4 # 최신 버전의 체크아웃 액션으로, 리포지토리의 코드를 워크플로우 실행 환경
 
+            - name: Generate .env file
+              run: |
+                  echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
+                  echo "RDS_TEST_HOST=${{secrets.RDS_TEST_HOST}}" >> .env
+                  echo "RDS_TEST_NAME=${{secrets.RDS_TEST_NAME}}" >> .env
+                  echo "RDS_TEST_USER=${{secrets.RDS_TEST_USER}}" >> .env
+                  echo "RDS_TEST_PASSWORD=${{secrets.RDS_TEST_PASSWORD}}" >> .env
+
             - name: code test
               run: |
                   docker build -t postgres ./.postgresql
@@ -19,7 +27,7 @@ jobs:
                     -v $(pwd)/.postgresql/init/:/docker-entrypoint-initdb.d/ \
                     -e POSTGRES_DB=${{secrets.RDS_TEST_NAME}} \
                     -e POSTGRES_USER=${{secrets.RDS_TEST_USER}} \
-                    -e POSTGRES_PASSWORD=${{secrets.RDS_TEST_PW}} \
+                    -e POSTGRES_PASSWORD=${{secrets.RDS_TEST_PASSWORD}} \
                     postgres
 
                   python -m venv ./myvenv
