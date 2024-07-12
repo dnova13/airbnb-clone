@@ -16,6 +16,9 @@ jobs:
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
                   echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+                  echo "RDS_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+                  echo "RDS_NAME=${{vars.RDS_TEST_NAME}}" >> .env
+                  echo "RDS_USER=${{vars.RDS_TEST_USER}}" >> .env
 
             - name: Use .env in subsequent steps
               run: |
