@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 on:
     push:
         branches:
-            - master
+            - main
 jobs:
     depoly:
         runs-on: ubuntu-latest # 테스트할 리눅스,
@@ -21,6 +21,11 @@ jobs:
                     -e POSTGRES_USER=${{secrets.RDS_USER}} \
                     -e POSTGRES_PASSWORD=${{secrets.RDS_PASSWORD}} \
                     postgres
+
+                  python -m venv ./myvenv
+                  source myvenv/bin/activate
+                  pip install --upgrade pip 
+                  pip install -r requirements.txt
 
                   python manage.py test --settings='config.test_settings'
 
