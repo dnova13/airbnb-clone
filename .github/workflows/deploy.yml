@@ -48,10 +48,13 @@ jobs:
                   # python manage.py runserver
                   # # 테스트 실행
                   # python manage.py test --settings='config.test_settings'
-                  docker logs --tail 50 postgres
+                  # docker logs --tail 50 postgres
             - name: postgres
               run: |
-                  docker logs --tail 50 postgres
+                  docker logs postgres
+
+                  python -m venv ./myvenv
+                  source myvenv/bin/activate
                   python manage.py test --settings='config.test_settings'
             # - name: SSH and deploy
             #   uses: appleboy/ssh-action@master
