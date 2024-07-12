@@ -18,7 +18,7 @@ services:
             - ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
             - ./.log/service/:/var/log/service/
             - ./.log/nginx/:/var/log/nginx/
-            - ./local_settings.py:/app/app/airbnb-clone/local_settings.py
+            - ./local_settings.py:/app/airbnb-clone/local_settings.py
             # ssl 설정
             # - /etc/letsencrypt/live:/etc/certs/live
             # - /etc/letsencrypt/archive:/etc/certs/archive
