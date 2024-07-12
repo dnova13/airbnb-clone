@@ -12,8 +12,8 @@ jobs:
 
             - name: Generate .env file
               run: |
-                  echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
-                  echo "RDS_TEST_HOST=${{secrets.RDS_TEST_HOST}}" >> .env
+                  # echo "RDS_TEST_HOST=${{secrets.RDS_TEST_HOST}}" >> .env
+                  echo "RDS_TEST_HOST=localhost" >> .env
                   echo "RDS_TEST_NAME=${{secrets.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{secrets.RDS_TEST_USER}}" >> .env
                   echo "RDS_TEST_PASSWORD=${{secrets.RDS_TEST_PASSWORD}}" >> .env
