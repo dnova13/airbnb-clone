@@ -121,6 +121,14 @@ django-admin startproject config
 
 ```
 
+# test django
+
+```
+python manage.py test --settings='config.test_settings'
+python manage.py test --testrunner='config.test_runner.TestRunner'
+
+```
+
 # translate commend
 
 ```

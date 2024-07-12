@@ -1,0 +1,56 @@
+name: CI/CD Pipeline
+on:
+    push:
+        branches:
+            - master
+jobs:
+    depoly:
+        runs-on: ubuntu-latest # 테스트할 리눅스,
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v4 # 최신 버전의 체크아웃 액션으로, 리포지토리의 코드를 워크플로우 실행 환경
+
+            - name: code test
+              run: |
+                  docker build -t postgres ./.postgresql
+                  docker run -d \
+                    -p 5432:5432 \
+                    -v $(pwd)/.postgresql/postgres_data:/var/lib/postgresql/data/ \
+                    -v $(pwd)/.postgresql/init/:/docker-entrypoint-initdb.d/ \
+                    -e POSTGRES_DB=${{secrets.RDS_NAME}} \
+                    -e POSTGRES_USER=${{secrets.RDS_USER}} \
+                    -e POSTGRES_PASSWORD=${{secrets.RDS_PASSWORD}} \
+                    postgres
+
+                  python manage.py test --settings='config.test_settings'
+
+            # - name: SSH and deploy
+            #   uses: appleboy/ssh-action@master
+            #   with:
+            #       host: ${{ secrets.SERVER_IP }}
+            #       username: ${{ secrets.SERVER_USERNAME }}
+            #       key: ${{ secrets.SSH_PRIVATE_KEY }}
+            #       port: 22
+            #       script: |
+            #           # 임시 폴더 생성
+            #           TEMP_DIR=$(mktemp -d)
+
+            #           # 임시 폴더로 이동
+            #           cd $TEMP_DIR
+
+            #           # 레포지토리 클론 private 시
+            #           # git clone https://사용자명:${{ secrets.GITHUB_TOKEN }}@github.com/dnova13/node-server-sample
+            #           git clone https://dnova13:${{ vars.GIT_ACCESS_KEY }}@github.com/dnova13/node-server-sample
+
+            #           # 본 프로젝트 디렉토리로 rsync
+            #           rsync -av --delete node-server-sample/ --exclude='.env' ~/project/node-server-sample
+            #           # rsync -av --delete node-server-sample ~/project/node-server-sample
+
+            #           # 임시 폴더 삭제
+            #           cd ..
+            #           rm -rf $TEMP_DIR
+
+            #           # Docker Compose로 애플리케이션 빌드 및 실행
+            #           cd ~/project/node-server-sample
+            #           sudo docker compose up -d --build
+            #           sudo docker system prune -af

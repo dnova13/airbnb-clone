@@ -32,9 +32,9 @@ services:
             dockerfile: Dockerfile
         container_name: postgres
         environment:
-            POSTGRES_PASSWORD: ${RDS_LOC_PASSWORD}
-            POSTGRES_DB: ${RDS_LOC_NAME}
-            POSTGRES_USER: ${RDS_LOC_USER}
+            POSTGRES_PASSWORD: ${RDS_PASSWORD}
+            POSTGRES_DB: ${RDS_NAME}
+            POSTGRES_USER: ${RDS_USER}
             TZ: ${TIME_ZONE}
             # - POSTGRES_SSL=disable
         ports:
