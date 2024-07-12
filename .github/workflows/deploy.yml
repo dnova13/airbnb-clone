@@ -12,11 +12,14 @@ jobs:
 
             - name: Generate .env file
               run: |
-                  # echo "RDS_TEST_HOST=${{secrets.RDS_TEST_HOST}}" >> .env
-                  echo "RDS_TEST_HOST=localhost" >> .env
-                  echo "RDS_TEST_NAME=${{secrets.RDS_TEST_NAME}}" >> .env
-                  echo "RDS_TEST_USER=${{secrets.RDS_TEST_USER}}" >> .env
-                  echo "RDS_TEST_PASSWORD=${{secrets.RDS_TEST_PASSWORD}}" >> .env
+                  echo "RDS_TEST_HOST=${{vars.RDS_TEST_HOST}}" >> .env
+                  echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
+                  echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
+                  echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+
+            - name: Use .env in subsequent steps
+              run: |
+                  cat .env  # .env 파일 내용 확인
 
             - name: code test
               run: |
@@ -25,18 +28,22 @@ jobs:
                     -p 5432:5432 \
                     -v $(pwd)/.postgresql/postgres_data:/var/lib/postgresql/data/ \
                     -v $(pwd)/.postgresql/init/:/docker-entrypoint-initdb.d/ \
-                    -e POSTGRES_DB=${{secrets.RDS_TEST_NAME}} \
-                    -e POSTGRES_USER=${{secrets.RDS_TEST_USER}} \
-                    -e POSTGRES_PASSWORD=${{secrets.RDS_TEST_PASSWORD}} \
+                    -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
+                    -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
+                    -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
+                    --name postgres
                     postgres
 
                   docker ps
-                  # docker logs postgres
+                  docker logs postgres
+
+                  # 가상환경 셋팅 및 패키지 설치
                   python -m venv ./myvenv
                   source myvenv/bin/activate
                   pip install --upgrade pip 
                   pip install -r requirements.txt
 
+                  # 테스트 실행
                   python manage.py test --settings='config.test_settings'
 
             # - name: SSH and deploy
