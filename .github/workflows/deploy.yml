@@ -53,7 +53,6 @@ jobs:
 
             - name: SSH and deploy
               uses: appleboy/ssh-action@master
-              timeout-minutes: 30
               with:
                   host: ${{ secrets.SERVER_IP }}
                   username: ${{ secrets.SERVER_USERNAME }}
