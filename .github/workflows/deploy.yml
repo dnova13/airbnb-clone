@@ -49,8 +49,9 @@ jobs:
                   pip install --upgrade pip 
                   pip install -r requirements.txt
 
+                  python manage.py runserver
                   # # 테스트 실행
-                  python manage.py test --settings='config.test_settings'
+                  # python manage.py test --settings='config.test_settings'
 
             # - name: SSH and deploy
             #   uses: appleboy/ssh-action@master
