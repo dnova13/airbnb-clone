@@ -36,6 +36,7 @@ jobs:
 
                   docker ps
                   docker logs postgres
+                  psql -h localhost -p 5432 -U root
 
                   # # 가상환경 셋팅 및 패키지 설치
                   # python -m venv ./myvenv
