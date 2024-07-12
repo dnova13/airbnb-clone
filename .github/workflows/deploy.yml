@@ -31,7 +31,7 @@ jobs:
                     postgres
 
                   docker ps
-                  docker logs postgres
+                  # docker logs postgres
                   python -m venv ./myvenv
                   source myvenv/bin/activate
                   pip install --upgrade pip 
