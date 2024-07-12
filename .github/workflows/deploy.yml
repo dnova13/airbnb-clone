@@ -52,6 +52,7 @@ jobs:
             - name: postgres
               run: |
                   docker logs --tail 50 postgres
+                  python manage.py test --settings='config.test_settings'
             # - name: SSH and deploy
             #   uses: appleboy/ssh-action@master
             #   with:
