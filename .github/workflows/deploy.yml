@@ -12,10 +12,9 @@ jobs:
               uses: actions/checkout@v4 # 최신 버전의 체크아웃 액션으로, 리포지토리의 코드를 워크플로우 실행 환경
 
             - name: generate .env file
+              # 에러가 나도 무시하고 다음 단계
+              continue-on-error: true
               run: |
-                  # 에러가 나도 무시하고 다음 단계 실행
-                  continue-on-error: true 
-
                   # env 파일 생성
                   echo "RDS_TEST_HOST=${{vars.RDS_TEST_HOST}}" >> .env
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
