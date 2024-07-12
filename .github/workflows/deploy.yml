@@ -16,6 +16,9 @@ jobs:
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
                   echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+                  echo "RDS_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+                  echo "RDS_NAME=${{vars.RDS_TEST_NAME}}" >> .env
+                  echo "RDS_USER=${{vars.RDS_TEST_USER}}" >> .env
 
             - name: Use .env in subsequent steps
               run: |
@@ -23,19 +26,17 @@ jobs:
 
             - name: code test
               run: |
-                  # docker compose up
-                  docker build -t postgres ./.postgresql
-
-                  # -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
-
-                  docker run -d  \
-                    -p 5432:5432 \
-                    -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
-                    -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
-                    -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
-                    -e TZ=Asia/Seoul \
-                    --name postgres \
-                    postgres
+                  docker compose up -d
+                  # docker build -t postgres ./.postgresql
+                  # docker run -d \
+                  #   -p 5432:5432 \
+                  #   -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
+                  #   -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
+                  #   -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
+                  #   -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
+                  #   -e TZ=Asia/Seoul \
+                  #   --name postgres \
+                  #   postgres
 
                   # docker ps
                   # docker logs --tail 50 postgres
@@ -47,7 +48,7 @@ jobs:
                   # pip install --upgrade pip 
                   # pip install -r requirements.txt
 
-                  # # # 테스트 실행
+                  # # 테스트 실행
                   # python manage.py test --settings='config.test_settings'
 
             # - name: SSH and deploy
