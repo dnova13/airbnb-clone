@@ -16,9 +16,6 @@ jobs:
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
                   echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
-                  echo "RDS_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
-                  echo "RDS_NAME=${{vars.RDS_TEST_NAME}}" >> .env
-                  echo "RDS_USER=${{vars.RDS_TEST_USER}}" >> .env
 
             - name: Use .env in subsequent steps
               run: |
@@ -28,7 +25,7 @@ jobs:
               run: |
                   # docker compose up
                   docker build -t postgres ./.postgresql
-                  docker run \
+                  docker run -d \
                     -p 5432:5432 \
                     -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
                     -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
@@ -38,18 +35,18 @@ jobs:
                     --name postgres \
                     postgres
 
-                  docker ps
-                  docker logs --tail 50 postgres
-                  psql -h localhost -p 5432 -U root
+                  # docker ps
+                  # docker logs --tail 50 postgres
+                  # psql -h localhost -p 5432 -U root
 
                   # # 가상환경 셋팅 및 패키지 설치
-                  # python -m venv ./myvenv
-                  # source myvenv/bin/activate
-                  # pip install --upgrade pip 
-                  # pip install -r requirements.txt
+                  python -m venv ./myvenv
+                  source myvenv/bin/activate
+                  pip install --upgrade pip 
+                  pip install -r requirements.txt
 
                   # # 테스트 실행
-                  # python manage.py test --settings='config.test_settings'
+                  python manage.py test --settings='config.test_settings'
 
             # - name: SSH and deploy
             #   uses: appleboy/ssh-action@master
