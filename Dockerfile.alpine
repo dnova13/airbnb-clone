@@ -29,6 +29,9 @@ RUN adduser -D -s /bin/bash ${USERNAME}
 RUN echo "${USERNAME}:${PW}" | chpasswd
 RUN adduser ${USERNAME} wheel
 
+# 사용자 권한으로 작업 수행
+# USER ${USERNAME}
+
 # ssh 서버 설정
 ## sed 커맨드를 이용한 문자열 변경.
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config

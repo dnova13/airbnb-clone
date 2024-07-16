@@ -19,6 +19,8 @@ RUN useradd -m -s /bin/bash ${USERNAME}
 RUN echo "${USERNAME}:${PW}" | chpasswd 
 RUN usermod -aG sudo ${USERNAME}
 
+# 사용자 권한으로 작업 수행
+# USER ${USERNAME}
 
 # ssh 서버 설정
 ## sed 커맨를 이용한 문자열 변경.
