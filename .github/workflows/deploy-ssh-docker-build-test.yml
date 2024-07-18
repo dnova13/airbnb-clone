@@ -35,7 +35,9 @@ jobs:
             - name: django docker server test
               run: |
                   # 실행 테스트
-                  docker exec django python manage.py test --settings='config.test_settings'
+                  docker exec django /bin/bash
+                  python manage.py test --settings='config.test_settings'
+                  # docker exec django python manage.py test --settings='config.test_settings'
 
             # - name: SSH and deploy
             #   uses: appleboy/ssh-action@master
