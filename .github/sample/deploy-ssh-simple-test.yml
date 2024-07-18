@@ -6,7 +6,7 @@ on:
             - master
 
 jobs:
-    depoly:
+    build-and-test-deploy:
         runs-on: ubuntu-latest # 테스트할 리눅스
         timeout-minutes: 40 # 타임 아웃 시간 셋팅(분)
 
@@ -28,7 +28,7 @@ jobs:
             #   run: |
             #       cat .env  # .env 파일 내용 확인
 
-            - name: docker build test
+            - name: postgres build test
               run: |
                   # docker compose up -d
                   docker build -t postgres ./.postgresql
@@ -43,7 +43,7 @@ jobs:
                     --name postgres \
                     postgres
 
-            - name: code test
+            - name: django server test
               run: |
                   # 가상환경 셋팅 및 패키지 설치
                   python -m venv ./myvenv

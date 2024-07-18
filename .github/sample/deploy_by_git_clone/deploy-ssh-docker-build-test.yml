@@ -1,0 +1,71 @@
+name: CI/CD Pipeline
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build-and-test-deploy:
+        runs-on: ubuntu-latest # 테스트할 리눅스
+        timeout-minutes: 40 # 타임 아웃 시간 셋팅(분)
+
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v4 # 최신 버전의 체크아웃 액션으로, 리포지토리의 코드를 워크플로우 실행 환경
+
+            - name: generate .env file
+              # 에러가 나도 무시하고 다음 단계
+              continue-on-error: true
+              run: |
+                  # env 파일 생성
+                  echo "RDS_TEST_HOST=${{vars.RDS_TEST_HOST}}" >> .env
+                  echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
+                  echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
+                  echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+
+            # - name: Use .env in subsequent steps
+            #   run: |
+            #       cat .env  # .env 파일 내용 확인
+
+            - name: docker build test
+              run: |
+                  docker compose up -d
+
+            - name: django docker server test
+              run: |
+                  # 실행 테스트
+                  docker exec django python manage.py test --settings='config.test_settings'
+
+            - name: SSH and deploy
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SERVER_IP }}
+                  username: ${{ secrets.SERVER_USERNAME }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  port: 22
+                  command_timeout: 20m
+                  script: |
+                      # 임시 폴더 생성
+                      TEMP_DIR=$(mktemp -d)
+
+                      # 임시 폴더로 이동
+                      cd $TEMP_DIR
+
+                      # 레포지토리 클론 private 시
+                      # git clone https://사용자명:${{ secrets.GITHUB_TOKEN }}@github.com/dnova13/airbnb-clone
+                      git clone https://dnova13:${{ vars.GIT_ACCESS_KEY }}@github.com/dnova13/airbnb-clone
+
+                      # 본 프로젝트 디렉토리로 rsync
+                      sudo rsync -av --delete airbnb-clone/ --exclude='.env' --exclude='uploads/' --exclude='local_settings.py'  ~/project/airbnb-clone
+                      # rsync -av --delete airbnb-clone ~/project/airbnb-clone
+
+                      # 임시 폴더 삭제
+                      cd ..
+                      sudo rm -rf $TEMP_DIR
+
+                      # Docker Compose로 애플리케이션 빌드 및 실행
+                      cd ~/project/airbnb-clone
+                      sudo docker compose up -d --build
+                      sleep 10
+                      sudo docker system prune -af
