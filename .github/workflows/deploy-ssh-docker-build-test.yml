@@ -35,7 +35,7 @@ jobs:
             - name: django docker server test
               run: |
                   # 실행 테스트
-                  docker exec -it django /bin/bash
+                  docker exec django /bin/bash
                   ls
                   # cat local_settings.py
                   pwd
