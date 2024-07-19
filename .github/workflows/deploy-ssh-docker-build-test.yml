@@ -123,6 +123,7 @@ jobs:
                         ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-redis
 
                       # django 백업 실행
+                      echo "-------------------------- django backup rebuild ------------------------------"
                       sudo docker run -d \
                         --name django-backup \
                         --restart=on-failure \
@@ -139,6 +140,7 @@ jobs:
                         ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-django
 
                       # webserver 백업 실행
+                      echo "-------------------------- webserver backup exec ------------------------------"
                       sudo docker rm -f webserver  
                       sudo docker run -d \
                         --name webserver-backup \
@@ -152,6 +154,7 @@ jobs:
                           nginx:latest
 
                       # django 실행
+                      echo "-------------------------- django rebuild ------------------------------"
                       sudo docker rm -f django
                       sudo docker run -d \
                         --name django \
@@ -168,9 +171,11 @@ jobs:
                         --network=django-network \
                         ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-django
 
+                      echo "-------------------------- backup clear ------------------------------"
                       sudo docker rm -f django-backup
                       sudo docker rm -f webserver-backup          
 
+                      echo "-------------------------- webserver exec ------------------------------"
                       sudo docker run -d \
                         --name webserver \
                         --memory=256m \
