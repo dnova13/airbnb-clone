@@ -125,7 +125,6 @@ jobs:
                       # django 백업 실행
                       sudo docker run -d \
                         --name django-backup \
-                        # --memory=256m \
                         --restart=on-failure \
                         -v ./uploads/:/app/airbnb-clone/uploads/:rw \
                         -v ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default \
@@ -156,7 +155,6 @@ jobs:
                       sudo docker rm -f django
                       sudo docker run -d \
                         --name django \
-                        # --memory=256m \
                         --restart=on-failure \
                         -v ./uploads/:/app/airbnb-clone/uploads/:rw \
                         -v ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default \
