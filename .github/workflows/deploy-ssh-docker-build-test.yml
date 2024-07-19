@@ -23,7 +23,10 @@ jobs:
                   echo "RDS_TEST_HOST=postgres" >> .env
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
-                  echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+                  echo "RDS_PW=${{secrets.RDS_PW}}" >> .env
+                  echo "RDS_NAME=${{secrets.RDS_NAME}}" >> .env
+                  echo "RDS_USER=${{secrets.RDS_USER}}" >> .env
+                  echo "TIME_ZONE=${{vars.TIME_ZONE}}" >> .env
 
             # - name: Use .env in subsequent steps
             #   run: |
@@ -33,9 +36,9 @@ jobs:
             #   run: |
             #       docker compose up -d
 
-            - name: docker build
+            - name: postgres build
               run: |
-                  docker compose up -d
+                  docker compose up -d 
                   # docker build -t postgres ./.postgresql
                   # docker run -d \
                   #   -p 5432:5432 \
@@ -47,7 +50,7 @@ jobs:
                   #   --restart unless-stopped \
                   #   --name postgres \
                   #   postgres
-                  docker logs postgres
+                  # docker logs postgres
 
             - name: django server test
               run: |
