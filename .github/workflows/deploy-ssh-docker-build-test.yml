@@ -34,18 +34,19 @@ jobs:
 
             - name: django docker server test
               run: |
+                  docker ps 
                   # 실행 테스트
-                  docker exec django /bin/bash
-                  ls
-                  # cat local_settings.py
-                  pwd
-                  cd ..
-                  ls -a
-                  cd /home/runner/work
-                  ls -a
-                  # cd /app/airbnb-clone
-                  source /home/runner/work/airbnb-clone/myvenv/bin/activate
-                  python manage.py test --settings='config.test_settings'
+                  # docker exec django /bin/bash
+                  # ls
+                  # # cat local_settings.py
+                  # pwd
+                  # cd ..
+                  # ls -a
+                  # cd /home/runner/work
+                  # ls -a
+                  # # cd /app/airbnb-clone
+                  # source /home/runner/work/airbnb-clone/myvenv/bin/activate
+                  # python manage.py test --settings='config.test_settings'
                   # docker exec django python manage.py test --settings='config.test_settings'
 
             # - name: SSH and deploy
