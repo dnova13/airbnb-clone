@@ -35,25 +35,9 @@ jobs:
             #   run: |
             #       cat .env  # .env 파일 내용 확인
 
-            # - name: docker build
-            #   run: |
-            #       docker compose up -d
-
-            - name: postgres build
+            - name: docker build
               run: |
-                  docker compose up -d 
-                  # docker build -t postgres ./.postgresql
-                  # docker run -d \
-                  #   -p 5432:5432 \
-                  #   -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
-                  #   -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
-                  #   -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
-                  #   -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
-                  #   -e TZ=Asia/Seoul \
-                  #   --restart unless-stopped \
-                  #   --name postgres \
-                  #   postgres
-                  # docker logs postgres
+                  docker compose up -d
 
             - name: django server test
               run: |
@@ -76,12 +60,6 @@ jobs:
                   REPO_NAME=${{ github.repository }}
                   PROJECT_NAME=${REPO_NAME##*/}
                   echo "The project name is $PROJECT_NAME"
-
-                  docker images
-
-                  django
-                  postgres
-                  redis
 
                   # docker tag
                   docker tag $PROJECT_NAME-django ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django:latest
