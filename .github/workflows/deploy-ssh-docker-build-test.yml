@@ -101,9 +101,9 @@ jobs:
                         --restart=unless-stopped \
                         -v $(pwd)/.postgresql/postgres_data/:/var/lib/postgresql/data/ \
                         -v $(pwd)/.postgresql/init/:/docker-entrypoint-initdb.d/ \
-                        -e POSTGRES_PASSWORD=${{ vars.RDS_PW }} \
-                        -e POSTGRES_DB=${{ vars.RDS_NAME}} \
-                        -e POSTGRES_USER=${{ vars.RDS_USER}} \
+                        -e POSTGRES_PASSWORD=${{ secrets.RDS_PW }} \
+                        -e POSTGRES_DB=${{ secrets.RDS_NAME}} \
+                        -e POSTGRES_USER=${{ secrets.RDS_USER}} \
                         -e TZ=${{ vars.TIME_ZONE }} \
                         -p 5432:5432 \
                         --expose=5432 \
