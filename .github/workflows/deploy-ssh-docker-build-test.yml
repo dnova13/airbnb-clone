@@ -171,10 +171,6 @@ jobs:
                         --network=django-network \
                         ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-django
 
-                      echo "-------------------------- backup clear ------------------------------"
-                      sudo docker rm -f django-backup
-                      sudo docker rm -f webserver-backup          
-
                       echo "-------------------------- webserver exec ------------------------------"
                       sudo docker run -d \
                         --name webserver \
@@ -186,6 +182,10 @@ jobs:
                         -p 443:443 \
                         --network=django-network \
                           nginx:latest
+
+                      echo "-------------------------- backup clear ------------------------------"
+                      sudo docker rm -f django-backup
+                      sudo docker rm -f webserver-backup      
 
                       # Docker Compose로 애플리케이션 빌드 및 실행
                       sleep 10
