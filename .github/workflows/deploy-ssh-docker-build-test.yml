@@ -20,7 +20,7 @@ jobs:
               run: |
                   # env 파일 생성
                   # echo "RDS_TEST_HOST=${{vars.RDS_TEST_HOST}}" >> .env
-                  echo "RDS_TEST_HOST=postgres" >> .env
+                  echo "RDS_TEST_HOST=localhost" >> .env
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
                   echo "RDS_PW=${{secrets.RDS_PW}}" >> .env
