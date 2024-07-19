@@ -28,7 +28,7 @@ jobs:
             #   run: |
             #       cat .env  # .env 파일 내용 확인
 
-            - name: docker build test
+            - name: docker build
               run: |
                   docker compose up -d
 
@@ -36,6 +36,8 @@ jobs:
               run: |
                   # 실행 테스트
                   docker exec django /bin/bash
+                  cd /app/airbnb-clone
+                  source /app/myvenv/bin/activate
                   python manage.py test --settings='config.test_settings'
                   # docker exec django python manage.py test --settings='config.test_settings'
 
