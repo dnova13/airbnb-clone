@@ -39,6 +39,8 @@ jobs:
                   ls
                   # cat local_settings.py
                   pwd
+                  cd ..
+                  ls -a
                   # cd /app/airbnb-clone
                   source /home/runner/work/airbnb-clone/myvenv/bin/activate
                   python manage.py test --settings='config.test_settings'
