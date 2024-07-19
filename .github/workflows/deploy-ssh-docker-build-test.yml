@@ -37,7 +37,7 @@ jobs:
                   # 실행 테스트
                   docker exec django /bin/bash
                   ls
-                  cat local_settings.py
+                  # cat local_settings.py
                   pwd
                   # cd /app/airbnb-clone
                   source /app/myvenv/bin/activate
