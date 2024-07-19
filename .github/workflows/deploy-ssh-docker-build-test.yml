@@ -105,7 +105,7 @@ jobs:
                         -e POSTGRES_DB=${{ vars.RDS_NAME}} \
                         -e POSTGRES_USER=${{ vars.RDS_USER}} \
                         -e TZ=${{ vars.TIME_ZONE }} \
-                        -p 5432:5432
+                        -p 5432:5432 \
                         --expose=5432 \
                         --network=django-network \
                         ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-postgres
