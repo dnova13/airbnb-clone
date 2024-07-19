@@ -35,11 +35,13 @@ jobs:
             - name: django docker server test
               run: |
                   # 실행 테스트
-                  docker exec django /bin/bash
+                  docker exec -it django /bin/bash
                   ls
                   # cat local_settings.py
                   pwd
                   cd ..
+                  ls -a
+                  cd /home/runner/work
                   ls -a
                   # cd /app/airbnb-clone
                   source /home/runner/work/airbnb-clone/myvenv/bin/activate
