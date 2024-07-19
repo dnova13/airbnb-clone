@@ -40,7 +40,7 @@ jobs:
                   # cat local_settings.py
                   pwd
                   # cd /app/airbnb-clone
-                  source /app/myvenv/bin/activate
+                  source /home/runner/work/myvenv/bin/activate
                   python manage.py test --settings='config.test_settings'
                   # docker exec django python manage.py test --settings='config.test_settings'
 
