@@ -36,6 +36,7 @@ jobs:
               run: |
                   # 실행 테스트
                   docker exec django /bin/bash
+                  ls
                   cd /app/airbnb-clone
                   source /app/myvenv/bin/activate
                   python manage.py test --settings='config.test_settings'
