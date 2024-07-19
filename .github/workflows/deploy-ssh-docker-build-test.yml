@@ -35,9 +35,9 @@ jobs:
             #   run: |
             #       cat .env  # .env 파일 내용 확인
 
-            # - name: docker build
-            #   run: |
-            #       docker compose up -d
+            - name: docker build
+              run: |
+                  docker compose up -d
 
             # - name: django server test
             #   run: |
