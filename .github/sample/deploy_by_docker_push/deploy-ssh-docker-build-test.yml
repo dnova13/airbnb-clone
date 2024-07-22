@@ -19,40 +19,56 @@ jobs:
               continue-on-error: true
               run: |
                   # env 파일 생성
-                  echo "RDS_TEST_HOST=${{vars.RDS_TEST_HOST}}" >> .env
+                  # echo "RDS_TEST_HOST=${{vars.RDS_TEST_HOST}}" >> .env
+                  echo "RDS_TEST_HOST=localhost" >> .env
                   echo "RDS_TEST_NAME=${{vars.RDS_TEST_NAME}}" >> .env
                   echo "RDS_TEST_USER=${{vars.RDS_TEST_USER}}" >> .env
                   echo "RDS_TEST_PASSWORD=${{vars.RDS_TEST_PASSWORD}}" >> .env
+
+
+                  echo "RDS_PW=${{secrets.RDS_PW}}" >> .env
+                  echo "RDS_NAME=${{secrets.RDS_NAME}}" >> .env
+                  echo "RDS_USER=${{secrets.RDS_USER}}" >> .env
+                  echo "TIME_ZONE=${{vars.TIME_ZONE}}" >> .env
 
             # - name: Use .env in subsequent steps
             #   run: |
             #       cat .env  # .env 파일 내용 확인
 
-            - name: postgres build
+            - name: docker build
               run: |
-                  # docker compose up -d
-                  docker build -t postgres ./.postgresql
-                  docker run -d \
-                    -p 5432:5432 \
-                    -v ./.postgresql/init/:/docker-entrypoint-initdb.d/ \
-                    -e POSTGRES_DB=${{vars.RDS_TEST_NAME}} \
-                    -e POSTGRES_USER=${{vars.RDS_TEST_USER}} \
-                    -e POSTGRES_PASSWORD=${{vars.RDS_TEST_PASSWORD}} \
-                    -e TZ=Asia/Seoul \
-                    --restart unless-stopped \
-                    --name postgres \
-                    postgres
+                  docker compose up -d
 
             - name: django server test
               run: |
                   # 가상환경 셋팅 및 패키지 설치
                   python -m venv ./myvenv
                   source myvenv/bin/activate
-                  pip install --upgrade pip 
+                  pip install --upgrade pip
                   pip install -r requirements.txt
 
                   # 실행 테스트
                   python manage.py test --settings='config.test_settings'
+
+            - name: docker push
+              run: |
+                  # 여기서는 도커 허브 레지스트리가 안되므로 registry-1.docker.io 그냥 생략해서 쓰면 도커허브로 연결됨.
+                  docker login -u ${{ vars.DOCKER_ID }} -p ${{ vars.DOCKER_ACCESS_TOKEN }}
+
+                  # 해당 레포지토리에서 project 이름 추출
+                  REPO_NAME=${{ github.repository }}
+                  PROJECT_NAME=${REPO_NAME##*/}
+                  echo "The project name is $PROJECT_NAME"
+
+                  # docker tag
+                  docker tag $PROJECT_NAME-django ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django:latest
+                  docker tag $PROJECT_NAME-postgres ${{ vars.DOCKER_ID }}/$PROJECT_NAME-postgres:latest
+                  docker tag $PROJECT_NAME-redis ${{ vars.DOCKER_ID }}/$PROJECT_NAME-redis:latest
+
+                  # docker push
+                  docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django
+                  docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-postgres
+                  docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-redis
 
             - name: SSH and deploy
               uses: appleboy/ssh-action@master
@@ -63,26 +79,116 @@ jobs:
                   port: 22
                   command_timeout: 20m
                   script: |
-                      # 임시 폴더 생성
-                      TEMP_DIR=$(mktemp -d)
 
-                      # 임시 폴더로 이동
-                      cd $TEMP_DIR
+                      # 도커 허브 로그인
+                      docker login registry-1.docker.io -u ${{ vars.DOCKER_ID }} -p ${{ vars.DOCKER_ACCESS_TOKEN }}
 
-                      # 레포지토리 클론 private 시
-                      # git clone https://사용자명:${{ secrets.GITHUB_TOKEN }}@github.com/dnova13/airbnb-clone
-                      git clone https://dnova13:${{ vars.GIT_ACCESS_KEY }}@github.com/dnova13/airbnb-clone
-
-                      # 본 프로젝트 디렉토리로 rsync
-                      sudo rsync -av --delete airbnb-clone/ --exclude='.env' --exclude='uploads/' --exclude='local_settings.py'  ~/project/airbnb-clone
-                      # rsync -av --delete airbnb-clone ~/project/airbnb-clone
-
-                      # 임시 폴더 삭제
-                      cd ..
-                      sudo rm -rf $TEMP_DIR
+                      mkdir ~/project/${{ vars.PROJECT_NAME }}
 
                       # Docker Compose로 애플리케이션 빌드 및 실행
-                      cd ~/project/airbnb-clone
-                      sudo docker compose up -d --build
+                      cd ~/project/${{ vars.PROJECT_NAME }}
+
+                      sudo docker pull ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-django:latest
+                      sudo docker pull ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-postgres:latest
+                      sudo docker pull ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-redis:latest
+
+                      sudo docker network create django-network
+
+                      # postgres 도커 실행
+                      sudo docker run -d \
+                        --name postgres \
+                        --memory=128m \
+                        --restart=unless-stopped \
+                        -v $(pwd)/.postgresql/postgres_data/:/var/lib/postgresql/data/ \
+                        -v $(pwd)/.postgresql/init/:/docker-entrypoint-initdb.d/ \
+                        -e POSTGRES_PASSWORD=${{ secrets.RDS_PW }} \
+                        -e POSTGRES_DB=${{ secrets.RDS_NAME}} \
+                        -e POSTGRES_USER=${{ secrets.RDS_USER}} \
+                        -e TZ=${{ vars.TIME_ZONE }} \
+                        -p 5432:5432 \
+                        --expose=5432 \
+                        --network=django-network \
+                        ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-postgres
+
+
+                        # redis 도커 실행
+                        sudo docker rm -f redis
+                        sudo docker run -d \
+                        --name redis \
+                        --memory=256m \
+                        --restart=on-failure \
+                        -v $(pwd)/.redis/redis_data/:/data/ \
+                        -v $(pwd)/.redis/my-redis.conf:/usr/local/etc/redis/redis.conf \
+                        --network=django-network \
+                        ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-redis
+
+                      # django 백업 실행
+                      echo "-------------------------- django backup rebuild ------------------------------"
+                      sudo docker run -d \
+                        --name django-backup \
+                        --restart=on-failure \
+                        -v ./uploads/:/app/airbnb-clone/uploads/:rw \
+                        -v ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default \
+                        -v ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf \
+                        -v ./.log/service/:/var/log/service/ \
+                        -v ./.log/nginx/:/var/log/nginx/ \
+                        -v ./local_settings.py:/app/airbnb-clone/local_settings.py \
+                        -v ./.env:/app/airbnb-clone/.env \
+                        --expose=80 \
+                        --expose=2000 \
+                        --network=django-network \
+                        ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-django
+
+                      # webserver 백업 실행
+                      echo "-------------------------- webserver backup exec ------------------------------"
+                      sudo docker rm -f webserver  
+                      sudo docker run -d \
+                        --name webserver-backup \
+                        --memory=256m \
+                        --restart=always \
+                        -v $(pwd)/.webserver/default_backup.conf:/etc/nginx/conf.d/default.conf \
+                        -v $(pwd)/.webserver/logs:/var/log/nginx \
+                        -p 80:80 \
+                        -p 443:443 \
+                        --network=django-network \
+                          nginx:latest
+
+                      # django 실행
+                      echo "-------------------------- django rebuild ------------------------------"
+                      sudo docker rm -f django
+                      sudo docker run -d \
+                        --name django \
+                        --restart=on-failure \
+                        -v ./uploads/:/app/airbnb-clone/uploads/:rw \
+                        -v ./.config/nginx/my.conf:/etc/nginx/sites-enabled/default \
+                        -v ./.config/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf \
+                        -v ./.log/service/:/var/log/service/ \
+                        -v ./.log/nginx/:/var/log/nginx/ \
+                        -v ./local_settings.py:/app/airbnb-clone/local_settings.py \
+                        -v ./.env:/app/airbnb-clone/.env \
+                        --expose=80 \
+                        --expose=2000 \
+                        --network=django-network \
+                        ${{ vars.DOCKER_ID }}/${{ vars.PROJECT_NAME }}-django
+
+                      echo "-------------------------- backup clear ------------------------------"
+                      sudo docker rm -f django-backup
+                      sudo docker rm -f webserver-backup   
+
+                      echo "-------------------------- webserver exec ------------------------------"
+                      sudo docker run -d \
+                        --name webserver \
+                        --memory=256m \
+                        --restart=always \
+                        -v $(pwd)/.webserver/default.conf:/etc/nginx/conf.d/default.conf \
+                        -v $(pwd)/.webserver/logs:/var/log/nginx \
+                        -p 80:80 \
+                        -p 443:443 \
+                        --network=django-network \
+                          nginx:latest
+
+                       
+
+                      # Docker Compose로 애플리케이션 빌드 및 실행
                       sleep 10
                       sudo docker system prune -af
