@@ -95,13 +95,19 @@ pipeline {
         // postgres docker container 를 agent 에 연결된 jenkins docker network에 연결
         stage("docker network connect") {
             steps {
-                echo "postgres connnect to jenkins docker network."
-            }
-            post {
-                always {
-                    sh'docker network connect jenkins postgres-test'
+                script {
+                    echo "postgres connnect to jenkins docker network."
+                    sh(
+                        script: 'docker network connect jenkins postgres-test',
+                        returnStatus: true
+                        )
                 }
             }
+            // post {
+            //     always {
+            //         sh'docker network connect jenkins postgres-test'
+            //     }
+            // }
         }
         
         stage('django server test') {
