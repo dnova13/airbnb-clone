@@ -55,7 +55,12 @@ jobs:
                   # 실행 테스트
                   # docker exec -i django bash test-server.sh
                   # docker exec -i django sh test-server.sh
-                  docker exec -i django test-server.sh
+                  docker exec  django ls
+                  docker exec  django pwd
+                  # docker exec django /app/airbnb-clone/test-server.sh
+                  # docker exec django /app/airbnb-clone/test-server.sh
+
+                  docker exec django chmod +x /app/airbnb-clone/test-server.sh
                   docker exec django /app/airbnb-clone/test-server.sh
 
             - name: docker push
