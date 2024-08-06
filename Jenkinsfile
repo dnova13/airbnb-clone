@@ -108,7 +108,7 @@ pipeline {
             steps {
                 script {
                 	// postgresip 추출
-                	def postgresIP = sh(script: "docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres", returnStdout: true).trim()
+                	def postgresIP = sh(script: "docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres-test", returnStdout: true).trim()
                     echo "A Container IP: ${postgresIP}"
                     
                     // groov 에서 정의된 변수 쓰고 싶다면 "" 가 아닌  """ 한다.
