@@ -4,7 +4,8 @@ services:
         build:
             context: ./.postgresql
             dockerfile: Dockerfile
-        container_name: postgres-test
+        container_name: testDB
+        # container_name: postgres-test
         environment:
             POSTGRES_PASSWORD: ${RDS_PW}
             POSTGRES_DB: ${RDS_NAME}

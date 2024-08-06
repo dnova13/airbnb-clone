@@ -10,7 +10,7 @@ pipeline {
     // }
     environment {
         // RDS_TEST_HOST = credentials('RDS_TEST_HOST')
-        RDS_TEST_HOST = "postgres"
+        // RDS_TEST_HOST = "postgres"
         RDS_TEST_NAME = credentials('RDS_TEST_NAME')
         RDS_TEST_USER = credentials('RDS_TEST_USER')
         RDS_TEST_PASSWORD = credentials('RDS_TEST_PASSWORD')
@@ -70,16 +70,16 @@ pipeline {
             steps {
 
                 // sh 'docker rm -f postgres'
-                sh'docker-compose -f docker-compose.postgres.yml up postgres-test -d --build'
+                sh'docker-compose -f docker-compose.postgres.yml up testDB -d --build'
                 
                 sh'''
-                docker cp ./.postgresql/init/ postgres-test:/docker-entrypoint-initdb.d/
-                docker exec -i postgres-test psql --version
-                docker exec -i postgres-test ls -l /docker-entrypoint-initdb.d/init
+                docker cp ./.postgresql/init/ testDB:/docker-entrypoint-initdb.d/
+                docker exec -i testDB psql --version
+                docker exec -i testDB ls -l /docker-entrypoint-initdb.d/init
                 '''
                 
                 // SQL 실행
-                sh'docker exec -u root -i postgres-test psql -U postgres -f /docker-entrypoint-initdb.d/init/postgres_dump202407092055_freetier_back.sql'
+                sh'docker exec -u root -i testDB psql -U postgres -f /docker-entrypoint-initdb.d/init/postgres_dump202407092055_freetier_back.sql'
             }
             post {
                 success {
@@ -99,7 +99,7 @@ pipeline {
                     echo "postgres connnect to jenkins docker network."
                     // 이미 연결됐다고 에러나도 그냥 넘김.
                     sh(
-                        script: 'docker network connect jenkins postgres-test',
+                        script: 'docker network connect jenkins testDB',
                         returnStatus: true
                         )
                 }
@@ -115,17 +115,17 @@ pipeline {
             steps {
                 script {
                 	// postgresip 추출
-                	def postgresIP = sh(script: "docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres-test", returnStdout: true).trim()
-                    echo "A Container IP: ${postgresIP}"
+                	// def postgresIP = sh(script: "docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres-test", returnStdout: true).trim()
+                    // echo "A Container IP: ${postgresIP}"
                     
                     // groov 에서 정의된 변수 쓰고 싶다면 "" 가 아닌  """ 한다.
                     // sh """echo 'RDS_TEST_HOST=${postgresIP}' >> .env"""
-                    sh """echo 'RDS_TEST_HOST=postgres-test' >> .env"""
-                    // sh """echo 'RDS_TEST_PORT=5433' >> .env"""
+                    sh """echo 'RDS_TEST_HOST=testDB' >> .env"""
                     
                     sh 'cat .env'
                     sh 'docker network inspect jenkins'
-                    // sh 'cat test_settings.py'
+                    sh 'cat test_settings.py'
+                    sh 'sleep 10'
 
                 	
                     sh '''
