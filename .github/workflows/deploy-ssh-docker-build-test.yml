@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
     push:
         branches:
-            - master
+            - main
 
 jobs:
     build-and-test-deploy:
@@ -35,9 +35,9 @@ jobs:
             #   run: |
             #       cat .env  # .env 파일 내용 확인
 
-            # - name: docker build
-            #   run: |
-            #       docker compose up -d
+            - name: docker build
+              run: |
+                  docker compose up -d
 
             # - name: django server test
             #   run: |
@@ -50,25 +50,30 @@ jobs:
             #       # 실행 테스트
             #       python manage.py test --settings='config.test_settings'
 
-            # - name: docker push
-            #   run: |
-            #       # 여기서는 도커 허브 레지스트리가 안되므로 registry-1.docker.io 그냥 생략해서 쓰면 도커허브로 연결됨.
-            #       docker login -u ${{ vars.DOCKER_ID }} -p ${{ vars.DOCKER_ACCESS_TOKEN }}
+            - name: django server test
+              run: |
+                  # 실행 테스트
+                  docker exec django bash test-server.sh
 
-            #       # 해당 레포지토리에서 project 이름 추출
-            #       REPO_NAME=${{ github.repository }}
-            #       PROJECT_NAME=${REPO_NAME##*/}
-            #       echo "The project name is $PROJECT_NAME"
+            - name: docker push
+              run: |
+                  # 여기서는 도커 허브 레지스트리가 안되므로 registry-1.docker.io 그냥 생략해서 쓰면 도커허브로 연결됨.
+                  docker login -u ${{ vars.DOCKER_ID }} -p ${{ vars.DOCKER_ACCESS_TOKEN }}
 
-            #       # docker tag
-            #       docker tag $PROJECT_NAME-django ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django:latest
-            #       docker tag $PROJECT_NAME-postgres ${{ vars.DOCKER_ID }}/$PROJECT_NAME-postgres:latest
-            #       docker tag $PROJECT_NAME-redis ${{ vars.DOCKER_ID }}/$PROJECT_NAME-redis:latest
+                  # 해당 레포지토리에서 project 이름 추출
+                  REPO_NAME=${{ github.repository }}
+                  PROJECT_NAME=${REPO_NAME##*/}
+                  echo "The project name is $PROJECT_NAME"
 
-            #       # docker push
-            #       docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django
-            #       docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-postgres
-            #       docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-redis
+                  # docker tag
+                  docker tag $PROJECT_NAME-django ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django:latest
+                  docker tag $PROJECT_NAME-postgres ${{ vars.DOCKER_ID }}/$PROJECT_NAME-postgres:latest
+                  docker tag $PROJECT_NAME-redis ${{ vars.DOCKER_ID }}/$PROJECT_NAME-redis:latest
+
+                  # docker push
+                  docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-django
+                  docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-postgres
+                  docker push ${{ vars.DOCKER_ID }}/$PROJECT_NAME-redis
 
             - name: SSH and deploy
               uses: appleboy/ssh-action@master

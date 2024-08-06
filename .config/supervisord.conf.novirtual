@@ -1,0 +1,30 @@
+# venv 사용하지 않을 경우
+
+[supervisord]
+# nodaemon=false
+
+[program:uwsgi]
+command=${PYENV_PATH}/uwsgi -i /app/airbnb-clone/.config/uwsgi.ini
+directory=/app/airbnb-clone
+autostart=true
+autorestart=true
+stopsignal=QUIT
+stderr_logfile=/var/log/service/uwsgi.err.log
+stdout_logfile=/var/log/service/uwsgi.out.log
+
+[program:daphne]
+command=${PYENV_PATH}/daphne -b 0.0.0.0 -p 8000 --access-log /var/log/service/daphne.log config.asgi:application
+directory=/app/airbnb-clone
+autostart=true
+autorestart=true
+stopsignal=QUIT
+stderr_logfile=/var/log/service/daphne.err.log
+stdout_logfile=/var/log/service/daphne.out.log
+
+[program:nginx]
+command=/usr/sbin/nginx -g "daemon off;"
+autostart=true
+autorestart=true
+stopsignal=QUIT
+stdout_logfile=/var/log/nginx/stdout.log
+stderr_logfile=/var/log/nginx/stderr.log

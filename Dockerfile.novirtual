@@ -9,8 +9,6 @@ ARG PROJECT_NAME=airbnb-clone
 ARG PYTHON_VERSION=3.9.4
 ARG NODE_VERSION=16.20.0
 
-
-
 RUN apt-get update && apt-get install -y \
     wget curl git vim nano nginx \
     openssh-server make build-essential \
@@ -38,6 +36,7 @@ RUN curl https://pyenv.run | bash
 ## 환경 변수 설정
 ENV HOME /root
 ENV PYENV_ROOT $HOME/.pyenv
+# ENV PATH $PYENV_ROOT/bin:$PATH
 ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
 
 ## pyenv 초기화 설정
@@ -77,8 +76,22 @@ COPY . .
 #     && nvm use ${NODE_VERSION} \
 #     && npm install"
 
+# RUN curl -fsSL https://deb.nodesource.com/setup_16.x | -E bash - \
+#     && apt-get install -y nodejs
+
 RUN apt-get install -y nodejs
 
+    
+# ARG NODE_DISTRO=node-v${NODE_VERSION}-linux-x64
+
+# # https://nodejs.org/dist/v16.20.0/node-v16.20.0-linux-arm64.tar.gz
+# RUN wget https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DISTRO}.tar.xz \
+#     && tar -xvf ${NODE_DISTRO}.tar.xz \
+#     && sudo mv ${NODE_DISTRO} /usr/local/${NODE_DISTRO}
+
+# # PATH 설정
+# RUN echo "export PATH=/usr/local/${NODE_DISTRO}/bin:\$PATH" >> ~/.bashrc \
+#     && source ~/.bashrc
 
 
 
@@ -89,19 +102,19 @@ RUN apt-get install -y nodejs
 ## Docker 이미지 빌드 과정에서 사용하는 쉘은 이미지 빌드를 위한 임시 쉘이라서 
 ## .bashrc 파일은 로드되지 않아서 pyenv로 설치한 python 으로 정상적으로 추가되지 않아서
 ## pyenv 로 설정한 python -m venv 안먹힘.
-RUN /root/.pyenv/shims/python -m venv /app/myvenv
-RUN echo "cd /app" >> $HOME/.bashrc \
-    && echo 'source myvenv/bin/activate' >> $HOME/.bashrc \
-    && echo 'cd ${PROJECT_NAME}' >> $HOME/.bashrc 
+# RUN /root/.pyenv/shims/python -m venv /app/myvenv
+# RUN echo "cd /app" >> $HOME/.bashrc \
+#     && echo 'source myvenv/bin/activate' >> $HOME/.bashrc \
+#     && echo 'cd ${PROJECT_NAME}' >> $HOME/.bashrc 
 
 
-RUN /app/myvenv/bin/pip install --upgrade pip 
-RUN /app/myvenv/bin/pip install -r requirements.txt
+RUN /root/.pyenv/shims/pip install --upgrade pip 
+RUN /root/.pyenv/shims/pip install -r requirements.txt
 
 
 
 # uwsgi, daphne 셋팅
-RUN /app/myvenv/bin/pip install uwsgi && /app/myvenv/bin/pip install daphne
+RUN /root/.pyenv/shims/pip install uwsgi && /root/.pyenv/shims/pip install daphne
 RUN mkdir -p /var/log/service
 RUN chown  -R ${USERNAME}:${USERNAME} /var/log/service/
 
@@ -116,9 +129,19 @@ COPY .config/nginx/my.conf /etc/nginx/sites-enabled/default
 
 
 #supervisor 설정
-COPY .config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-# RUN /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+ENV PYENV_PATH=/root/.pyenv/versions/${PYTHON_VERSION}/bin
+
+# 어플리케이션 코드 및 설정 파일 복사
+COPY .config/supervisord.conf.novirtual /etc/supervisor/conf.d/supervisord.conf.template
+
+# get-test envsubst 기능을 통해 supervisor template 에서 pyenv 경로를 적용한 supervisord.conf 파일 생성
+RUN envsubst < /etc/supervisor/conf.d/supervisord.conf.template > /etc/supervisor/conf.d/supervisord.conf
+
 
 # Supervisor를 포그라운드 모드로 실행하도록 CMD 설정
 # 관리자 아이디 생성(만약 관리자 아이디 생성시, db 먼저 생성후 실행) & 전 static 폴더 설정. 
-CMD ["/bin/bash", "-c", "source /app/myvenv/bin/activate && python manage.py createsu && python manage.py collectstatic --noinput && python manage.py compilemessages && python manage.py migrate && /usr/bin/supervisord -n"]
+# CMD ["/bin/bash", "-c", "source /app/myvenv/bin/activate && python manage.py createsu && python manage.py collectstatic --noinput && python manage.py compilemessages && python manage.py migrate"]
+# && /usr/bin/supervisord -n"]
+CMD ["/bin/bash", "-c", "python manage.py createsu && python manage.py collectstatic --noinput && python manage.py compilemessages && python manage.py migrate && /usr/bin/supervisord -n"]
+# CMD ["/bin/bash", "-c", "/root/.pyenv/shims/python manage.py createsu && /root/.pyenv/shims/python manage.py collectstatic --noinput && /root/.pyenv/shims/python manage.py compilemessages && /root/.pyenv/shims/python manage.py migrate"]
+# && /usr/bin/supervisord -n"]
