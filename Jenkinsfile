@@ -70,16 +70,16 @@ pipeline {
             steps {
 
                 // sh 'docker rm -f postgres'
-                sh'docker-compose -f docker-compose.postgres.yml up postgres -d --build'
+                sh'docker-compose -f docker-compose.postgres.yml up postgres-test -d --build'
                 
                 sh'''
-                docker cp ./.postgresql/init/ postgres:/docker-entrypoint-initdb.d/
-                docker exec -i postgres psql --version
-                docker exec -i postgres ls -l /docker-entrypoint-initdb.d/init
+                docker cp ./.postgresql/init/ postgres-test:/docker-entrypoint-initdb.d/
+                docker exec -i postgres-test psql --version
+                docker exec -i postgres-test ls -l /docker-entrypoint-initdb.d/init
                 '''
                 
                 // SQL 실행
-                sh'docker exec -u root -i postgres psql -U postgres -f /docker-entrypoint-initdb.d/init/postgres_dump202407092055_freetier_back.sql'
+                sh'docker exec -u root -i postgres-test psql -U postgres -f /docker-entrypoint-initdb.d/init/postgres_dump202407092055_freetier_back.sql'
             }
             post {
                 success {
@@ -99,7 +99,7 @@ pipeline {
             }
             post {
                 always {
-                    sh'docker network connect jenkins postgres'
+                    sh'docker network connect jenkins postgres-test'
                 }
             }
         }
