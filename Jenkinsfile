@@ -123,6 +123,7 @@ pipeline {
                     sh """echo 'RDS_TEST_HOST=postgres-test' >> .env"""
                     
                     sh 'cat .env'
+                    sh 'docker network inspect jenkins'
                     // sh 'cat test_settings.py'
 
                 	
