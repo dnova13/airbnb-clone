@@ -60,9 +60,9 @@ jobs:
                   # docker exec django /app/airbnb-clone/test-server.sh
                   # docker exec django /app/airbnb-clone/test-server.sh
 
-                  docker exec django chmod +x /app/airbnb-clone/test-server.sh
+                  docker exec -u root django chmod +x /app/airbnb-clone/test-server.sh
                   echo "#############################################"
-                  docker exec django /app/airbnb-clone/test-server.sh
+                  docker exec -u root django /app/airbnb-clone/test-server.sh
 
             - name: docker push
               run: |
