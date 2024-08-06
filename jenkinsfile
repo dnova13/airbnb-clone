@@ -1,7 +1,7 @@
 pipeline {
     agent {
         label 'agent-in-docker'
-        // label 'agent-in-django'
+        //  label 'agent-in-django'
         
     }
     // triggers {
