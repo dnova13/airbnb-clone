@@ -121,7 +121,7 @@ pipeline {
                     // groov 에서 정의된 변수 쓰고 싶다면 "" 가 아닌  """ 한다.
                     // sh """echo 'RDS_TEST_HOST=${postgresIP}' >> .env"""
                     sh """echo 'RDS_TEST_HOST=postgres-test' >> .env"""
-                    sh """echo 'RDS_TEST_PORT=5433' >> .env"""
+                    // sh """echo 'RDS_TEST_PORT=5433' >> .env"""
                     
                     sh 'cat .env'
                     sh 'docker network inspect jenkins'
@@ -148,6 +148,7 @@ pipeline {
 
                 failure {
                     echo '##################### django test failed'
+                    sh'docker rm -f postgres-test'
                 }
             }
         }
@@ -185,8 +186,8 @@ pipeline {
                     echo '##################### docker push failed'
                 }
                 always {
-                    sh 'docker compose -f docker-compose.postgres.yml down -v --rmi all'
-                    // sh 'docker rm -f postgres'
+                    // sh 'docker compose -f docker-compose.postgres.yml down -v --rmi all'
+                    sh'docker rm -f postgres-test'
                 }
             }
         }
