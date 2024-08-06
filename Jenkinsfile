@@ -97,6 +97,7 @@ pipeline {
             steps {
                 script {
                     echo "postgres connnect to jenkins docker network."
+                    // 이미 연결됐다고 에러나도 그냥 넘김.
                     sh(
                         script: 'docker network connect jenkins postgres-test',
                         returnStatus: true
@@ -119,7 +120,7 @@ pipeline {
                     
                     // groov 에서 정의된 변수 쓰고 싶다면 "" 가 아닌  """ 한다.
                     // sh """echo 'RDS_TEST_HOST=${postgresIP}' >> .env"""
-                    sh """echo 'RDS_TEST_HOST=postgres' >> .env"""
+                    sh """echo 'RDS_TEST_HOST=postgres-test' >> .env"""
                     
                     sh 'cat .env'
                     // sh 'cat test_settings.py'
@@ -131,7 +132,6 @@ pipeline {
                     . myvenv/bin/activate
                     pip install --upgrade pip 
                     pip install -r requirements.txt
-                    
                     
                     # 실행 테스트
                     docker ps 
@@ -159,6 +159,7 @@ pipeline {
                 
                 # 나머지 compose 이미지 빌드
                 docker-compose build redis
+                docker-compose build postgres
                 docker-compose build django
 
                 # docker tag
