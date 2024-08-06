@@ -121,6 +121,7 @@ pipeline {
                     // groov 에서 정의된 변수 쓰고 싶다면 "" 가 아닌  """ 한다.
                     // sh """echo 'RDS_TEST_HOST=${postgresIP}' >> .env"""
                     sh """echo 'RDS_TEST_HOST=postgres-test' >> .env"""
+                    sh """echo 'RDS_TEST_PORT=5433' >> .env"""
                     
                     sh 'cat .env'
                     sh 'docker network inspect jenkins'
