@@ -149,9 +149,6 @@ pipeline {
                 failure {
                     echo '##################### django test failed'
                 }
-                always {
-                    sh'docker rm -f postgres-test'
-                }
             }
         }
         stage('Build Docker Push') {
