@@ -71,16 +71,14 @@ COPY . .
 
 # node 셋팅
 ## node 설치
-# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-# RUN /bin/bash -c "source $HOME/.nvm/nvm.sh \
-#     && nvm install ${NODE_VERSION} \
-#     && nvm use ${NODE_VERSION} \
-#     && npm install"
-
-RUN apt-get install -y nodejs
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+RUN /bin/bash -c "source $HOME/.nvm/nvm.sh \
+    && nvm install ${NODE_VERSION} \
+    && nvm use ${NODE_VERSION} \
+    && npm install"
 
 
-
+# RUN apt-get install -y nodejs
 
 # # 프로젝트 폴더 생성 및 권한 설정
 # RUN chown -R ${USERNAME}:${USERNAME} /app
