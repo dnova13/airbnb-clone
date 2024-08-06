@@ -70,7 +70,7 @@ pipeline {
             steps {
 
                 // sh 'docker rm -f postgres'
-                sh'docker-compose up postgres -d --build'
+                sh'docker-compose up -f docker-compose.postgres.yml postgres -d --build'
                 
                 sh'''
                 docker cp ./.postgresql/init/ postgres:/docker-entrypoint-initdb.d/
