@@ -176,7 +176,7 @@ pipeline {
                     echo '##################### docker push failed'
                 }
                 always {
-                    sh 'docker-compose -f docker-compose.postgres.yml -v --rmi all'
+                    sh 'docker compose -f docker-compose.postgres.yml down -v --rmi all'
                     // sh 'docker rm -f postgres'
                 }
             }
