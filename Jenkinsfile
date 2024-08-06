@@ -70,7 +70,7 @@ pipeline {
             steps {
 
                 // sh 'docker rm -f postgres'
-                sh'docker-compose up -f docker-compose.postgres.yml postgres -d --build'
+                sh'docker-compose -f docker-compose.postgres.yml up postgres -d --build'
                 
                 sh'''
                 docker cp ./.postgresql/init/ postgres:/docker-entrypoint-initdb.d/
@@ -176,7 +176,8 @@ pipeline {
                     echo '##################### docker push failed'
                 }
                 always {
-                    sh 'docker-compose down -v --rmi all'
+                    sh 'docker-compose -f docker-compose.postgres.yml -v --rmi all'
+                    // sh 'docker rm -f postgres'
                 }
             }
         }
