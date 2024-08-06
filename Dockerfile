@@ -78,8 +78,6 @@ RUN /bin/bash -c "source $HOME/.nvm/nvm.sh \
     && npm install"
 
 
-# RUN apt-get install -y nodejs
-
 # # 프로젝트 폴더 생성 및 권한 설정
 # RUN chown -R ${USERNAME}:${USERNAME} /app
 

@@ -70,16 +70,16 @@ COPY . .
 
 # node 셋팅
 ## node 설치
-# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-# RUN /bin/bash -c "source $HOME/.nvm/nvm.sh \
-#     && nvm install ${NODE_VERSION} \
-#     && nvm use ${NODE_VERSION} \
-#     && npm install"
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+RUN /bin/bash -c "source $HOME/.nvm/nvm.sh \
+    && nvm install ${NODE_VERSION} \
+    && nvm use ${NODE_VERSION} \
+    && npm install"
 
 # RUN curl -fsSL https://deb.nodesource.com/setup_16.x | -E bash - \
 #     && apt-get install -y nodejs
 
-RUN apt-get install -y nodejs
+# RUN apt-get install -y nodejs
 
     
 # ARG NODE_DISTRO=node-v${NODE_VERSION}-linux-x64
