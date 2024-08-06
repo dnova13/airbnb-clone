@@ -70,7 +70,7 @@ pipeline {
             steps {
 
                 // sh 'docker rm -f postgres'
-                sh'docker-compose -f docker-compose.postgres.yml up testDB -d --build'
+                sh'docker-compose -f docker-compose.postgres.yml up postgres -d --build'
                 
                 sh'''
                 docker cp ./.postgresql/init/ testDB:/docker-entrypoint-initdb.d/
@@ -148,7 +148,7 @@ pipeline {
 
                 failure {
                     echo '##################### django test failed'
-                    sh'docker rm -f postgres-test'
+                    sh'docker rm -f testDB'
                 }
             }
         }
