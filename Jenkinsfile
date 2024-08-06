@@ -70,7 +70,7 @@ pipeline {
             steps {
 
                 // sh 'docker rm -f postgres'
-                sh'docker-compose -f docker-compose.postgres.yml up postgres -d --build'
+                sh'docker-compose -f docker-compose.test-postgres.yml up postgres -d --build'
                 
                 sh'''
                 docker cp ./.postgresql/init/ testDB:/docker-entrypoint-initdb.d/
@@ -104,11 +104,6 @@ pipeline {
                         )
                 }
             }
-            // post {
-            //     always {
-            //         sh'docker network connect jenkins postgres-test'
-            //     }
-            // }
         }
         
         stage('django server test') {
@@ -186,8 +181,7 @@ pipeline {
                     echo '##################### docker push failed'
                 }
                 always {
-                    // sh 'docker compose -f docker-compose.postgres.yml down -v --rmi all'
-                    sh'docker rm -f postgres-test'
+                    sh'docker rm -f testDB'
                 }
             }
         }
