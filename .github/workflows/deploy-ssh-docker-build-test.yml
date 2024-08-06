@@ -53,7 +53,7 @@ jobs:
             - name: django server test
               run: |
                   # 실행 테스트
-                  docker exec django bash test-server.sh
+                  docker exec -i django /app/airbnb-clone/test-server.sh
 
             - name: docker push
               run: |
