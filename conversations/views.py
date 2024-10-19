@@ -187,10 +187,12 @@ def get_msgs(request, pk):
 
 @api_view(["POST"])
 def create_msg(request, pk):
-
+    
     _data = request.data
-
+    
+    # print(_data, pk)
     conversation = models.Conversation.objects.get_or_none(pk=pk)
+    # print(conversation)
 
     if not ("msg" in _data):
         messages.error(request, "cant' go there")
@@ -201,6 +203,7 @@ def create_msg(request, pk):
         return Response(data={"success": False}, status=403)
 
     valid_chk = False
+    # print(request.user)
 
     for participant in conversation.participants.all():
         if participant.id == request.user.pk:
@@ -216,6 +219,7 @@ def create_msg(request, pk):
     )
 
     _data = {"created": msg_obj.created, "is_read": msg_obj.is_read}
+    # _data = {}
 
     return Response(data={"success": True, "data": _data}, status=status.HTTP_200_OK)
 

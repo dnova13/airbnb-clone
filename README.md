@@ -172,7 +172,8 @@ python manage.py migrate
 ```
 
 pipenv install channls
-pipenv install channels-redis
+pipenv install channels-redis==3.3.1
+
 
 ```
 
@@ -192,6 +193,7 @@ python manage.py collectstatic --no-input ## 따로 인풋없이 static 업로�
 yum -y install docker
 systemctl start docker
 docker run -p 6379:6379 -d redis:6.2.6
+docker run -p 6379:6379 -d redis
 
 docker network create redis-net
 docker run --name airb -p 6379:6379 --network redis-net -d redis:6.2.6 redis-server --appendonly yes
