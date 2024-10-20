@@ -139,9 +139,8 @@ class ConversationDetailView(mixins.LoggedInOnlyView, View):
 @api_view(["GET"])
 def get_msgs(request, pk):
     conversation = models.Conversation.objects.get_or_none(pk=pk)
-
     page_size = 15
-    offset = string_to_positive_int(request.GET.get("page", 1))
+    offset = string_to_positive_int(request.GET.get("start", 1))
 
     if offset < 0:
         messages.error(request, "cant' go there")
